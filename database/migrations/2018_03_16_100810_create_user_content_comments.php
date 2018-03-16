@@ -15,8 +15,8 @@ class CreateUserContentComments extends Migration
     {
         Schema::create('user_content_comments', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->integer('renter_user_id')->unsigned();
+            $table->foreign('renter_user_id')->references('id')->on('renter_users')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('content_id')->unsigned();
             $table->foreign('content_id')->references('id')->on('contents')->onDelete('cascade')->onUpdate('cascade');
             $table->string('comment_text',280);
