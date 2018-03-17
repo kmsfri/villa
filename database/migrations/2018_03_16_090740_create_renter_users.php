@@ -17,14 +17,14 @@ class CreateRenterUsers extends Migration
             $table->increments('id');
             $table->string('mobile_number',15)->unique();
             $table->string('password');
-            $table->string('fullname');
-            $table->string('avatar_dir');
-            $table->string('address',500);
-            $table->string('blog_title');
-            $table->text('blog_description');
+            $table->string('fullname')->nullable();
+            $table->string('avatar_dir')->nullable();
+            $table->string('address',500)->nullable();
+            $table->string('blog_title')->nullable();
+            $table->text('blog_description')->nullable();
             $table->boolean('user_status')->default(1)->comment='0:disable - 1:active';
             $table->string('profile_slug')->unique()->charset('utf8');
-            $table->rememberToken();
+            $table->rememberToken()->nullable();
             $table->timestamps();
         });
     }
