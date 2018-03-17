@@ -2,16 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="719ab3b0-ed7b-43c0-a1cf-1e17a498ee36" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/villa.iml" afterPath="$PROJECT_DIR$/.idea/villa.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/database/migrations/2018_03_16_100810_create_user_content_comments.php" afterPath="$PROJECT_DIR$/database/migrations/2018_03_16_100810_create_user_content_comments.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/database/migrations/2018_03_16_101047_create_user_content_scores.php" afterPath="$PROJECT_DIR$/database/migrations/2018_03_16_101047_create_user_content_scores.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/database/migrations/2018_03_16_101301_create_user_renter_user_scores.php" afterPath="$PROJECT_DIR$/database/migrations/2018_03_16_101301_create_user_renter_user_scores.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/database/migrations/2018_03_16_101508_create_website_comments.php" afterPath="$PROJECT_DIR$/database/migrations/2018_03_16_101508_create_website_comments.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/database/migrations/2018_03_16_105539_create_user_villa_comments.php" afterPath="$PROJECT_DIR$/database/migrations/2018_03_16_105539_create_user_villa_comments.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/database/migrations/2018_03_16_105643_create_user_villa_reports.php" afterPath="$PROJECT_DIR$/database/migrations/2018_03_16_105643_create_user_villa_reports.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/storage/logs/laravel.log" afterPath="$PROJECT_DIR$/storage/logs/laravel.log" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -38,8 +29,8 @@
       <file leaf-file-name="2018_03_16_101301_create_user_renter_user_scores.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/database/migrations/2018_03_16_101301_create_user_renter_user_scores.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="20" column="38" lean-forward="false" selection-start-line="20" selection-start-column="38" selection-end-line="20" selection-end-column="38" />
+            <state relative-caret-position="92">
+              <caret line="18" column="76" lean-forward="false" selection-start-line="18" selection-start-column="76" selection-end-line="18" selection-end-column="76" />
               <folding />
             </state>
           </provider>
@@ -363,16 +354,15 @@
       <workItem from="1521171211880" duration="4271000" />
       <workItem from="1521193515281" duration="8197000" />
       <workItem from="1521212325532" duration="1051000" />
-      <workItem from="1521238334826" duration="1689000" />
+      <workItem from="1521238334826" duration="2965000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="15208000" />
+    <option name="totallyTimeSpent" value="16484000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-4" y="-4" width="1374" height="776" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3648036" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -691,8 +681,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/database/migrations/2018_03_16_101301_create_user_renter_user_scores.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="20" column="38" lean-forward="false" selection-start-line="20" selection-start-column="38" selection-end-line="20" selection-end-column="38" />
+        <state relative-caret-position="92">
+          <caret line="18" column="76" lean-forward="false" selection-start-line="18" selection-start-column="76" selection-end-line="18" selection-end-column="76" />
           <folding />
         </state>
       </provider>

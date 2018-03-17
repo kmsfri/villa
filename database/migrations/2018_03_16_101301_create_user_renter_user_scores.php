@@ -15,8 +15,8 @@ class CreateUserRenterUserScores extends Migration
     {
         Schema::create('user_renter_user_scores', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('promoter_user_id')->unsigned();
-            $table->foreign('promoter_user_id')->references('id')->on('renter_users')->onDelete('cascade')->onUpdate('cascade');
+            $table->integer('renter_user_id')->unsigned();
+            $table->foreign('renter_user_id')->references('id')->on('renter_users')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('renter_user_id')->unsigned();
             $table->foreign('renter_user_id')->references('id')->on('renter_users')->onDelete('cascade')->onUpdate('cascade');
             $table->smallInteger('score_value');
