@@ -1,0 +1,72 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Villa extends Model
+{
+    protected $table = 'villa';
+    protected $primaryKey = 'id';
+
+    public function RenterUser()
+    {
+        return $this->belongsTo('App\Models\RenterUser');
+    }
+
+    public function SpecialRenterUser() //has a Paid Tariff(n to n Database Relation)
+    {
+        return $this->belongsToMany('App\Models\RenterUser','renter_user_villa_tairff','villa_id','renter_user_id');
+    }
+
+    public function BoutghtTariffs()
+    {
+        return $this->belongsToMany('App\Models\Tariffs','renter_user_villa_tairff','villa_id','tariff_id');
+    }
+
+    public function Reports()
+    {
+        return $this->belongsToMany('App\Models\RenterUser','user_villa_reports','villa_id','renter_user_id');
+    }
+
+    public function Comments()
+    {
+        return $this->belongsToMany('App\Models\RenterUser','user_villa_comments','villa_id','renter_user_id');
+    }
+
+
+    public function Properties()
+    {
+        return $this->belongsToMany('App\Models\Property','villa_property_value','villa_id','property_id');
+    }
+
+
+    public function SpecProperty($prop_id)
+    {
+        return $this->belongsToMany('App\Models\Property','villa_property_value', 'villa_id','property_id')
+            ->where('parent_id','=',$prop_id)->first();
+    }
+
+
+    public function Categories1()
+    {
+        return $this->belongsToMany('App\Models\Category1');
+    }
+
+    public function Categories2()
+    {
+        return $this->belongsToMany('App\Models\Category2');
+    }
+
+
+    public function ReserveRequests()
+    {
+        return $this->hasMany('App\Models\VillaReserveRequest');
+    }
+
+    public function VillaImages()
+    {
+        return $this->hasMany('App\Models\VillaImages');
+    }
+
+}
