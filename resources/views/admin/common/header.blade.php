@@ -83,10 +83,7 @@
                     <a href="#"><i class="fa fa-book fa-fw"></i> کاربران<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="{{url('admin/user/admin')}}">کاربران بخش مدیریت</a>
-                        </li>
-                        <li>
-                            <a href="{{url('admin/user')}}">کاربران وبسایت</a>
+                            <a href="{{Route('admin-user-list')}}">کاربران بخش مدیریت</a>
                         </li>
                     </ul>
 
