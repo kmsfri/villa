@@ -24,23 +24,31 @@
                             @endif
 
                         </div>
-                        <form method="POST" action="">
+                        <form method="POST" action="{{route('login')}}">
                             {{csrf_field()}}
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <input class="form-control right" name="phone" value="{{ old('phone') }}" min="10" max="11" type="text" placeholder="شماره همراه" required autofocus>
+                                        @if ($errors->has('phone')) <span class="help-block"><strong>{{ $errors->first('phone') }}</strong></span> @endif
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <input class="form-control right" name="password" value="" type="password" placeholder="رمز عبور" required>
+                                        @if ($errors->has('password')) <span class="help-block"><strong>{{ $errors->first('password') }}</strong></span> @endif
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group" style="font-size: 12px;">
+                                        <input type="checkbox" name="remember"> مرا به یاد داشته باش
                                     </div>
                                 </div>
                             </div>
                             <div class="clearfix"></div>
-                            <button class="btn btn-success float-left"><i class="mdi mdi-check"></i>ورود</button><a class="btn btn-outline-secondary" href="#"><i class="mdi mdi-account-plus"></i>ثبت نام</a>
+                            <button class="btn btn-success float-left"><i class="mdi mdi-check"></i>ورود</button><a class="btn btn-outline-secondary" href="{{route('showregister')}}"><i class="mdi mdi-account-plus"></i>ثبت نام</a>
                             <div class="clearfix"></div>
+                            <a href="{{route('showpassword')}}" style="font-size: 12px;">رمز عبور خود را فراموش کرده اید؟</a>
                         </form>
                     </div>
                 </div>
