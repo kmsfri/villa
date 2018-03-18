@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
-
-class RenterUser extends Model
+use Illuminate\Foundation\Auth\User as Authenticatable;
+class RenterUser extends Authenticatable
 {
+    use Notifiable;
     protected $table = 'renter_users';
     protected $primaryKey = 'id';
 

@@ -22,12 +22,13 @@
                                 <span class="help-block" style="background: #fff;color:red;"> {{ Session::get('data') }} </span>
                             @endif
                         </div>
-                        <form method="POST" action="">
+                        <form method="POST" action="{{route('password')}}">
                             {{csrf_field()}}
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <input class="form-control right" name="phone" value="{{ old('phone') }}" min="10" max="11" type="text" placeholder="شماره همراه" required autofocus>
+                                        @if ($errors->has('phone')) <span class="help-block"><strong>{{ $errors->first('phone') }}</strong></span> @endif
                                     </div>
                                 </div>
                             </div>

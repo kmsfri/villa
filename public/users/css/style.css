@@ -107,7 +107,7 @@ html {
 body {
   color: #000;
   font-family: "vazir", arial, sans-serif;
-  font-size: 1.3rem;
+  font-size: 1rem;
   font-weight: normal;
   -webkit-font-smoothing: antialiased !important;
   -moz-osx-font-smoothing: grayscale !important;
@@ -2755,3 +2755,11 @@ form.newsletters {
   color: #588bbf;
   font-family: "vazir", arial, sans-serif;
   font-weight: 300; }
+
+.input-group-addon{
+  height: 33.47px;
+  border: none;
+  border-radius: 0px !important;
+  margin: 10px 0;
+  direction: ltr;
+}

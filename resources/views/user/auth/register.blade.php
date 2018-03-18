@@ -22,17 +22,18 @@
                                 <span class="help-block" style="background: #fff;color:red;"> {{ Session::get('data') }} </span>
                             @endif
                         </div>
-                        <form method="POST" action="">
+                        <form method="POST" action="{{route('register')}}">
                             {{csrf_field()}}
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <input class="form-control right" name="phone" value="{{ old('phone') }}" min="10" max="11" type="text" placeholder="شماره همراه" required autofocus>
+                                        @if ($errors->has('phone')) <span class="help-block"><strong>{{ $errors->first('phone') }}</strong></span> @endif
                                     </div>
                                 </div>
                             </div>
                             <div class="clearfix"></div>
-                            <button class="btn btn-success float-left"><i class="mdi mdi-check"></i>ثبت نام</button><a class="btn btn-outline-secondary" href="#"><i class="mdi mdi-account-plus"></i>قبلا ثبت نام کرده اید؟</a>
+                            <button class="btn btn-success float-left"><i class="mdi mdi-check"></i>ثبت نام</button><a class="btn btn-outline-secondary" href="{{route('showlogin')}}"><i class="mdi mdi-account-plus"></i>قبلا ثبت نام کرده اید؟</a>
                             <div class="clearfix"></div>
                         </form>
                     </div>
