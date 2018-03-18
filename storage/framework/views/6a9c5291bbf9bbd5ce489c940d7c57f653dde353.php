@@ -1,5 +1,4 @@
-@extends('admin.master-lists')
-@section('content_list')
+<?php $__env->startSection('content_list'); ?>
 
 <thead>
 <tr>
@@ -38,55 +37,58 @@
 
 </thead>
 <tbody>
-@php $c=1; @endphp
-@foreach($admins as $u)
+<?php $c=1; ?>
+<?php $__currentLoopData = $admins; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $u): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
     <tr>
         <td class="text-center">
-            <input form="delForm" name="remove_val[]" value="{{$u->id}}" type="checkbox">
+            <input form="delForm" name="remove_val[]" value="<?php echo e($u->id); ?>" type="checkbox">
         </td>
         <td class="text-center">
             <center>
-                {{$c}} @php $c++; @endphp
+                <?php echo e($c); ?> <?php $c++; ?>
             </center>
         </td>
         <td class="text-center">
             <center>
-                {{$u->user_name}}
+                <?php echo e($u->user_name); ?>
+
             </center>
         </td>
         <td class="text-center">
             <center>
-                {{$u->user_title}}
+                <?php echo e($u->user_title); ?>
+
             </center>
         </td>
         <td class="text-center">
             <center>
-                @if(trim($u->avatar_dir)!='' && file_exists( public_path().'/admin/uploads/users/'.$u->avatar_dir))
-                    <img src="{{url( '/admin/uploads/users/'.$u->avatar_dir)}}" class="shop-list-avatar">
-                @else
+                <?php if(trim($u->avatar_dir)!='' && file_exists( public_path().'/admin/uploads/users/'.$u->avatar_dir)): ?>
+                    <img src="<?php echo e(url( '/admin/uploads/users/'.$u->avatar_dir)); ?>" class="shop-list-avatar">
+                <?php else: ?>
                     <span>بدون تصویر</span>
-                @endif
+                <?php endif; ?>
             </center>
         </td>
         <td class="text-center">
             <center>
-                @if($u->user_status==1)
+                <?php if($u->user_status==1): ?>
                     فعال
-                @else
+                <?php else: ?>
                     غیر فعال
-                @endif
+                <?php endif; ?>
             </center>
         </td>
         <td class="text-center">
-            <a href="{{url('management/user/admin/edit/'.$u->id)}}" data-toggle="tooltip" title="ویرایش کاربر">
+            <a href="<?php echo e(url('management/user/admin/edit/'.$u->id)); ?>" data-toggle="tooltip" title="ویرایش کاربر">
                 ویرایش کاربر
             </a></br>
-            <a href="{{url('management/user/admin/edit_sec_permit/'.$u->id)}}" data-toggle="tooltip" title="ویرایش دسترسی به بخشها">
+            <a href="<?php echo e(url('management/user/admin/edit_sec_permit/'.$u->id)); ?>" data-toggle="tooltip" title="ویرایش دسترسی به بخشها">
                 ویرایش دسترسیها
             </a>
         </td>
     </tr>
-@endforeach
+<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 </tbody>
 
-@stop
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('admin.master-lists', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

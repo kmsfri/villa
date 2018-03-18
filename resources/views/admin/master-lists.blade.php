@@ -14,7 +14,7 @@
                                     @if($add_url!=Null) <li><a href="{{$add_url}}" class="btn btn-btn1-cs1">افزودن</a></li>@endif
                                     @if($del_url!=Null)
                                         <li><a href="{{$del_url}}" onclick="$('#delForm').submit(); return false;" class="btn btn-btn1-cs1">حذف انتخاب شده ها</a></li>
-                                        <form id="delForm" action="{{$del_url}}" method="post" onsubmit="return confirm('آیا از حذف آگهی های انتخاب شده مطمئنید؟');">
+                                        <form id="delForm" action="{{$del_url}}" method="post" onsubmit="return confirm('آیا از حذف موارد انتخاب شده مطمئنید؟');">
                                             {{ csrf_field() }}
                                         </form>
                                     @endif

@@ -64,11 +64,11 @@
                 <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
             </a>
             <ul class="dropdown-menu leftzero dropdown-user">
-                <li><a href="{{url('admin/user/admin')}}"><i class="fa fa-user fa-fw"></i> تنظیمات حساب کاربری</a>
+                <li><a href="<?php echo e(url('admin/user/admin')); ?>"><i class="fa fa-user fa-fw"></i> تنظیمات حساب کاربری</a>
                 </li>
                 </li>
                 <li class="divider"></li>
-                <li><a href="{{url('logout')}}"><i class="fa fa-sign-out fa-fw"></i> خروج</a>
+                <li><a href="<?php echo e(url('logout')); ?>"><i class="fa fa-sign-out fa-fw"></i> خروج</a>
                 </li>
             </ul>
         </li>
@@ -77,13 +77,13 @@
         <div class="sidebar-nav navbar-collapse">
             <ul class="nav" id="side-menu">
                 <li>
-                    <a class="active" href="{{url(Route('dashboard'))}}"><i class="fa fa-dashboard fa-fw"></i> داشبورد</a>
+                    <a class="active" href="<?php echo e(url(Route('dashboard'))); ?>"><i class="fa fa-dashboard fa-fw"></i> داشبورد</a>
                 </li>
                 <li>
                     <a href="#"><i class="fa fa-book fa-fw"></i> کاربران<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="{{Route('admin-user-list')}}">کاربران بخش مدیریت</a>
+                            <a href="<?php echo e(Route('admin-user-list')); ?>">کاربران بخش مدیریت</a>
                         </li>
                     </ul>
                 </li>
@@ -92,10 +92,10 @@
                     <a href="#"><i class="fa fa-book fa-fw"></i> دسته بندیها<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="{{Route('cities-list')}}">استان-شهر-منطقه</a>
+                            <a href="<?php echo e(Route('cities-list')); ?>">استان-شهر-منطقه</a>
                         </li>
                         <li>
-                            <a href="{{Route('categories3-list')}}">مطالب گردشگری</a>
+                            <a href="<?php echo e(Route('categories3-list')); ?>">مطالب گردشگری</a>
                         </li>
                     </ul>
                 </li>

@@ -39,7 +39,7 @@
         @if ($errors->has('avatar_dir')) <span class="help-block"><strong>{{ $errors->first('avatar_dir') }}</strong></span> @endif
     </div>
     <div class="col-md-4 pull-right">
-        <img id="admin_img_preview" class="{{ isset($u->avatar_dir) ? '' : 'hide' }}" src="{{ isset($u->avatar_dir) ? url('uploads/users/admin/'.$u->avatar_dir) : '#' }}" alt="تصویر پروفایل" autocomplete="off" />
+        <img id="admin_img_preview" class="{{ isset($u->avatar_dir) ? '' : 'hide' }}" src="{{ isset($u->avatar_dir) ? url('admin/uploads/users/'.$u->avatar_dir) : '#' }}" alt="تصویر پروفایل" autocomplete="off" />
     </div>
 </div>
 

@@ -21,7 +21,7 @@ Route::group(['prefix'=>'management'],function(){
             Route::get('/', function(){
                 return redirect('admin/dashboard');
             });
-            Route::get('dashboard', 'Admin\AdminController@dashboard');
+            Route::get('dashboard', 'Admin\AdminController@dashboard')->name('dashboard');
 
             Route::get('/user/admin', 'Admin\AdminController@showAdmins')->name('admin-user-list');
             Route::get('/user/admin/add', 'Admin\AdminController@showAddAdminForm')->name('add_admin_form');
@@ -30,9 +30,25 @@ Route::group(['prefix'=>'management'],function(){
             Route::get('/user/admin/edit/{id}', 'Admin\AdminController@editAdmin')->name('edit_admin_form');
             Route::post('/user/admin/edit', 'Admin\AdminController@doEditAdmin')->name('do_edit_admin');
 
-            Route::get('/user/admin/edit_sec_permit/{id}', 'Admin\AdminController@editSectionPermit');
-            Route::post('/user/admin/edit_sec_permit', 'Admin\AdminController@doEditSectionPermit');
+            Route::get('/user/admin/edit_sec_permit/{id}', 'Admin\AdminController@editSectionPermit')->name('change_admin_sec_permit');
+            Route::post('/user/admin/edit_sec_permit', 'Admin\AdminController@doEditSectionPermit')->name('do_change_admin_sec_permit');
 
+
+
+            Route::get('/city/add/{parent_id?}', 'Admin\CityController@showAddCityForm')->name('add-city-form');
+            Route::post('/city/add', 'Admin\CityController@saveCity')->name('do-add-city');
+            Route::post('/city/delete/{parent_id?}', 'Admin\CityController@deleteCity')->name('do-delete-city');
+            Route::get('/city/edit/{id}', 'Admin\CityController@editCity')->name('edit-city-form');
+            Route::post('/city/edit', 'Admin\CityController@doEditCity')->name('do-edit-city');
+            Route::get('/city/{parent_id?}', 'Admin\CityController@cities')->name('cities-list');
+
+
+            Route::get('/category3/add/{parent_id?}', 'Admin\Category3Controller@showAddCategoryForm')->name('add-category3-form');
+            Route::post('/category3/add', 'Admin\Category3Controller@saveCategory')->name('do-add-category3');
+            Route::post('/category3/delete/{parent_id?}', 'Admin\Category3Controller@deleteCategory')->name('do-delete-category3');
+            Route::get('/category3/edit/{id}', 'Admin\Category3Controller@editCategory')->name('edit-category3-form');
+            Route::post('/category3/edit', 'Admin\Category3Controller@doEditCategory')->name('do-edit-category3');
+            Route::get('/category3/{parent_id?}', 'Admin\Category3Controller@categories')->name('categories3-list');
 
 
         //});
