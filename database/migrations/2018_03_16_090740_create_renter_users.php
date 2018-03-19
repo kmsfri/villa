@@ -23,7 +23,7 @@ class CreateRenterUsers extends Migration
             $table->string('blog_title')->nullable();
             $table->text('blog_description')->nullable();
             $table->boolean('user_status')->default(1)->comment='0:disable - 1:active';
-            $table->string('profile_slug')->unique()->charset('utf8');
+            $table->string('profile_slug')->unique()->charset('utf8')->nullable();
             $table->rememberToken()->nullable();
             $table->timestamps();
         });
