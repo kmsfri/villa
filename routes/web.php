@@ -12,7 +12,7 @@
 */
 
 
-
+Route::post('/ajax/get_province_cities', 'API\AjaxServicesController@get_province_cities');
 //User Auth Routes
 Route::get('User/Login', 'users\auth\AuthController@showUserLoginForm')->name('showlogin');
 Route::post('User/Login', 'users\auth\AuthController@Login')->name('login');
@@ -31,6 +31,9 @@ Route::group(['prefix' => 'User',  'middleware' => 'auth:user'], function(){
     Route::post('Edit','users\UserController@useraction')->name('useraction');
     Route::get('Blog','users\GeneralController@showBlogconfig')->name('showblog');
     Route::post('Blog','users\GeneralController@blogaction')->name('blogaction');
+    Route::get('Content','users\ContentController@addcontent')->name('addcontent');
+    Route::get('Content/{id}','users\ContentController@editcontent')->name('editcontent');
+    Route::post('Content','users\ContentController@addcontentaction')->name('addcontentaction');
 
 });
 
