@@ -17,3 +17,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 */
+
+Route::post('/ajax/get_province_cities', 'API\AjaxServicesController@get_province_cities');
