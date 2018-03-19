@@ -19,4 +19,8 @@ class City extends Model
     {
         return $this->belongsTo('App\Models\City','parent_id');
     }
+    public function Contents()
+    {
+        return $this->belongsToMany('App\Models\Content');
+    }
 }

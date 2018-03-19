@@ -38,5 +38,9 @@ class Content extends Model
     {
         return $this->belongsToMany('App\Models\RenterUser');
     }
+    public function Cities()
+    {
+        return $this->belongsToMany('App\Models\City','content_city','content_id','city_id');
+    }
 
 }

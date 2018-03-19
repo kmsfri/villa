@@ -12,7 +12,6 @@
 */
 
 
-
 //User Auth Routes
 Route::get('User/Login', 'users\auth\AuthController@showUserLoginForm')->name('showlogin');
 Route::post('User/Login', 'users\auth\AuthController@Login')->name('login');
