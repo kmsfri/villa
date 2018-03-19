@@ -27,8 +27,8 @@ class CreateContents extends Migration
             $table->foreign('renter_user_id')->references('id')->on('renter_users')->onDelete('cascade')->onUpdate('cascade');
             $table->boolean('content_status')->default(0)->comment='0:disable - 1:active';
             $table->integer('view_count')->unsigned()->default(0);
-            $table->string('longitude',15)->nullable();
-            $table->string('latitude',15)->nullable();
+            $table->string('longitude',50)->nullable();
+            $table->string('latitude',50)->nullable();
 
             $table->timestamps();
         });
