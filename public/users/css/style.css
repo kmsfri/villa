@@ -2763,3 +2763,11 @@ form.newsletters {
   margin: 10px 0;
   direction: ltr;
 }
+.thumbnail{
+
+  height: 100px;
+  margin: 10px;
+}
+#result div{
+  float:left;
+}

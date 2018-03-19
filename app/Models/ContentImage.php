@@ -8,7 +8,9 @@ class ContentImage extends Model
 {
     protected $table = 'content_images';
     protected $primaryKey = 'id';
-
+    protected $fillable = [
+        'image_dir','image_order',
+    ];
     public function Content()
     {
         return $this->belongsTo('App\Models\Content');
