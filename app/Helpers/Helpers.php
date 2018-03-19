@@ -4,6 +4,59 @@
 
 class Helpers{
 
+    /*
+     * ='blogImage';
+        ='foo.png';
+        ='bar.png';
+     */
+
+    public static function save_img($imgType,$imgObject,$resultDir){
+
+        $imgConfig=[
+            'renterProfile'=>[
+                'width'=>100,
+                'height'=>100,
+                'hasWatermark'=>false,
+                'watermarkDir'=>'',
+            ],
+            'blogImage'=>[
+                'width'=>377,
+                'height'=>206,
+                'hasWatermark'=>true,
+                'watermarkDir'=>'watermark.png',
+            ],
+            'villaImage'=>[
+                'width'=>377,
+                'height'=>206,
+                'hasWatermark'=>true,
+                'watermarkDir'=>'watermark.png',
+            ],
+        ];
+
+        $withWatermark=$imgConfig[$imgType]['hasWatermark'];
+        $width=$imgConfig[$imgType]['width'];
+        $height=$imgConfig[$imgType]['height'];
+        $watermarkDir=$imgConfig[$imgType]['watermarkDir'];
+
+        $img = Image::make($imgObject)->fit($width, $height,function ($constraint) {
+            $constraint->upsize();
+        });
+
+        if($withWatermark){
+            $minDim=min($width,$height);
+            $watermarkHeight=Image::make($watermarkDir)->height();
+            $watermarkWidth=Image::make($watermarkDir)->Width();
+            $watermarkNewWidth=$minDim/3;
+            $watermarkNewHeight=$watermarkHeight/($watermarkWidth/$watermarkNewWidth);
+            $watermark=Image::make($watermarkDir)->resize($watermarkNewWidth,$watermarkNewHeight);
+            $img=$img->insert($watermark, 'bottom-left', 0, 0);
+        }
+
+        $img->save($resultDir);
+    }
+
+
+
 
     public static function make_slug($string, $separator = '-')
     {
