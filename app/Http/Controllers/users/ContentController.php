@@ -155,4 +155,27 @@ class ContentController extends Controller
             ->with('data','با موفقیت ذخیره شد');
 
     }
+    public function contents(){
+        $user = RenterUser::find(Auth::guard('user')->user()->id);
+        $contents = Content::where('renter_user_id',Auth::guard('user')->user()->id)->paginate(11);
+        return view('user.dashboard.PostsList',['user'=>$user,'contents'=>$contents]);
+    }
+    public function showinbody($id){
+        $content = Content::where('id',$id)->where('renter_user_id',Auth::guard('user')->user()->id)->where('content_status',1)->get()->first();
+        if(isset($content)){
+            if ($content->show_in_body != 0){
+                $content->show_in_body = 0;
+                $content->save();
+                return redirect()->back()->with('data','تغییرات با موفقیت اعمال شد');
+            }
+            else{
+                $content->show_in_body = 1;
+                $content->save();
+                return redirect()->back()->with('data','تغییرات با موفقیت اعمال شد');
+            }
+        }
+        else{
+            return redirect()->back()->with('data','چنین مطلبی وجود ندارد و یا غیر فعال است');
+        }
+    }
 }
