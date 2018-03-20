@@ -37,6 +37,8 @@ Route::group(['prefix' => 'User',  'middleware' => 'auth:user'], function(){
     Route::get('Content/category/{content_id}','users\ContentController@editContentCategory')->name('editContentCategory');
     Route::post('Content/category','users\ContentController@doEditContentCategory')->name('doEditContentCategory');
 
+    Route::get('Contents','users\ContentController@contents')->name('contents');
+    Route::get('Content/showinbody/{id}','users\ContentController@showinbody')->name('showinbody');
 
 });
 
