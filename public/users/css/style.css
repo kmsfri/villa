@@ -2687,8 +2687,13 @@ form.newsletters {
         margin: 10px 0; } }
 
 .tooltip {
-  position: relative !important; }
-
+  font-family: vazir !important; }
+.btn-bloglink{
+  color: #fff;
+  background-color: #cc3434;
+  border-radius: 29px;
+  font-size: 10px;
+}
 @media (max-width: 991px) {
   section.vila {
     background-color: #f2f3f4;

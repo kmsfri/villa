@@ -31,12 +31,12 @@ class Content extends Model
 
     public function RenterUserScores()
     {
-        return $this->belongsToMany('App\Models\RenterUser');
+        return $this->belongsToMany('App\Models\RenterUser','user_content_scores','content_id','renter_user_id');
     }
 
     public function RenterUserComments()
     {
-        return $this->belongsToMany('App\Models\RenterUser');
+        return $this->belongsToMany('App\Models\RenterUser','user_content_comments','content_id','renter_user_id');
     }
     public function Cities()
     {

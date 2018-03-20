@@ -34,6 +34,8 @@ Route::group(['prefix' => 'User',  'middleware' => 'auth:user'], function(){
     Route::get('Content','users\ContentController@addcontent')->name('addcontent');
     Route::get('Content/{id}','users\ContentController@editcontent')->name('editcontent');
     Route::post('Content','users\ContentController@addcontentaction')->name('addcontentaction');
+    Route::get('Contents','users\ContentController@contents')->name('contents');
+    Route::get('Content/showinbody/{id}','users\ContentController@showinbody')->name('showinbody');
 
 });
 
