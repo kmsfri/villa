@@ -26,7 +26,7 @@ class Content extends Model
 
     public function Categories3()
     {
-        return $this->belongsToMany('App\Models\Category3');
+        return $this->belongsToMany('App\Models\Category3','content_category3','content_id','category_id');
     }
 
     public function RenterUserScores()

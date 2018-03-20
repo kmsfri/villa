@@ -24,6 +24,8 @@ class CreateRenterUsers extends Migration
             $table->text('blog_description')->nullable();
             $table->boolean('user_status')->default(1)->comment='0:disable - 1:active';
             $table->string('profile_slug')->unique()->charset('utf8')->nullable();
+            $table->string('instagram_link')->nullable();
+            $table->string('telegram_link')->nullable();
             $table->rememberToken()->nullable();
             $table->timestamps();
         });
