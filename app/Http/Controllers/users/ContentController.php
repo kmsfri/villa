@@ -186,7 +186,7 @@ class ContentController extends Controller
             }
 
 
-            DB::transaction(function() use($request,$uploaded_files_dir,$removableOldImgID,$removableOldImgDir,$content){
+            DB::transaction(function() use($request,$uploaded_files_dir,$removableOldImgID,$removableOldImgDir,$content,$content_slug){
                 $allowable_tags = "<p>,<b>,<i>,<table>,<tr>,<th>,<td>,<center>,<li>,<ul>,<a>,<pre>,<br>,<strong>,<span>,<label>,<em>,<div>,<tbody>,<h1>,<h2>,<h3>,<h4>,<h5>,<ol>,<blockquote>,<hr>";
                 $request->content_body = strip_tags($request->content_body, $allowable_tags);
 
@@ -194,7 +194,7 @@ class ContentController extends Controller
                 $content->content_title = $request->content_title;
                 $content->content_tags = $request->content_tags;
                 $content->content_order = $request->content_order;
-                $content->content_slug = $request->content_slug;
+                $content->content_slug = $content_slug;
                 $content->content_body = $request->content_body;
                 $content->renter_user_id = Auth::guard('user')->user()->id;
                 if ($request->latitude != null){
