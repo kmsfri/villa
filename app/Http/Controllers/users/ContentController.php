@@ -47,7 +47,7 @@ class ContentController extends Controller
             $cities=array();
         }
 
-        $contentcount = Content::where('renter_user_id',Auth::guard('user')->user()->id)->all()->count();
+        $contentcount = Content::where('renter_user_id',Auth::guard('user')->user()->id)->count();
         $user = RenterUser::find(Auth::guard('user')->user()->id);
 
         $data=[
