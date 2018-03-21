@@ -47,8 +47,7 @@ class ContentController extends Controller
             $cities=array();
         }
 
-
-        $contentcount = Content::all()->count();
+        $contentcount = Content::where('renter_user_id',Auth::guard('user')->user()->id)->all()->count();
         $user = RenterUser::find(Auth::guard('user')->user()->id);
 
         $data=[
@@ -340,6 +339,12 @@ class ContentController extends Controller
         return view('user.dashboard.PostsList',['user'=>$user,'contents'=>$contents]);
     }
     public function showinbody($id){
+
+        $showInBodyCount = Content::where('renter_user_id',Auth::guard('user')->user()->id)->where('show_in_body',1)->where('content_status',1)->count();
+        if($showInBodyCount>6){
+            return redirect()->back()->with('data','تعداد مطالب پین شده نمیتواند بیشتر از 6 عدد باشد');
+        }
+
         $content = Content::where('id',$id)->where('renter_user_id',Auth::guard('user')->user()->id)->where('content_status',1)->get()->first();
         if(isset($content)){
             if ($content->show_in_body != 0){
