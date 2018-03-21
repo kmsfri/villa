@@ -17,7 +17,7 @@ class ContentController extends Controller
 {
     public function addcontent(){
         $states = City::where('parent_id',null)->where('city_status',1)->orderBy('city_order','ASC')->get();
-        $contentcount = Content::all()->count();
+        $contentcount = Content::where('renter_user_id',Auth::guard('user')->user()->id)->count();
         $user = RenterUser::find(Auth::guard('user')->user()->id);
         $cities=array();
         return view('user.dashboard.AddPost',['user'=>$user,'states'=>$states, 'cities'=>$cities,'contentcount'=>$contentcount]);
