@@ -115,7 +115,7 @@
                         </div>
                         <div class="data">
                             <div class="row">
-                                <div class="col-md-9">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label>* برچسب ها(کلمات کلیدی را با ویرگول جدا نمایید)</label>
                                         <input class="form-control" value="{{ old('content_tags',isset($content->content_tags) ? $content->content_tags : '') }}" type="text" name="content_tags" required>
@@ -132,6 +132,16 @@
                                             @endfor
                                         </select>
                                         @if ($errors->has('content_order')) <span class="help-block"><strong>{{ $errors->first('content_order') }}</strong></span> @endif
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>حالت ذخیره</label>
+                                        <select class="form-control" name="is_draft" required autocomplete="off">
+                                            <option @if(old('is_draft', isset($content->is_draft) ? $content->is_draft : '')==0) selected @endif value="0">نهایی</option>
+                                            <option @if(old('is_draft', isset($content->is_draft) ? $content->is_draft : '')==1) selected @endif value="1">پیش نویس</option>
+                                        </select>
+                                        @if ($errors->has('is_draft')) <span class="help-block"><strong>{{ $errors->first('is_draft') }}</strong></span> @endif
                                     </div>
                                 </div>
                             </div>

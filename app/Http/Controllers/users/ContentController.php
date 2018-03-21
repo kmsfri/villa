@@ -81,6 +81,7 @@ class ContentController extends Controller
             'latitude'=>$request->latitude,
             'longitude'=>$request->longitude,
             'content_slug'=>$content_slug,
+            'is_draft'=>$request->is_draft,
             'city'=>$request->city,
         ];
 
@@ -98,6 +99,7 @@ class ContentController extends Controller
                 'latitude'=>['nullable', 'regex:/^(?=.+)(?:[1-9]\d*|0)?(?:\.\d+)?$/'],
                 'longitude'=>['nullable', 'regex:/^(?=.+)(?:[1-9]\d*|0)?(?:\.\d+)?$/'],
                 'content_slug'=>'required|max:30|unique:contents,content_slug,'.$request->edit_id,
+                'is_draft'=>'required|integer',
                 'city'=>'required|max:30|exists:cities,id',
             ]
         );
@@ -203,6 +205,8 @@ class ContentController extends Controller
                 if ($request->longitude != null){
                     $content->longitude = $request->longitude;
                 }
+                $content->is_draft = $request->is_draft;
+                $content->content_status = 0;
                 $content->save();
 
 

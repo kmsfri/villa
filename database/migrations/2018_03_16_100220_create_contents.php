@@ -29,7 +29,7 @@ class CreateContents extends Migration
             $table->integer('view_count')->unsigned()->default(0);
             $table->string('longitude',50)->nullable();
             $table->string('latitude',50)->nullable();
-
+            $table->boolean('is_draft')->default(0);
             $table->timestamps();
         });
     }
