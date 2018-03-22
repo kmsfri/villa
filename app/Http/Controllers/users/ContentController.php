@@ -367,6 +367,24 @@ class ContentController extends Controller
             return redirect()->back()->with('data','چنین مطلبی وجود ندارد و یا غیر فعال است');
         }
     }
+    public function draft($id){
+        $content = Content::where('id',$id)->where('renter_user_id',Auth::guard('user')->user()->id)->get()->first();
+        if(isset($content)){
+            if ($content->is_draft != 0){
+                $content->is_draft = 0;
+                $content->save();
+                return redirect()->back()->with('data','تغییرات با موفقیت اعمال شد');
+            }
+            else{
+                $content->is_draft = 1;
+                $content->save();
+                return redirect()->back()->with('data','تغییرات با موفقیت اعمال شد');
+            }
+        }
+        else{
+            return redirect()->back()->with('data','چنین مطلبی وجود ندارد و یا غیر فعال است');
+        }
+    }
 
 
 

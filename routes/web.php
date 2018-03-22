@@ -39,6 +39,7 @@ Route::group(['prefix' => 'User',  'middleware' => 'auth:user'], function(){
 
     Route::get('Contents','users\ContentController@contents')->name('contents');
     Route::get('Content/showinbody/{id}','users\ContentController@showinbody')->name('showinbody');
+    Route::get('Content/draft/{id}','users\ContentController@draft')->name('draft');
 
 });
 
