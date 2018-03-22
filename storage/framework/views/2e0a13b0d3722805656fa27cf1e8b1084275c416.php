@@ -116,7 +116,7 @@
                         </div>
                         <div class="data">
                             <div class="row">
-                                <div class="col-md-9">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label>* برچسب ها(کلمات کلیدی را با ویرگول جدا نمایید)</label>
                                         <input class="form-control" value="<?php echo e(old('content_tags',isset($content->content_tags) ? $content->content_tags : '')); ?>" type="text" name="content_tags" required>
@@ -133,6 +133,16 @@
                                             <?php endfor; ?>
                                         </select>
                                         <?php if($errors->has('content_order')): ?> <span class="help-block"><strong><?php echo e($errors->first('content_order')); ?></strong></span> <?php endif; ?>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>حالت ذخیره</label>
+                                        <select class="form-control" name="is_draft" required autocomplete="off">
+                                            <option <?php if(old('is_draft', isset($content->is_draft) ? $content->is_draft : '')==0): ?> selected <?php endif; ?> value="0">نهایی</option>
+                                            <option <?php if(old('is_draft', isset($content->is_draft) ? $content->is_draft : '')==1): ?> selected <?php endif; ?> value="1">پیش نویس</option>
+                                        </select>
+                                        <?php if($errors->has('is_draft')): ?> <span class="help-block"><strong><?php echo e($errors->first('is_draft')); ?></strong></span> <?php endif; ?>
                                     </div>
                                 </div>
                             </div>

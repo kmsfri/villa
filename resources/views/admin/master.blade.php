@@ -21,16 +21,18 @@
 <body>
 <div id="wrapper">
     @include('admin.common.header')
+    <div id="page-wrapper">
     @if(session('messages'))
       <div class="row submit-messages">
         <ul>
-            @foreach(session('messages') as $msg)
-                <li>{{$msg}}</li>
-            @endforeach
+          @foreach(session('messages') as $msg)
+            <li>{{$msg}}</li>
+          @endforeach
         </ul>
       </div>
     @endif
     @yield('content')
+    </div>
 </div>
 </body>
 </html>

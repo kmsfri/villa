@@ -1,29 +1,45 @@
 <?php
 
-namespace App\Http\Controllers\users;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Content;
-use App\Models\RenterUser;
-use Illuminate\Support\Facades\Auth;
-use phpDocumentor\Reflection\Types\Null_;
+use \App\Models\Content;
 use Validator;
+use Illuminate\Support\Facades\Auth;
 use App\Models\City;
 use App\Models\ContentImage;
 use DB;
-use Intervention\Image\Facades\Image;
+
 class ContentController extends Controller
 {
-    public function addcontent(){
-        $states = City::where('parent_id',null)->where('city_status',1)->orderBy('city_order','ASC')->get();
-        $contentcount = Content::where('renter_user_id',Auth::guard('user')->user()->id)->count();
-        $user = RenterUser::find(Auth::guard('user')->user()->id);
-        $cities=array();
-        return view('user.dashboard.AddPost',['user'=>$user,'states'=>$states, 'cities'=>$cities,'contentcount'=>$contentcount]);
+    public function showContentList(Request $request){
+        $contents = Content::orderBy('updated_at','DESC')->orderBy('created_at','ASC')->paginate(10);
+        $data=[
+            'title'=>'لیست مطالب بخش گردشتگری وبسایت',
+            'add_url'=>Route('adminAddContentForm'),
+            'del_url'=>Route('adminRemoveContent'),
+            'contents'=>$contents,
+        ];
+        return view('admin.pages.lists.contents',$data);
     }
+
+    public function addContent(){
+        $states = \App\Models\City::where('parent_id',null)->where('city_status',1)->orderBy('city_order','ASC')->get();
+        $cities=array();
+        $data=[
+            'title'=>'افزودن مطلب جدید به بخش گردشگری',
+            'request_type'=>'add',
+            'post_add_url'=>Route('adminDoSaveContent'),
+            'states'=>$states,
+            'cities'=>$cities,
+        ];
+        return view('admin.pages.forms.add_post',$data);
+    }
+
+
     public function editcontent($id){
-        $content = Content::where('id',$id)->where('renter_user_id',Auth::guard('user')->user()->id)->first();
+        $content = Content::where('id',$id)->first();
         if(empty($content))die('invalid_request!');
 
         $states=\App\Models\City::select('*')
@@ -47,29 +63,27 @@ class ContentController extends Controller
             $cities=array();
         }
 
-        $contentcount = Content::where('renter_user_id',Auth::guard('user')->user()->id)->count();
-        $user = RenterUser::find(Auth::guard('user')->user()->id);
-
         $data=[
-            'user'=>$user,
+            'title'=>'ویرایش مطلب بخش گردشگری',
+            'request_type'=>'edit',
+            'post_edit_url'=>Route('adminDoSaveContent'),
             'states'=>$states,
             'cities'=>$cities,
-            'contentcount'=>$contentcount,
             'content'=>$content,
+            'edit_id'=>$content->id,
         ];
 
-        return view('user.dashboard.AddPost',$data);
+        return view('admin.pages.forms.add_post',$data);
     }
 
 
-    public function addcontentaction(Request $request){
 
+    public function doSaveContent(Request $request){
 
 
         if(isset($request->content_slug) && $request->content_slug!=null){
             $content_slug = \Helpers::make_slug($request->content_slug);
         }
-
 
         $newRequest=[
             'newImg.*' => $request->newImg,
@@ -78,6 +92,7 @@ class ContentController extends Controller
             'content_tags'=>$request->content_tags,
             'content_body'=>$request->content_body,
             'content_order'=>$request->content_order,
+            'content_status'=>$request->content_status,
             'latitude'=>$request->latitude,
             'longitude'=>$request->longitude,
             'content_slug'=>$content_slug,
@@ -96,6 +111,7 @@ class ContentController extends Controller
                 'content_tags'=>'required|max:255',
                 'content_body'=>'required',
                 'content_order'=>'required|integer',
+                'content_status'=>'required|integer',
                 'latitude'=>['nullable', 'regex:/^(?=.+)(?:[1-9]\d*|0)?(?:\.\d+)?$/'],
                 'longitude'=>['nullable', 'regex:/^(?=.+)(?:[1-9]\d*|0)?(?:\.\d+)?$/'],
                 'content_slug'=>'required|max:30|unique:contents,content_slug,'.$request->edit_id,
@@ -103,6 +119,9 @@ class ContentController extends Controller
                 'city'=>'required|max:30|exists:cities,id',
             ]
         );
+
+
+
 
 
         if($validator->fails()){
@@ -127,16 +146,8 @@ class ContentController extends Controller
             return redirect()->back()
                 ->withInput($request->input())
                 ->withErrors($validator->errors())
-                ->with('data','ورودی های خود را بررسی کنید')
+                ->with('messages',['ورودی های خود را بررسی کنید'])
                 ->with(['cities'=>$cities]);
-        }
-
-
-
-        if(isset($request->edit_id) && $request->edit_id!=Null) {
-            $user = Auth::guard('user')->user();
-            $content = Content::where('id', $request->edit_id)->where('renter_user_id', $user->id)->first();
-            if($content==Null)die('invalid request!');
         }
 
 
@@ -152,7 +163,7 @@ class ContentController extends Controller
                         $fileName = "";
                     } else {
                         if ($file->isValid()) {
-                            $fileName = Auth::guard('user')->user()->id.str_replace(' ', '', time()).rand(1000,9999). '.' . $file->guessClientExtension();
+                            $fileName = Auth::guard('admin')->user()->id.str_replace(' ', '', time()).rand(1000,9999). '.' . $file->guessClientExtension();
                             $destinationPath = public_path() . '/images/users/user-uploads/user-contents/';
                             $file->move($destinationPath, $fileName);
                             $uploaded_files_dir[] = $fileName;
@@ -168,6 +179,9 @@ class ContentController extends Controller
             $removableOldImgDir=array();
 
             if(isset($request->edit_id) && $request->edit_id!=Null){
+
+                $content=Content::where('id',$request->edit_id)->first();
+                if($content==Null)die('invalid_request!');
 
                 foreach($content->ContentImages()->get() as $cimg){
                     $exists=false;
@@ -199,7 +213,9 @@ class ContentController extends Controller
                 $content->content_order = $request->content_order;
                 $content->content_slug = $content_slug;
                 $content->content_body = $request->content_body;
-                $content->renter_user_id = Auth::guard('user')->user()->id;
+                if(!isset($request->edit_id) || $request->edit_id==Null){
+                    $content->admin_user_id = Auth::guard('admin')->user()->id;
+                }
                 if ($request->latitude != null){
                     $content->latitude = $request->latitude;
                 }
@@ -207,7 +223,7 @@ class ContentController extends Controller
                     $content->longitude = $request->longitude;
                 }
                 $content->is_draft = $request->is_draft;
-                $content->content_status = 0;
+                $content->content_status = $request->content_status;
                 $content->save();
 
 
@@ -251,48 +267,49 @@ class ContentController extends Controller
             }
             return redirect()->back()
                 ->withInput($request->input())
-                ->with('data','عملیات با شکست مواجه شد، دوباره تلاش کنید');
+                ->with('messages',['عملیات با شکست مواجه شد، دوباره تلاش کنید']);
 
         }
 
         if(isset($request->edit_id) && $request->edit_id!=Null){
-            $msg="مطلب مورد نظر با موفقیت ویرایش شد";
+            $msg=["مطلب مورد نظر با موفقیت ویرایش شد"];
         }else{
-            $msg="مطلب جدید با موفقیت اضافه شد";
+            $msg=["مطلب جدید با موفقیت اضافه شد"];
         }
-        return redirect(url(Route('editContentCategory',$content->id)))->with('data', $msg);
-
+        return redirect(url(Route('adminEditContentCategory',$content->id)))->with('messages', $msg);
     }
-
 
 
 
 
     public function editContentCategory(Request $request){
 
-        $user=Auth::guard('user')->user();
-
         $content=Content::where('id',$request->content_id)
-                        ->where('renter_user_id',$user->id)
-                        ->first();
+            ->first();
         if($content==Null)die('invalid request!');
 
         $masterCtgs=\App\Models\Category3::where('category_status',1)
-                    ->where('parent_id',Null)
-                    ->orderBy('category_order','ASC')
-                    ->orderBy('created_at','DESC')
-                    ->get();
+            ->where('parent_id',Null)
+            ->orderBy('category_order','ASC')
+            ->orderBy('created_at','DESC')
+            ->get();
+
 
 
 
 
         $data=[
-            'user'=>$user,
+            'title'=>'انتخاب دسته بندی',
+            'request_type'=>'edit',
+            'post_edit_url'=>Route('adminDoEditContentCategory'),
             'masterCtgs'=>$masterCtgs,
             'content'=>$content,
+            'edit_id'=>$content->id,
         ];
 
-        return view('user.dashboard.SelectContentCategory',$data);
+        return view('admin.pages.forms.SelectContentCategory',$data);
+
+
     }
 
 
@@ -302,7 +319,7 @@ class ContentController extends Controller
             $request->all(),
             [
                 'ctg.*' => 'integer|exists:categories3,id',
-                'content_id'=>'required|exists:contents,id',
+                'edit_id'=>'required|exists:contents,id',
             ]
         );
 
@@ -312,61 +329,67 @@ class ContentController extends Controller
             return redirect()->back()
                 ->withInput($request->input())
                 ->withErrors($validator->errors())
-                ->with('data','ورودی های خود را بررسی کنید');
+                ->with('messages',['ورودی های خود را بررسی کنید']);
         }
 
-        $user=Auth::guard('user')->user();
 
 
 
-        $content=Content::where('id',$request->content_id)
-                    ->where('renter_user_id',$user->id)
-                    ->first();
 
+        $content=Content::where('id',$request->edit_id)
+            ->first();
         if($content==Null)die('invalid request!');
 
 
         $content->Categories3()->sync($request->ctg);
 
 
-
-
         $msg=['دسته بندی مطلب مورد نظر با موفقیت بروزرسانی شد'];
-        return redirect(url(Route('showdashboard')))->with('data', $msg);
-
-
+        return redirect(url(Route('adminShowContentList')))->with('messages', $msg);
 
 
     }
-    public function contents(){
-        $user = RenterUser::find(Auth::guard('user')->user()->id);
-        $contents = Content::where('renter_user_id',Auth::guard('user')->user()->id)->paginate(11);
-        return view('user.dashboard.PostsList',['user'=>$user,'contents'=>$contents]);
-    }
-    public function showinbody($id){
 
-        $showInBodyCount = Content::where('renter_user_id',Auth::guard('user')->user()->id)->where('show_in_body',1)->where('content_status',1)->count();
+
+
+
+    public function showInBody($id){
+
+        $showInBodyCount = Content::where('show_in_body',1)->where('content_status',1)->count();
         if($showInBodyCount>6){
-            return redirect()->back()->with('data','تعداد مطالب پین شده نمیتواند بیشتر از 6 عدد باشد');
+            return redirect()->back()->with('messages',['تعداد مطالب پین شده نمیتواند بیشتر از 6 عدد باشد']);
         }
 
-        $content = Content::where('id',$id)->where('renter_user_id',Auth::guard('user')->user()->id)->where('content_status',1)->get()->first();
+        $content = Content::where('id',$id)->where('content_status',1)->get()->first();
         if(isset($content)){
             if ($content->show_in_body != 0){
                 $content->show_in_body = 0;
                 $content->save();
-                return redirect()->back()->with('data','تغییرات با موفقیت اعمال شد');
+                return redirect()->back()->with('messages',['تغییرات با موفقیت اعمال شد']);
             }
             else{
                 $content->show_in_body = 1;
                 $content->save();
-                return redirect()->back()->with('data','تغییرات با موفقیت اعمال شد');
+                return redirect()->back()->with('messages',['تغییرات با موفقیت اعمال شد']);
             }
         }
         else{
-            return redirect()->back()->with('data','چنین مطلبی وجود ندارد و یا غیر فعال است');
+            return redirect()->back()->with('messages',['چنین مطلبی وجود ندارد و یا غیر فعال است']);
         }
     }
+
+
+
+    public function doRemoveContent(Request $request){
+        if(isset($request->remove_val)){
+            \App\Models\Content::destroy($request->remove_val);
+        }
+        $msg=['موارد انتخاب شده با موفقیت حذف شدند'];
+
+        return redirect(url(Route('adminShowContentList')))->with('messages', $msg);
+    }
+
+
 
 
 

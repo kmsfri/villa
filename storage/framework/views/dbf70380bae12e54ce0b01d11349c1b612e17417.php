@@ -21,16 +21,18 @@
 <body>
 <div id="wrapper">
     <?php echo $__env->make('admin.common.header', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+    <div id="page-wrapper">
     <?php if(session('messages')): ?>
       <div class="row submit-messages">
         <ul>
-            <?php $__currentLoopData = session('messages'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $msg): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <li><?php echo e($msg); ?></li>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+          <?php $__currentLoopData = session('messages'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $msg): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <li><?php echo e($msg); ?></li>
+          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </ul>
       </div>
     <?php endif; ?>
     <?php echo $__env->yieldContent('content'); ?>
+    </div>
 </div>
 </body>
 </html>

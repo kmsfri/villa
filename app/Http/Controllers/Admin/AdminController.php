@@ -263,9 +263,9 @@ class AdminController extends Controller
             return "invalid";
         }
 
-        $route_g=\App\Models\Admin_route::orderBy('r_order','ASC')->orderBy('created_at','ASC')->orderBy('updated_at')->get();
+        $route_g=\App\Models\AdminRoutes::orderBy('r_order','ASC')->orderBy('created_at','ASC')->orderBy('updated_at')->get();
         $routes_g_user=clone $user;
-        $routes_g_user=$routes_g_user->route;
+        $routes_g_user=$routes_g_user->Routes;
         foreach ($route_g as $key => $c){
             if($routes_g_user!=null && $routes_g_user->contains($c->id)){
                 $route_g[$key]->permited=1;
@@ -284,12 +284,13 @@ class AdminController extends Controller
         $resp=[
             'routes'=>$route_g,
             'request_type'=>'edit',
+            'post_edit_url'=>Route('do_change_admin_sec_permit'),
             'title'=>'ویرایش مجوزهای کاربر: '.$user->user_name,
-            'u_id'=>$user->id,
+            'edit_id'=>$user->id,
             'backward_url'=>$backward_url,
         ];
 
-        return view('admin.pages.add_admin_section_permission' ,$resp);
+        return view('admin.pages.forms.add_admin_section_permission' ,$resp);
     }
 
 
@@ -297,7 +298,7 @@ class AdminController extends Controller
     public function doEditSectionPermit(Request $request){
 
         $validator = Validator::make($request->all(),[
-            'u_id'=>'required|integer|exists:admin_users,id',
+            'edit_id'=>'required|integer|exists:admin_users,id',
         ]);
 
         if ($validator->fails()) {
@@ -306,17 +307,17 @@ class AdminController extends Controller
                 ->withInput();
         }
 
-        $user=\App\Models\AdminUser::find($request->u_id);
+        $user=\App\Models\AdminUser::find($request->edit_id);
 
         (count($request->routes_assign_to_user)>0)? $assign_routes=$request->routes_assign_to_user : $assign_routes=array();
-        $user->route()->sync($assign_routes);
+        $user->Routes()->sync($assign_routes);
 
 
         $msg=[
             'مجوزهای کاربر: '.$user->user_name.' با موفقیت ویرایش شد.'
         ];
 
-        return redirect(url('admin/user/admin'))->with('messages', $msg);
+        return redirect(url(Route('admin-user-list')))->with('messages', $msg);
 
     }
 

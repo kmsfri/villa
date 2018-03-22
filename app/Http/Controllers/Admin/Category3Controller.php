@@ -80,9 +80,7 @@ class Category3Controller extends Controller
 
 
         if(isset($request->category_slug) && $request->category_slug!=null){
-            $category_slug_corrected=trim($request->category_slug);
-            $category_slug_corrected=str_replace(" ","-",$category_slug_corrected);
-            $category_slug_corrected=str_replace("_","-",$category_slug_corrected);
+            $category_slug_corrected=\Helpers::make_slug($request->category_slug);
         }
 
         $newRequest = new \Illuminate\Http\Request();
@@ -168,9 +166,7 @@ class Category3Controller extends Controller
     public function doEditCategory(Request $request){
 
         if(isset($request->category_slug) && $request->category_slug!=null){
-            $category_slug_corrected=trim($request->category_slug);
-            $category_slug_corrected=str_replace(" ","-",$category_slug_corrected);
-            $category_slug_corrected=str_replace("_","-",$category_slug_corrected);
+            $category_slug_corrected=\Helpers::make_slug($request->category_slug);
         }
 
         $newRequest = new \Illuminate\Http\Request();
