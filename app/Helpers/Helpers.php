@@ -49,10 +49,12 @@ class Helpers{
             $watermarkNewWidth=$minDim/3;
             $watermarkNewHeight=$watermarkHeight/($watermarkWidth/$watermarkNewWidth);
             $watermark=Image::make($watermarkDir)->resize($watermarkNewWidth,$watermarkNewHeight);
-            $img=$img->insert($watermark, 'bottom-left', 0, 0);
+            $img=$img->insert($watermark, 'bottom-left', 10, 10);
         }
 
         $img->save($resultDir);
+
+
     }
 
 

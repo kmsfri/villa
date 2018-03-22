@@ -74,14 +74,17 @@
                                     <td>
                                         <a href="<?php echo e(route('editcontent',$content->id)); ?>" data-toggle="tooltip" title="ویرایش"><i class="fa fa-pencil"></i></a>
                                         <?php if($content->show_in_body != 0): ?>
-                                            <a href="<?php echo e(route('showinbody',$content->id)); ?>" data-toggle="tooltip" title="عدم نمایش در بالای بلاگ"><i class="fa fa-eye-slash"></i></a>
+                                            <a href="<?php echo e(route('showinbody',$content->id)); ?>" onclick="confirmaction();" data-toggle="tooltip" title="عدم نمایش در بالای بلاگ"><i class="fa fa-eye-slash"></i></a>
                                         <?php else: ?>
-                                            <a href="<?php echo e(route('showinbody',$content->id)); ?>" data-toggle="tooltip" title="نمایش در بالای بلاگ"><i class="fa fa-eye"></i></a>
+                                            <a href="<?php echo e(route('showinbody',$content->id)); ?>" onclick="confirmaction();" data-toggle="tooltip" title="نمایش در بالای بلاگ"><i class="fa fa-eye"></i></a>
                                         <?php endif; ?>
                                         <br>
                                         <a href="#" data-toggle="tooltip" title="درخواست حذف"><i class="fa fa-trash"></i></a>
-
-                                        <a href="#" data-toggle="tooltip" title="ذخیره به صورت پیش نویس"><i class="fa fa-sticky-note"></i></a>
+                                        <?php if($content->is_draft != 0): ?>
+                                        <a href="<?php echo e(route('draft',$content->id)); ?>" onclick="confirmaction();" data-toggle="tooltip" title="وضعیت:پیش نویس"><i class="fa fa-sticky-note"></i></a>
+                                        <?php else: ?>
+                                            <a href="<?php echo e(route('draft',$content->id)); ?>" onclick="confirmaction();" data-toggle="tooltip" title="وضعیت:نهایی"><i class="fa fa-check"></i></a>
+                                        <?php endif; ?>
                                     </td>
                                     <td>
                                         <p class="text"><?php echo e(Helpers::convert_date_g_to_j($content->created_at,true)); ?><br><?php echo e($content->created_at->format('H:i:s')); ?></p>
@@ -111,6 +114,16 @@
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
         });
+        function confirmaction() {
+            var r = confirm("آیا از انجام این عملیات مطمئن هستید؟");
+            if (r == true) {
+                return true;
+            } else {
+                event.preventDefault();
+                return false;
+            }
+
+        }
     </script>
 
     <script>

@@ -154,7 +154,13 @@ class ContentController extends Controller
                         if ($file->isValid()) {
                             $fileName = Auth::guard('user')->user()->id.str_replace(' ', '', time()).rand(1000,9999). '.' . $file->guessClientExtension();
                             $destinationPath = public_path() . '/images/users/user-uploads/user-contents/';
-                            $file->move($destinationPath, $fileName);
+                            $imgConf=[
+                                'imgType'=>'blogImage',
+                                'imgObject'=>$file,
+                                'resultDir'=>$destinationPath.'/'.$fileName,
+                                ];
+                            \Helpers::save_img($imgConf['imgType'],$imgConf['imgObject'],$imgConf['resultDir']);
+                            //$file->move($destinationPath, $fileName);
                             $uploaded_files_dir[] = $fileName;
                         } else {
                             $this->img_upload_error_msg = 'آپلود یکی از تصاویر ناموفق بود';
