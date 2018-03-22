@@ -143,9 +143,12 @@
 </div>
 @stop
 @section('jsCustom')
-    <script src="{{ asset('users/ckeditor/ckeditor.js') }}"></script>
+    <script src="{{ asset('admin/ckeditor/ckeditor.js') }}"></script>
     <script>
-        CKEDITOR.replace('cktext');
+        CKEDITOR.replace('cktext' , {
+            filebrowserImageBrowseUrl  : '{{asset('admin/ckeditor/kcfinder/browse.php?opener=ckeditor&type=images&langCode=fa')}}',
+
+        });
     </script>
     <script type="text/javascript">
         window.onload = function(){
