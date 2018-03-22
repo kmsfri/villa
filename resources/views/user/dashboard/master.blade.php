@@ -38,9 +38,9 @@
           </li>
           <li><a href="" title=""><img src="{{asset('users/img/icon/icon042.png')}}" alt=""><img class="img" src="{{asset('users/img/icon/icon042-2.png')}}" alt=""><span>ارتباط با مهمانان</span></a></li>
           <li><a href="" title=""><img src="{{asset('users/img/icon/icon045.png')}}" alt=""><img class="img" src="{{asset('users/img/icon/icon045-2.png')}}" alt=""><span>امور مالی</span></a></li>
-          <li><a href="" title=""><img src="{{asset('users/img/icon/icon043.png')}}" alt=""><img class="img" src="{{asset('users/img/icon/icon043-2.png')}}" alt=""><span>گردشگری</span></a></li>
-          <li><a href="" title=""><img src="{{asset('users/img/icon/icon045.png')}}" alt=""><img class="img" src="{{asset('users/img/icon/icon045-2.png')}}" alt=""><span>وبلاگ من</span></a></li>
-          <li><a href="{{route('blogaction')}}" title=""><img src="{{asset('users/img/icon/icon044.png')}}" alt=""><img class="img" src="{{asset('users/img/icon/icon044-2.png')}}" alt=""><span>پیام ها</span></a></li>
+          <li><a href="{{route('contents')}}" title=""><img src="{{asset('users/img/icon/icon043.png')}}" alt=""><img class="img" src="{{asset('users/img/icon/icon043-2.png')}}" alt=""><span>گردشگری</span></a></li>
+          <li><a href="{{route('showblog')}}" title=""><img src="{{asset('users/img/icon/icon045.png')}}" alt=""><img class="img" src="{{asset('users/img/icon/icon045-2.png')}}" alt=""><span>وبلاگ من</span></a></li>
+          <li><a href="" title=""><img src="{{asset('users/img/icon/icon044.png')}}" alt=""><img class="img" src="{{asset('users/img/icon/icon044-2.png')}}" alt=""><span>پیام ها</span></a></li>
           <li><a href="{{route('showuser')}}" title=""><i class="fa fa-user" style="font-size: 25px;"></i> <span>ویرایش اطلاعات</span></a></li>
           <li><a href="{{route('logout')}}" title=""><i class="fa fa-unlock" style="font-size: 25px;"></i> <span>خروج از سیستم</span></a></li>
         </ul>
