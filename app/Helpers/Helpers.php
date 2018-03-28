@@ -243,6 +243,46 @@ class Helpers{
         }
         return $resp;
     }
+    public static function returnexplodedtime($date){
+        $f = Helpers::convert_date_g_to_j($date,true);
+        $fs = explode('/',$f);
+        return '<span>'.$fs[2].'</span><strong>'.Helpers::get_equal_str_month($fs[1]).'</strong><span>'.$fs[0].'</span>';
+    }
+
+    public static function sendsms($number,$code){
+        $from = "";
+        if (substr($number, 0, 2) == "92"){
+            $from = "+98100009";
+        }
+        else{
+            $from = "+98500020403557";
+        }
+        $url = "37.130.202.188/services.jspd";
+
+        $param = array
+        (
+            'uname'=>'mazandaranweb',
+            'pass'=>'5p64g49',
+            'from'=>$from,
+            'message'=>'رمز عبور جدید شما:'.$code,
+            'to'=>$number,
+            'op'=>'send'
+        );
+
+        $handler = curl_init($url);
+        curl_setopt($handler, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($handler, CURLOPT_POSTFIELDS, $param);
+        curl_setopt($handler, CURLOPT_RETURNTRANSFER, true);
+        $response2 = curl_exec($handler);
+
+        $response2 = json_decode($response2);
+        $res_code = $response2[0];
+        //$res_data = $response2[1];
+
+
+        return $res_code;
+    }
+
 
 
 

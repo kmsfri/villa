@@ -104,6 +104,11 @@
                                     <div class="form-group">
                                         <textarea class="form-control" id="cktext" rows="6" name="content_body" required>{{ old('content_body',isset($content->content_body) ? $content->content_body : '') }}</textarea>
                                         @if ($errors->has('content_body')) <span class="help-block"><strong>{{ $errors->first('content_body') }}</strong></span> @endif
+                                    </div><br>
+                                    <div class="form-group">
+                                        <label>* توضیح مختصر درباره مطلب</label>
+                                        <input class="form-control" type="text" max="200" value="{{ old('content_short_desc',isset($content->content_short_desc) ? $content->content_short_desc : '') }}" name="content_short_desc" required>
+                                        @if ($errors->has('content_short_desc')) <span class="help-block"><strong>{{ $errors->first('content_short_desc') }}</strong></span> @endif
                                     </div>
                                 </div>
                             </div>
@@ -280,7 +285,7 @@
 
         function initMap() {
             var map = new google.maps.Map(document.getElementById('map-container'), {
-                center: {lat: 35.42323874580487, lng: 52.07075264355467 },
+                center: {lat: {{(isset($content->latitude) && ($content->latitude!=Null && trim($content->latitude)!=''))?$content->latitude:'35.42323874580487'}}, lng: {{(isset($content->latitude) && ($content->longitude!=Null && trim($content->longitude)!=''))?$content->longitude:'52.07075264355467'}} },
                 zoom: 6,
                 //disableDefaultUI: true,
                 zoomControl: true,

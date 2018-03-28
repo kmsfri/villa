@@ -11,6 +11,16 @@
 |
 */
 
+//Website routes
+
+//blog
+Route::get('Articles','users\web\BlogController@websiteArticles')->name('websiteArticles');
+Route::get('Article/{slug}','users\web\BlogController@showArticle')->name('showArticle');
+Route::post('Article/{id}/Comment','users\web\BlogController@content_comment')->name('content_comment');
+
+
+
+
 
 Route::post('/ajax/get_province_cities', 'API\AjaxServicesController@get_province_cities');
 //User Auth Routes
