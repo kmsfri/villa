@@ -17,7 +17,7 @@
     <ul class="breadcrumb">
         <li><a href="" title="پیشخوان">پیشخوان</a></li>
         <li><a href="" title="ملک های من">جاذبه های گردشگری</a></li>
-        <a class="btn btn-info pull-left" href="" title="ثبت رایگان ملک">افزدون مطلب گردشگری جدید <i class="fa fa-file"></i></a>
+        <a class="btn btn-info pull-left" href="{{route('addcontent')}}" title="ثبت رایگان ملک">افزدون مطلب گردشگری جدید <i class="fa fa-file"></i></a>
     </ul>
     <div class="container-fluid">
         <div class="row">

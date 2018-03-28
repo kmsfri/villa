@@ -74,18 +74,30 @@ class AuthController extends Controller
                 ->withErrors($validator->errors());
 
         }
-        $randompass = "1234";
+        $randompass = rand(9999,9999999);
 
-        //sms to user
 
-        $user = new RenterUser();
-        $user->mobile_number = $request->phone;
-        $user->user_status = 1;
-        $user->password = bcrypt($randompass);
-        $user->save();
+        try{
+            $user = new RenterUser();
+            $user->mobile_number = $request->phone;
+            $user->user_status = 1;
+            $user->password = bcrypt($randompass);
 
-        return redirect(url('User/Login'))
-            ->with('data','رمز عبور جدید برای شماره ی وارد شده ارسال شد، بعد از دریافت می توانید وارد شوید');
+            $number = ltrim($request->phone, 0);
+            if(\Helpers::sendsms($number,$randompass) == 0){
+                $user->save();
+                return redirect(url('User/Login'))
+                    ->with('data', 'رمز عبور جدید برای شماره ی وارد شده ارسال شد، بعد از دریافت می توانید وارد شوید');
+            }
+            else {
+                goto catch_block;
+            }
+
+        }
+        catch(\Exception $e) {
+            catch_block:
+            return redirect()->back()->with('data','مشکلی در عملیات ثبت نام به وجود آمد، دوباره تلاش کنید');
+        }
 
     }
     public function NewPassword(Request $request){
@@ -113,12 +125,27 @@ class AuthController extends Controller
                 ->withInput($request->input())
                 ->with('data','این شماره در سیستم موجود نمی باشد');
         }
-        $randompass = "4321";
-        $user->password = bcrypt($randompass);
-        $user->save();
+        $randompass = rand(9999,9999999);
 
-        return redirect(url('User/Login'))
-            ->with('data','رمز عبور جدید برای شماره ی وارد شده ارسال شد، بعد از دریافت می توانید وارد شوید');
+        try{
+            $user->password = bcrypt($randompass);
+
+            $number = ltrim($request->phone, 0);
+            if(\Helpers::sendsms($number,$randompass) == 0){
+                $user->save();
+                return redirect(url('User/Login'))
+                    ->with('data', 'رمز عبور جدید برای شماره ی وارد شده ارسال شد، بعد از دریافت می توانید وارد شوید');
+            }
+            else {
+                goto catch_block;
+            }
+
+        }
+        catch(\Exception $e) {
+            catch_block:
+            return redirect()->back()->with('data','مشکلی در عملیات ثبت نام به وجود آمد، دوباره تلاش کنید');
+        }
+
     }
 
 
@@ -135,4 +162,5 @@ class AuthController extends Controller
         $request->session()->regenerate();
         return redirect($this->redirectPathAfterLogout);
     }
+
 }

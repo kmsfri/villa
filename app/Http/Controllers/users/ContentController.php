@@ -83,6 +83,7 @@ class ContentController extends Controller
             'content_slug'=>$content_slug,
             'is_draft'=>$request->is_draft,
             'city'=>$request->city,
+            'content_short_desc'=>$request->content_short_desc,
         ];
 
 
@@ -94,6 +95,7 @@ class ContentController extends Controller
                 'oldImg.*' => 'integer|exists:content_images,id',
                 'content_title'=>'required|max:255',
                 'content_tags'=>'required|max:255',
+                'content_short_desc'=>'required|max:200',
                 'content_body'=>'required',
                 'content_order'=>'required|integer',
                 'latitude'=>['nullable', 'regex:/^(?=.+)(?:[1-9]\d*|0)?(?:\.\d+)?$/'],
@@ -204,6 +206,7 @@ class ContentController extends Controller
                 $content->content_tags = $request->content_tags;
                 $content->content_order = $request->content_order;
                 $content->content_slug = $content_slug;
+                $content->content_short_desc = $request->content_short_desc;
                 $content->content_body = $request->content_body;
                 $content->renter_user_id = Auth::guard('user')->user()->id;
                 if ($request->latitude != null){

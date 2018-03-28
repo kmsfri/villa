@@ -14,7 +14,6 @@ class RenterUser extends Authenticatable
     protected $hidden = [
         'password',
     ];
-
     public function Tickets()
     {
         return $this->hasMany('App\Models\Ticket');
