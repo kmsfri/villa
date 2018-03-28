@@ -29,7 +29,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <input class="form-control right" name="phone" value="{{ old('phone') }}" min="10" max="11" type="text" placeholder="شماره همراه" required autofocus>
+                                        <input class="form-control right" name="phone" value="{{ old('phone') }}" min="10" max="11" type="text" placeholder="شماره همراه مثال(09120000000)" required autofocus>
                                         @if ($errors->has('phone')) <span class="help-block"><strong>{{ $errors->first('phone') }}</strong></span> @endif
                                     </div>
                                 </div>

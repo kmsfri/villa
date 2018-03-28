@@ -36,7 +36,7 @@ class Content extends Model
 
     public function RenterUserComments()
     {
-        return $this->belongsToMany('App\Models\RenterUser','user_content_comments','content_id','renter_user_id');
+        return $this->belongsToMany('App\Models\RenterUser','user_content_comments','content_id','renter_user_id')->withTimestamps();
     }
     public function Cities()
     {
