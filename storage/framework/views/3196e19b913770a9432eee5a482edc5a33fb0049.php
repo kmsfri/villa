@@ -40,7 +40,7 @@
             </td>
             <td class="text-center">
                 <center>
-                    <?php if($canHasSubCategory): ?><a href="<?php echo e(url(Route('categories3-list',$ctg->id))); ?>"><?php endif; ?>
+                    <?php if($canHasSubCategory): ?><a href="<?php echo e(url(Route('categories'.$ctgType.'-list',$ctg->id))); ?>"><?php endif; ?>
                             <?php echo e($ctg->category_title); ?>
 
                     <?php if($canHasSubCategory==Null): ?></a><?php endif; ?>
@@ -59,7 +59,7 @@
             </td>
 
             <td class="text-center">
-                <a href="<?php echo e(url(Route('edit-category3-form',$ctg->id))); ?>">
+                <a href="<?php echo e(url(Route('edit-category'.$ctgType.'-form',$ctg->id))); ?>">
                     ویرایش
                 </a>
             </td>

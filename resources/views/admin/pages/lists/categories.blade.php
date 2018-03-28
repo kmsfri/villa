@@ -41,7 +41,7 @@
             </td>
             <td class="text-center">
                 <center>
-                    @if($canHasSubCategory)<a href="{{ url(Route('categories3-list',$ctg->id))}}">@endif
+                    @if($canHasSubCategory)<a href="{{ url(Route('categories'.$ctgType.'-list',$ctg->id))}}">@endif
                             {{$ctg->category_title}}
                     @if($canHasSubCategory==Null)</a>@endif
 
@@ -59,7 +59,7 @@
             </td>
 
             <td class="text-center">
-                <a href="{{url(Route('edit-category3-form',$ctg->id))}}">
+                <a href="{{url(Route('edit-category'.$ctgType.'-form',$ctg->id))}}">
                     ویرایش
                 </a>
             </td>

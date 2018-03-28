@@ -21,6 +21,7 @@ class CreateContents extends Migration
             $table->string('content_tags');
             $table->SmallInteger('content_order')->unsigned()->default(1);
             $table->SmallInteger('show_in_body')->unsigned()->default(0);
+            $table->SmallInteger('show_in_blog')->unsigned()->default(0);
             $table->integer('admin_user_id')->unsigned()->nullable();
             $table->foreign('admin_user_id')->references('id')->on('admin_users')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('renter_user_id')->unsigned()->nullable();

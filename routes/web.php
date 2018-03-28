@@ -50,7 +50,7 @@ Route::group(['prefix'=>'management'],function(){
     Route::get('logout', 'Admin\AuthAdmin\LoginController@logout')->name('do-admin-logout');
 
     Route::group(['middleware'=>['auth:admin'/*,'init_admin_common_data'*/]],function(){
-        Route::group(['middleware'=>['route_permission']],function(){
+        Route::group(['middleware'=>[/*'route_permission'*/]],function(){
             Route::get('/', function(){
                 return redirect(Route('dashboard'));
             });
@@ -92,6 +92,41 @@ Route::group(['prefix'=>'management'],function(){
             Route::get('content/category/{content_id}','Admin\ContentController@editContentCategory')->name('adminEditContentCategory');
             Route::post('content/category','Admin\ContentController@doEditContentCategory')->name('adminDoEditContentCategory');
             Route::get('content/showinbody/{id}','Admin\ContentController@showInBody')->name('adminShowinBody');
+
+
+            Route::get('/category2/add/{parent_id?}', 'Admin\Category2Controller@showAddCategoryForm')->name('add-category2-form');
+            Route::post('/category2/add', 'Admin\Category2Controller@saveCategory')->name('do-add-category2');
+            Route::post('/category2/delete/{parent_id?}', 'Admin\Category2Controller@deleteCategory')->name('do-delete-category2');
+            Route::get('/category2/edit/{id}', 'Admin\Category2Controller@editCategory')->name('edit-category2-form');
+            Route::post('/category2/edit', 'Admin\Category2Controller@doEditCategory')->name('do-edit-category2');
+            Route::get('/category2/{parent_id?}', 'Admin\Category2Controller@categories')->name('categories2-list');
+
+            Route::get('/category1/add/{parent_id?}', 'Admin\Category1Controller@showAddCategoryForm')->name('add-category1-form');
+            Route::post('/category1/add', 'Admin\Category1Controller@saveCategory')->name('do-add-category1');
+            Route::post('/category1/delete/{parent_id?}', 'Admin\Category1Controller@deleteCategory')->name('do-delete-category1');
+            Route::get('/category1/edit/{id}', 'Admin\Category1Controller@editCategory')->name('edit-category1-form');
+            Route::post('/category1/edit', 'Admin\Category1Controller@doEditCategory')->name('do-edit-category1');
+            Route::get('/category1/{parent_id?}', 'Admin\Category1Controller@categories')->name('categories1-list');
+
+
+            Route::get('/property/add/{parent_id?}', 'Admin\PropertyController@showAddPropertyForm')->name('addPropertyForm');
+            Route::post('/property/add', 'Admin\PropertyController@saveProperty')->name('saveProperty');
+            Route::post('/property/delete/{parent_id?}', 'Admin\PropertyController@deleteProperty')->name('deleteProperty');
+            Route::get('/property/edit/{id}', 'Admin\PropertyController@editProperty')->name('editPropertyForm');
+            Route::post('/property/edit', 'Admin\PropertyController@doEditProperty')->name('doEditProperty');
+            Route::get('/property/{parent_id?}', 'Admin\PropertyController@properties')->name('propertiesList');
+
+
+
+            Route::get('/user/renter', 'Admin\RenterUserController@showRenterUsers')->name('renter-user-list');
+            Route::get('/user/renter/add', 'Admin\RenterUserController@showAddRenterUserForm')->name('add_renter_form');
+            Route::post('/user/renter/add', 'Admin\RenterUserController@saveRenterUser')->name('do_add_renter');
+            Route::post('/user/renter/delete', 'Admin\RenterUserController@deleteRenterUser')->name('delete_renter_user');
+            Route::get('/user/renter/edit/{id}', 'Admin\RenterUserController@editRenterUser')->name('edit_renter_form');
+            Route::post('/user/renter/edit', 'Admin\RenterUserController@doEditRenterUser')->name('do_edit_renter');
+
+
+
 
 
 

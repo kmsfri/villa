@@ -14,8 +14,8 @@ class Helpers{
 
         $imgConfig=[
             'renterProfile'=>[
-                'width'=>100,
-                'height'=>100,
+                'width'=>150,
+                'height'=>150,
                 'hasWatermark'=>false,
                 'watermarkDir'=>'',
             ],

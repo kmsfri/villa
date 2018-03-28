@@ -17,9 +17,11 @@ class CreateProperties extends Migration
             $table->increments('id');
             $table->integer('parent_id')->unsigned()->nullable();
             $table->foreign('parent_id')->references('id')->on('properties')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('property_title');
-            $table->smallInteger('property_order')->unsigned()->default('1');
-            $table->boolean('property_status')->default(1)->comment='0:deactive - 1:active';
+            $table->string('prop_title');
+            $table->boolean('has_text_value')->default(0)->comment="1: is used for master properties(parent:Null). they hasn't any specified values. the value is a dynamic text ";
+            $table->string('guide_text')->nullable();
+            $table->smallInteger('prop_order')->unsigned()->default('1');
+            $table->boolean('prop_status')->default(1)->comment='0:deactive - 1:active';
             $table->timestamps();
         });
     }
