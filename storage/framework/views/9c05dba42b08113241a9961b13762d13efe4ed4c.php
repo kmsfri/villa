@@ -1,5 +1,4 @@
-@extends('user.dashboard.master')
-@section('main')
+<?php $__env->startSection('main'); ?>
 
 
     <div class="header-form">
@@ -23,57 +22,61 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <form class="form" method="POST" action="{{Route('doEditContentCategory')}}" enctype="multipart/form-data">
-                    {{csrf_field()}}
-                    <input type="hidden" name="content_id" value="{{ old('content_id',isset($content->id) ? $content->id : '') }}" autocomplete="off">
+                <form class="form" method="POST" action="<?php echo e(Route('doEditContentCategory')); ?>" enctype="multipart/form-data">
+                    <?php echo e(csrf_field()); ?>
+
+                    <input type="hidden" name="content_id" value="<?php echo e(old('content_id',isset($content->id) ? $content->id : '')); ?>" autocomplete="off">
                     <div class="box-panel padding">
-                        @if( Session::has('data') )
+                        <?php if( Session::has('data') ): ?>
                             <div class="alert alert-success alert-dismissable">
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                {{ Session::get('data') }}
+                                <?php echo e(Session::get('data')); ?>
+
                             </div>
-                        @endif
+                        <?php endif; ?>
                         <div class="header"><h3 class="title-box">انتخاب دسته بندی ها(انتخاب دسته بندی اجباری نیست)</h3><br></div>
                     </div>
 
-                    @foreach($masterCtgs as $mctg)
+                    <?php $__currentLoopData = $masterCtgs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $mctg): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="box-panel">
                             <div class="header">
-                                @php
+                                <?php
                                     $hasSubMenu=false;
                                     if($mctg->SubCategory3()->count()>0)$hasSubMenu=true;
-                                @endphp
+                                ?>
 
-                                <input {{($content->Categories3()->find($mctg->id)!=Null)?'checked':''}} class="checkbox" {{($hasSubMenu)?'disabled':''}} type="checkbox" value="{{$mctg->id}}"  name="ctg[]" autocomplete="off">{{$mctg->category_title}}<br><br>
-                                @if($hasSubMenu) <a onclick="changeCheckBox('{{$mctg->id}}');" href="javascript:void()"  style="color:#d26b6b">نمایش زیر دسته های این دسته بندی</a><br> @endif
+                                <input <?php echo e(($content->Categories3()->find($mctg->id)!=Null)?'checked':''); ?> class="checkbox" <?php echo e(($hasSubMenu)?'disabled':''); ?> type="checkbox" value="<?php echo e($mctg->id); ?>"  name="ctg[]" autocomplete="off"><?php echo e($mctg->category_title); ?><br><br>
+                                <?php if($hasSubMenu): ?> <a onclick="changeCheckBox('<?php echo e($mctg->id); ?>');" href="javascript:void()"  style="color:#d26b6b">نمایش زیر دسته های این دسته بندی</a><br> <?php endif; ?>
                             </div>
-                            @if($hasSubMenu)
-                                <div class="data" style="display: none;" id="checkCollection{{$mctg->id}}">
+                            <?php if($hasSubMenu): ?>
+                                <div class="data" style="display: none;" id="checkCollection<?php echo e($mctg->id); ?>">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                @foreach($mctg->SubCategory3EnabledOrdered()->get() as $ctg)
-                                                    <input {{($content->Categories3()->find($ctg->id)!=Null)?'checked':''}} type="checkbox" name="ctg[]" value="{{$ctg->id}}" autocomplete="off"> {{$ctg->category_title}}&nbsp;&nbsp;&nbsp;
-                                                @endforeach
+                                                <?php $__currentLoopData = $mctg->SubCategory3EnabledOrdered()->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ctg): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <input <?php echo e(($content->Categories3()->find($ctg->id)!=Null)?'checked':''); ?> type="checkbox" name="ctg[]" value="<?php echo e($ctg->id); ?>" autocomplete="off"> <?php echo e($ctg->category_title); ?>&nbsp;&nbsp;&nbsp;
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            @endif
+                            <?php endif; ?>
                         </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     <button class="btn btn-primary pull-left" type="submit">ذخیره</button>
                 </form>
             </div>
         </div>
     </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('mapscript')
+<?php $__env->startSection('mapscript'); ?>
     <script type="text/javascript">
         function changeCheckBox(ctg_id){
             $('#checkCollection'+ctg_id).slideToggle();
         }
     </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('user.dashboard.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

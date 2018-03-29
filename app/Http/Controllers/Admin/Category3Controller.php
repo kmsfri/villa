@@ -72,6 +72,7 @@ class Category3Controller extends Controller
             'request_type'=>'add',
             'parent_id'=>$request->parent_id,
             'backward_url'=>$backward_url,
+            'ctg_type'=>'category3',
         ];
         return view('admin.pages.forms.add_category' ,$resp);
     }
@@ -79,7 +80,7 @@ class Category3Controller extends Controller
 
     public function saveCategory(Request $request){
 
-
+        $category_slug_corrected='';
         if(isset($request->category_slug) && $request->category_slug!=null){
             $category_slug_corrected=\Helpers::make_slug($request->category_slug);
         }
@@ -89,6 +90,7 @@ class Category3Controller extends Controller
             'category_title' => $request->category_title,
             'category_order'=>$request->category_order,
             'category_status'=>$request->category_status,
+            'show_in_blog'=>$request->show_in_blog,
             'category_slug_corrected'=>$category_slug_corrected,
             'parent_id' => $request->parent_id,
         ]);
@@ -97,6 +99,7 @@ class Category3Controller extends Controller
             'category_title' => 'required|min:2|max:255|unique:categories3',
             'category_order'=>'required|integer',
             'category_status'=>'required|integer',
+            'show_in_blog'=>'required|integer',
             'category_slug_corrected'=>'required|unique:categories3,category_slug',
             'parent_id' => 'nullable|exists:categories3,id',
         ]);
@@ -107,6 +110,7 @@ class Category3Controller extends Controller
         $ctg->parent_id=$newRequest->parent_id;
         $ctg->category_order=$newRequest->category_order;
         $ctg->category_status=$newRequest->category_status;
+        $ctg->show_in_blog=$newRequest->show_in_blog;
         $ctg->category_slug=$newRequest->category_slug_corrected;
         $ctg->save();
 
@@ -157,6 +161,7 @@ class Category3Controller extends Controller
             'edit_id'=>$ctg->id,
             'title'=>$title,
             'backward_url'=>$backward_url,
+            'ctg_type'=>'category3',
         ];
 
 
@@ -166,6 +171,7 @@ class Category3Controller extends Controller
 
     public function doEditCategory(Request $request){
 
+        $category_slug_corrected='';
         if(isset($request->category_slug) && $request->category_slug!=null){
             $category_slug_corrected=\Helpers::make_slug($request->category_slug);
         }
@@ -175,6 +181,7 @@ class Category3Controller extends Controller
             'category_title' => $request->category_title,
             'category_order'=>$request->category_order,
             'category_status'=>$request->category_status,
+            'show_in_blog'=>$request->show_in_blog,
             'category_slug_corrected'=>$category_slug_corrected,
             'edit_id' => $request->edit_id,
         ]);
@@ -184,6 +191,7 @@ class Category3Controller extends Controller
             'category_title' => 'required|min:2|max:255|unique:categories3,category_title,'.$newRequest->edit_id,
             'category_order'=>'required|integer',
             'category_status'=>'required|integer',
+            'show_in_blog'=>'required|integer',
             'category_slug_corrected'=>'required|unique:categories3,category_slug,'.$newRequest->edit_id,
             'edit_id' => 'required|exists:categories3,id',
         ]);
@@ -194,6 +202,7 @@ class Category3Controller extends Controller
         $ctg->category_title=$newRequest->category_title;
         $ctg->category_order=$newRequest->category_order;
         $ctg->category_status=$newRequest->category_status;
+        $ctg->show_in_blog=$newRequest->show_in_blog;
         $ctg->category_slug=$newRequest->category_slug_corrected;
         $ctg->save();
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>داشبورد</title>
+    <title>پنل کاربری{{isset($page_title)?' - '.$page_title:''}}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1"><!-- My Style -->
     <link href="{{asset('users/bs4/scss/bootstrap.css')}}" rel="stylesheet">
@@ -19,9 +19,6 @@
     <main>
       <aside class="sidebar">
         <div class="headera">
-		
-		<!-- <a class="link" href="#" alt=""><span></span><span></span><span></span></a> -->
-		
 		<a class="logo" href="" alt=""><img src="{{asset('users/img/logo.png')}}" alt=""></a><a class="link-mobile d-md-none d-inline-block" href="" alt=""><img src="{{asset('users/img/icon/icon0108.png')}}" alt=""></a></div>
         <div class="box-user"><img src="{{asset('images/users/user-uploads/user-pics/'.$user->avatar_dir)}}" alt="">
           <p>{{$user->fullname}}</p><span class="points">امتیاز شما : 400</span>
@@ -46,24 +43,13 @@
         </ul>
       </aside>
       <div class="main-panel">
-
-
-
-
-
-
+      @include('user.panel.common.heading')
       @yield('main')
-
-
       </div>
     </main>
-
-
-
     <script src="{{asset('users/js/popover.js')}}"></script>
     <script src="{{asset('users/js/bootstrap.min.js')}}"></script>
     <script src="{{asset('users/js/tether.min.js')}}"></script>
-
     @yield('mapscript')
     <script>
       $(document).ready(function () {
@@ -84,14 +70,3 @@
     <!--end scripts-->
   </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-

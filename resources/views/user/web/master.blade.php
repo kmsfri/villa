@@ -1,22 +1,20 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <title>Home Page</title>
+    <title>ویلایار{{(!empty($meta) && $meta->title!=Null)?' - '.$meta->title:''}}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="description site">
-    <meta name="keywords" content="keywords site">
-    <link rel="canonical" href="url site">
-    <meta property="og:site_name" content="">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="url site">
-    <meta property="og:title" content="title site">
-    <meta property="og:description" content="og:description">
-    <meta property="og:image" content="/favicon.ico">
-    <meta property="og:locale" content="fa_IR">
-    <meta name="twitter:card" content="app">
-    <meta name="twitter:description" content="twitter:description">
-    <meta name="twitter:app:country" content="IR"><!-- My Style -->
+@if(!empty($meta))
+@foreach($meta as $key=>$m)
+    <meta name="{{$key}}" content="{{$m}}">
+@endforeach
+@endif
+    {!!(isset($canonical_url))?'<link rel="canonical" href="'.$canonical_url.'">':''!!}
+@if(!empty($openGraph))
+@foreach($openGraph as $key=>$og)
+    <meta property="og:{{$key}}" content="{{$og}}">
+@endforeach
+@endif
     <link href="{{asset('users/bs4/scss/bootstrap.css')}}" rel="stylesheet">
     <link href="{{asset('users/plugin/rating/star-rating-svg.css')}}" rel="stylesheet">
     <link href="{{asset('users/plugin/slick/slick.css')}}" rel="stylesheet">
@@ -28,18 +26,8 @@
 </head>
 <body>
 <main>
-
     @yield('header')
-
-
-@yield('main')
-
-
-
-
-
-
-
+    @yield('main')
 </main>
 <footer>
     <div class="footer">

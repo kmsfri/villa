@@ -98,10 +98,10 @@
 
             <td class="text-center">
                 <a href="{{route('adminEditContentForm',$content->id)}}" data-toggle="tooltip" title="ویرایش"><i class="fa fa-pencil"></i></a>
-                @if($content->show_in_body != 0)
-                    <a href="{{route('adminShowinBody',$content->id)}}" data-toggle="tooltip" title="نمایش در بالای بلاگ"><i class="fa fa-eye"></i></a>
+                @if($content->show_in_blog != 0)
+                    <a href="{{route('adminShowinBlog',$content->id)}}" data-toggle="tooltip" title="نمایش در بالای بلاگ"><i class="fa fa-eye"></i></a>
                 @else
-                    <a href="{{route('adminShowinBody',$content->id)}}" data-toggle="tooltip" title="عدم نمایش در بالای بلاگ"><i class="fa fa-eye-slash"></i></a>
+                    <a href="{{route('adminShowinBlog',$content->id)}}" data-toggle="tooltip" title="عدم نمایش در بالای بلاگ"><i class="fa fa-eye-slash"></i></a>
                 @endif
             </td>
 

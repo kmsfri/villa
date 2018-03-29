@@ -55,4 +55,25 @@
     </div>
 
 
+    @if(isset($ctg_type) && $ctg_type='category3')
+        <div class="form-group{{ $errors->has('show_in_blog') ? ' has-error' : '' }}">
+            <label for="show_in_blog" class="col-md-2 pull-right control-label">نمایش در وبلاگ:</label>
+            <div class="col-md-6 pull-right">
+                <select  name='show_in_blog' class='selectpicker form-control pull-right'>
+                    <option @if(old('show_in_blog' , isset($category->show_in_blog) ? $category->show_in_blog : '')==1) selected @endif value="1" >بله</option>
+                    <option @if(old('show_in_blog' , isset($category->show_in_blog) ? $category->show_in_blog : '')==0) selected @endif value="0" >خیر(عدم نمایش)</option>
+                </select>
+                @if ($errors->has('show_in_blog'))
+                    <span class="help-block"><strong>{{ $errors->first('show_in_blog') }}</strong></span>
+                @endif
+            </div>
+        </div>
+    @endif
+
+
+
+
+
+
+
 @stop

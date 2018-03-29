@@ -16,6 +16,7 @@ class CreateContents extends Migration
         Schema::create('contents', function (Blueprint $table) {
             $table->increments('id');
             $table->text('content_body');
+            $table->string('content_short_desc');
             $table->string('content_title');
             $table->string('content_slug')->unique()->charset('utf8');
             $table->string('content_tags');

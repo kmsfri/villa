@@ -20,9 +20,9 @@ class CreateCategories3 extends Migration
             $table->foreign('parent_id')->references('id')->on('categories3')->onDelete('cascade')->onUpdate('cascade');
             $table->smallInteger('category_order')->unsigned()->default('1');
             $table->boolean('category_status')->default(1)->comment='0:deactive - 1:active';
-            $table->SmallInteger('show_in_blog')->unsigned()->default(0);
             $table->boolean('optional')->default(1);
             $table->string('category_slug')->unique()->charset('utf8');
+            $table->SmallInteger('show_in_blog')->unsigned()->default(0);
             $table->timestamps();
         });
     }

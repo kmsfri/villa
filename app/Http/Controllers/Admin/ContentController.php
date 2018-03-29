@@ -91,6 +91,7 @@ class ContentController extends Controller
             'content_title'=>$request->content_title,
             'content_tags'=>$request->content_tags,
             'content_body'=>$request->content_body,
+            'content_short_desc'=>nl2br($request->content_short_desc),
             'content_order'=>$request->content_order,
             'content_status'=>$request->content_status,
             'latitude'=>$request->latitude,
@@ -110,6 +111,7 @@ class ContentController extends Controller
                 'content_title'=>'required|max:255',
                 'content_tags'=>'required|max:255',
                 'content_body'=>'required',
+                'content_short_desc'=>'required|min:140|max:230',
                 'content_order'=>'required|integer',
                 'content_status'=>'required|integer',
                 'latitude'=>['nullable', 'regex:/^(?=.+)(?:[1-9]\d*|0)?(?:\.\d+)?$/'],
@@ -219,6 +221,7 @@ class ContentController extends Controller
                 $content->content_order = $request->content_order;
                 $content->content_slug = $content_slug;
                 $content->content_body = $request->content_body;
+                $content->content_short_desc = $request->content_short_desc;
                 if(!isset($request->edit_id) || $request->edit_id==Null){
                     $content->admin_user_id = Auth::guard('admin')->user()->id;
                 }
@@ -359,22 +362,22 @@ class ContentController extends Controller
 
 
 
-    public function showInBody($id){
+    public function showInBlog($id){
 
-        $showInBodyCount = Content::where('show_in_body',1)->where('content_status',1)->count();
-        if($showInBodyCount>6){
+        $showInBlogCount = Content::where('show_in_blog',1)->where('content_status',1)->count();
+        if($showInBlogCount>6){
             return redirect()->back()->with('messages',['تعداد مطالب پین شده نمیتواند بیشتر از 6 عدد باشد']);
         }
 
         $content = Content::where('id',$id)->where('content_status',1)->get()->first();
         if(isset($content)){
-            if ($content->show_in_body != 0){
-                $content->show_in_body = 0;
+            if ($content->show_in_blog != 0){
+                $content->show_in_blog = 0;
                 $content->save();
                 return redirect()->back()->with('messages',['تغییرات با موفقیت اعمال شد']);
             }
             else{
-                $content->show_in_body = 1;
+                $content->show_in_blog = 1;
                 $content->save();
                 return redirect()->back()->with('messages',['تغییرات با موفقیت اعمال شد']);
             }

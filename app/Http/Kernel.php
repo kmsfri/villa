@@ -61,5 +61,8 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
 
         'route_permission' => \App\Http\Middleware\CheckAdminPermission::class,
+        'renterProfileCompletionCheck' => \App\Http\Middleware\RenterProfileCompletionCheck::class,
+        'getSectionPathParts' => \App\Http\Middleware\getSectionPathParts::class,
+
     ];
 }

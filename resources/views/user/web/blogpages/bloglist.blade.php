@@ -14,7 +14,13 @@
                     @foreach($pinedcontents as $pinedcontent)
                         <div class="col-sm-6 col-lg-4"><a href="{{route('showArticle',$pinedcontent->content_slug)}}" title="{{$pinedcontent->content_title}}">
                                 <article class="article-blog">
-                                    <figure><img src="{{asset('images/users/user-uploads/user-contents').'/'.$pinedcontent->ContentImages()->first()->image_dir}}" alt="{{$pinedcontent->content_title}}"></figure>
+                                    <figure>
+                                        @if($pinedcontent->ContentImages()->first()!=Null)
+                                        <img src="{{asset('images/users/user-uploads/user-contents').'/'.$pinedcontent->ContentImages()->first()->image_dir}}" alt="{{$pinedcontent->content_title}}">
+                                        @else
+                                            <span>بدون تصویر</span>
+                                        @endif
+                                    </figure>
                                     <h2 class="title">{{$pinedcontent->content_title}}</h2>
                                 </article></a>
                         </div>
@@ -80,11 +86,28 @@
                             @foreach($contents as $content)
                                 <div class="col-sm-6 col-lg-4">
                                     <article class="blog">
-                                        <figure><a href="" title="{{$content->content_title}}"><img src="{{asset('images/users/user-uploads/user-contents').'/'.$content->ContentImages()->first()->image_dir}}" alt="{{$content->content_title}}"/></a></figure>
+                                        <figure><a href="" title="{{$content->content_title}}">
+                                                @if($content->ContentImages()->first()!=Null)
+                                                <img src="{{asset('images/users/user-uploads/user-contents').'/'.$content->ContentImages()->first()->image_dir}}" alt="{{$content->content_title}}"/>
+                                                @else
+                                                <span>بدون تصویر</span>
+                                                @endif
+
+                                            </a></figure>
                                         <div class="data">
                                             <h3><a class="title" href="" title="{{$content->content_title}}">{{$content->content_title}}</a></h3>
                                             <p>{{str_limit($content->content_short_desc,190)}}</p>
-                                            <p class="author"><img src="{{asset('images/users/user-uploads/user-pics').'/'.$content->authorRenterUser()->first()->avatar_dir}}" alt="{{$content->authorRenterUser()->first()->fullname}}"/>{{$content->authorRenterUser()->first()->fullname}}</p>
+                                            <p class="author">
+                                                @if($content->authorRenterUser()->first()!=Null)
+                                                <img src="{{asset('images/users/user-uploads/user-pics').'/'.$content->authorRenterUser()->first()->avatar_dir}}" alt="{{$content->authorRenterUser()->first()->fullname}}"/>
+                                                @endif
+                                                @if($content->authorRenterUser()->first()!=Null)
+                                                {{$content->authorRenterUser()->first()->fullname}}</p>
+                                                @elseif($content->authorAdminUser()->first()!=Null)
+                                                    مدیر سایت
+                                                @else
+                                                    ناشناس
+                                                @endif
                                             <p class="day">@php \Carbon\Carbon::setLocale('fa'); @endphp {{$content->created_at->diffForHumans()}}</p><a class="more" href="" title="ادامه مطلب">ادامه مطلب</a>
                                         </div>
                                     </article>

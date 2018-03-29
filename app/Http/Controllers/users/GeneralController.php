@@ -11,11 +11,15 @@ class GeneralController extends Controller
 {
     public function showDashboard(){
         $user = RenterUser::find(Auth::guard('user')->user()->id);
-        return view('user.dashboard.master',['user'=>$user]);
+        return view('user.panel.master',['user'=>$user]);
     }
     public function showBlogconfig(){
         $user = RenterUser::find(Auth::guard('user')->user()->id);
-        return view('user.dashboard.Blog',['user'=>$user]);
+        $data=[
+            'actionURL'=>route('blogaction'),
+            'user'=>$user
+        ];
+        return view('user.panel.Blog',$data);
     }
     public function blogaction(Request $request){
         $validator = Validator::make(

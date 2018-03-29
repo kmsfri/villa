@@ -20,8 +20,8 @@ class Helpers{
                 'watermarkDir'=>'',
             ],
             'blogImage'=>[
-                'width'=>377,
-                'height'=>206,
+                'width'=>755,
+                'height'=>412,
                 'hasWatermark'=>true,
                 'watermarkDir'=>'watermark.png',
             ],
@@ -43,6 +43,30 @@ class Helpers{
         });
 
         if($withWatermark){
+
+            if(\File::exists($watermarkDir)){
+
+                $watermarkImg=Image::make($watermarkDir);
+                $wmarkWidth=$watermarkImg->width();
+                $wmarkHeight=$watermarkImg->height();
+
+                $imgWidth=$img->width();
+                $imgHeight=$img->height();
+
+                $x=0;
+                $y=0;
+                while($y<=$imgHeight){
+                    $img->insert($watermarkDir,'top-left',$x,$y);
+                    $x+=$wmarkWidth;
+                    if($x>=$imgWidth){
+                        $x=0;
+                        $y+=$wmarkHeight;
+                    }
+                }
+
+            }
+
+            /*
             $minDim=min($width,$height);
             $watermarkHeight=Image::make($watermarkDir)->height();
             $watermarkWidth=Image::make($watermarkDir)->Width();
@@ -50,9 +74,16 @@ class Helpers{
             $watermarkNewHeight=$watermarkHeight/($watermarkWidth/$watermarkNewWidth);
             $watermark=Image::make($watermarkDir)->resize($watermarkNewWidth,$watermarkNewHeight);
             $img=$img->insert($watermark, 'bottom-left', 10, 10);
+            */
+
         }
 
         $img->save($resultDir);
+
+        if($withWatermark) {
+            $watermarkImg->destroy();
+        }
+        $img->destroy(); //  to free memory in case you have a lot of images to be processed
 
 
     }

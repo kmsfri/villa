@@ -74,6 +74,23 @@
             </div>
         </div>
     </div>
+
+    <div class="box-panel">
+        <div class="header">
+            <h3 class="title-box">توضیحات مختصر مطلب(140 تا 230 کاراکتر)</h3><br>
+        </div>
+        <div class="data">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <textarea class="form-control" name="content_short_desc">{{ old('content_short_desc',isset($content->content_short_desc) ? Helpers::br2nl($content->content_short_desc) : '') }}</textarea>
+                        @if ($errors->has('content_short_desc'))<span class="help-block"><strong>{{ $errors->first('content_short_desc') }}</strong></span>@endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="box-panel">
         <div class="header">
             <h3 class="title-box">تنظیمات مطلب</h3><br>

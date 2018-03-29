@@ -7,12 +7,26 @@
                     <article class="article-aside">
                         <div class="row">
                             <div class="col-4 col-md-4">
-                                <figure><img src="{{asset('images/users/user-uploads/user-contents').'/'.$mostvisitcontent->ContentImages()->first()->image_dir}}" alt="{{$mostvisitcontent->content_title}}"/></figure>
+                                <figure>
+                                    @if($mostvisitcontent->ContentImages()->first()!=Null)
+                                    <img src="{{asset('images/users/user-uploads/user-contents').'/'.$mostvisitcontent->ContentImages()->first()->image_dir}}" alt="{{$mostvisitcontent->content_title}}"/>
+                                    @else
+                                    <span>بدون تصویر</span>
+                                    @endif
+                                </figure>
                             </div>
                             <div class="col-8 col-md-8 no-p">
                                 <div class="data">
                                     <h3><a class="title" href="" title="{{$mostvisitcontent->content_title}}">{{$mostvisitcontent->content_title}}</a></h3>
-                                    <p><img src="{{asset('images/users/user-uploads/user-pics').'/'.$mostvisitcontent->authorRenterUser()->first()->avatar_dir}}" alt="{{$mostvisitcontent->authorRenterUser()->first()->fullname}}"/>{{$mostvisitcontent->authorRenterUser()->first()->fullname}}</p>
+                                    <p>
+                                        @if($mostvisitcontent->authorRenterUser()->first()!=Null)
+                                        <img src="{{asset('images/users/user-uploads/user-pics').'/'.$mostvisitcontent->authorRenterUser()->first()->avatar_dir}}" alt="{{$mostvisitcontent->authorRenterUser()->first()->fullname}}"/>{{$mostvisitcontent->authorRenterUser()->first()->fullname}}
+                                        @elseif($mostvisitcontent->authorAdminUser()->first()!=Null)
+                                        <span>مدیر سایت</span>
+                                        @else
+                                        <span>بدون تصویر</span>
+                                        @endif
+                                    </p>
                                 </div>
                             </div>
                         </div>

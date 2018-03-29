@@ -20,7 +20,14 @@ class ContentController extends Controller
         $contentcount = Content::where('renter_user_id',Auth::guard('user')->user()->id)->count();
         $user = RenterUser::find(Auth::guard('user')->user()->id);
         $cities=array();
-        return view('user.dashboard.AddPost',['user'=>$user,'states'=>$states, 'cities'=>$cities,'contentcount'=>$contentcount]);
+        $data=[
+            'user'=>$user,
+            'states'=>$states,
+            'cities'=>$cities,
+            'contentcount'=>$contentcount,
+            'actionURL'=>Route('addcontentaction'),
+        ];
+        return view('user.panel.AddPost',$data);
     }
     public function editcontent($id){
         $content = Content::where('id',$id)->where('renter_user_id',Auth::guard('user')->user()->id)->first();
@@ -51,25 +58,24 @@ class ContentController extends Controller
         $user = RenterUser::find(Auth::guard('user')->user()->id);
 
         $data=[
+            'actionURL'=>Route('addcontentaction'),
             'user'=>$user,
             'states'=>$states,
             'cities'=>$cities,
             'contentcount'=>$contentcount,
             'content'=>$content,
+            'edit_id'=>$content->id,
         ];
 
-        return view('user.dashboard.AddPost',$data);
+        return view('user.panel.AddPost',$data);
     }
 
 
     public function addcontentaction(Request $request){
-
-
-
+        $content_slug='';
         if(isset($request->content_slug) && $request->content_slug!=null){
             $content_slug = \Helpers::make_slug($request->content_slug);
         }
-
 
         $newRequest=[
             'newImg.*' => $request->newImg,
@@ -86,8 +92,6 @@ class ContentController extends Controller
             'content_short_desc'=>$request->content_short_desc,
         ];
 
-
-
         $validator = Validator::make(
             $newRequest,
             [
@@ -95,7 +99,7 @@ class ContentController extends Controller
                 'oldImg.*' => 'integer|exists:content_images,id',
                 'content_title'=>'required|max:255',
                 'content_tags'=>'required|max:255',
-                'content_short_desc'=>'required|max:200',
+                'content_short_desc'=>'required|max:230',
                 'content_body'=>'required',
                 'content_order'=>'required|integer',
                 'latitude'=>['nullable', 'regex:/^(?=.+)(?:[1-9]\d*|0)?(?:\.\d+)?$/'],
@@ -108,9 +112,6 @@ class ContentController extends Controller
 
 
         if($validator->fails()){
-
-
-
             if($request->state!=Null){
                 if(\App\Models\City::find($request->state)!=Null){
                     $cities=\App\Models\City::selectRaw('id , city_name')
@@ -196,7 +197,6 @@ class ContentController extends Controller
                 $content=new Content();
             }
 
-
             DB::transaction(function() use($request,$uploaded_files_dir,$removableOldImgID,$removableOldImgDir,$content,$content_slug){
                 $allowable_tags = "<p>,<b>,<i>,<table>,<tr>,<th>,<td>,<center>,<li>,<ul>,<a>,<pre>,<br>,<strong>,<span>,<label>,<em>,<div>,<tbody>,<h1>,<h2>,<h3>,<h4>,<h5>,<ol>,<blockquote>,<hr>";
                 $request->content_body = strip_tags($request->content_body, $allowable_tags);
@@ -219,7 +219,6 @@ class ContentController extends Controller
                 $content->content_status = 0;
                 $content->save();
 
-
                 $img_data=array();
                 foreach($uploaded_files_dir as $key=>$ufd){
                     $img_data[]=new ContentImage([
@@ -229,15 +228,8 @@ class ContentController extends Controller
                     ]);
                 }
 
-
-
-
                 $content->ContentImages()->whereIn('id',$removableOldImgID)->delete();
-
                 $content->Cities()->sync($request->city);
-
-
-
                 $content->ContentImages()->saveMany($img_data);
 
                 if($request->edit_id!=Null){
@@ -274,18 +266,12 @@ class ContentController extends Controller
     }
 
 
-
-
-
     public function editContentCategory(Request $request){
-
         $user=Auth::guard('user')->user();
-
         $content=Content::where('id',$request->content_id)
                         ->where('renter_user_id',$user->id)
                         ->first();
         if($content==Null)die('invalid request!');
-
         $masterCtgs=\App\Models\Category3::where('category_status',1)
                     ->where('parent_id',Null)
                     ->orderBy('category_order','ASC')
@@ -293,15 +279,15 @@ class ContentController extends Controller
                     ->get();
 
 
-
-
         $data=[
+            'actionURL'=>Route('doEditContentCategory'),
             'user'=>$user,
             'masterCtgs'=>$masterCtgs,
             'content'=>$content,
+            'edit_id'=>$content->id,
         ];
 
-        return view('user.dashboard.SelectContentCategory',$data);
+        return view('user.panel.SelectContentCategory',$data);
     }
 
 
@@ -311,11 +297,9 @@ class ContentController extends Controller
             $request->all(),
             [
                 'ctg.*' => 'integer|exists:categories3,id',
-                'content_id'=>'required|exists:contents,id',
+                'edit_id'=>'required|exists:contents,id',
             ]
         );
-
-
 
         if($validator->fails()){
             return redirect()->back()
@@ -323,42 +307,30 @@ class ContentController extends Controller
                 ->withErrors($validator->errors())
                 ->with('data','ورودی های خود را بررسی کنید');
         }
-
         $user=Auth::guard('user')->user();
-
-
-
-        $content=Content::where('id',$request->content_id)
+        $content=Content::where('id',$request->edit_id)
                     ->where('renter_user_id',$user->id)
                     ->first();
-
         if($content==Null)die('invalid request!');
-
-
         $content->Categories3()->sync($request->ctg);
-
-
-
-
         $msg=['دسته بندی مطلب مورد نظر با موفقیت بروزرسانی شد'];
         return redirect(url(Route('showdashboard')))->with('data', $msg);
-
-
-
-
     }
     public function contents(){
         $user = RenterUser::find(Auth::guard('user')->user()->id);
         $contents = Content::where('renter_user_id',Auth::guard('user')->user()->id)->paginate(11);
-        return view('user.dashboard.PostsList',['user'=>$user,'contents'=>$contents]);
+        $data=[
+            'user'=>$user,
+            'contents'=>$contents,
+        ];
+        return view('user.panel.PostsList',$data);
     }
-    public function showinbody($id){
 
+    public function showinbody($id){
         $showInBodyCount = Content::where('renter_user_id',Auth::guard('user')->user()->id)->where('show_in_body',1)->where('content_status',1)->count();
         if($showInBodyCount>6){
             return redirect()->back()->with('data','تعداد مطالب پین شده نمیتواند بیشتر از 6 عدد باشد');
         }
-
         $content = Content::where('id',$id)->where('renter_user_id',Auth::guard('user')->user()->id)->where('content_status',1)->get()->first();
         if(isset($content)){
             if ($content->show_in_body != 0){

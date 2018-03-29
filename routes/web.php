@@ -14,13 +14,9 @@
 //Website routes
 
 //blog
-Route::get('Articles','users\web\BlogController@websiteArticles')->name('websiteArticles');
-Route::get('Article/{slug}','users\web\BlogController@showArticle')->name('showArticle');
+Route::get('گردشگری/','users\web\BlogController@websiteArticles')->name('websiteArticles');
+Route::get('گردشگری/{slug}','users\web\BlogController@showArticle')->name('showArticle');
 Route::post('Article/{id}/Comment','users\web\BlogController@content_comment')->name('content_comment');
-
-
-
-
 
 Route::post('/ajax/get_province_cities', 'API\AjaxServicesController@get_province_cities');
 //User Auth Routes
@@ -33,26 +29,25 @@ Route::post('User/Password', 'users\auth\AuthController@NewPassword')->name('pas
 Route::get('User/Logout', 'users\auth\AuthController@logout')->name('logout');
 
 //User Dashboard
-Route::group(['prefix' => 'User',  'middleware' => 'auth:user'], function(){
-
-
+Route::group(['prefix' => 'User',  'middleware' => ['auth:user', 'getSectionPathParts']], function(){
     Route::get('Dashboard','users\GeneralController@showDashboard')->name('showdashboard');
     Route::get('Edit','users\UserController@showUser')->name('showuser');
     Route::post('Edit','users\UserController@useraction')->name('useraction');
-    Route::get('Blog','users\GeneralController@showBlogconfig')->name('showblog');
-    Route::post('Blog','users\GeneralController@blogaction')->name('blogaction');
-    Route::get('Content','users\ContentController@addcontent')->name('addcontent');
-    Route::get('Content/{id}','users\ContentController@editcontent')->name('editcontent');
-    Route::post('Content','users\ContentController@addcontentaction')->name('addcontentaction');
-    Route::get('Content/category/{content_id}','users\ContentController@editContentCategory')->name('editContentCategory');
-    Route::post('Content/category','users\ContentController@doEditContentCategory')->name('doEditContentCategory');
 
-    Route::get('Contents','users\ContentController@contents')->name('contents');
-    Route::get('Content/showinbody/{id}','users\ContentController@showinbody')->name('showinbody');
-    Route::get('Content/draft/{id}','users\ContentController@draft')->name('draft');
+    Route::group(['middleware' => 'renterProfileCompletionCheck'], function() {
+        Route::get('Blog', 'users\GeneralController@showBlogconfig')->name('showblog');
+        Route::post('Blog', 'users\GeneralController@blogaction')->name('blogaction');
+        Route::get('Content', 'users\ContentController@addcontent')->name('addcontent');
+        Route::get('Content/{id}', 'users\ContentController@editcontent')->name('editcontent');
+        Route::post('Content', 'users\ContentController@addcontentaction')->name('addcontentaction');
+        Route::get('Content/category/{content_id}', 'users\ContentController@editContentCategory')->name('editContentCategory');
+        Route::post('Content/category', 'users\ContentController@doEditContentCategory')->name('doEditContentCategory');
 
+        Route::get('Contents', 'users\ContentController@contents')->name('contents');
+        Route::get('Content/showinbody/{id}', 'users\ContentController@showinbody')->name('showinbody');
+        Route::get('Content/draft/{id}', 'users\ContentController@draft')->name('draft');
+    });
 });
-
 
 Route::group(['prefix'=>'management'],function(){
     Route::get('login', 'Admin\AuthAdmin\LoginController@showLoginForm')->name('admin-login');
@@ -60,7 +55,7 @@ Route::group(['prefix'=>'management'],function(){
     Route::get('logout', 'Admin\AuthAdmin\LoginController@logout')->name('do-admin-logout');
 
     Route::group(['middleware'=>['auth:admin'/*,'init_admin_common_data'*/]],function(){
-        Route::group(['middleware'=>[/*'route_permission'*/]],function(){
+        Route::group(['middleware'=>['route_permission']],function(){
             Route::get('/', function(){
                 return redirect(Route('dashboard'));
             });
@@ -76,15 +71,12 @@ Route::group(['prefix'=>'management'],function(){
             Route::get('/user/admin/edit_sec_permit/{id}', 'Admin\AdminController@editSectionPermit')->name('change_admin_sec_permit');
             Route::post('/user/admin/edit_sec_permit', 'Admin\AdminController@doEditSectionPermit')->name('do_change_admin_sec_permit');
 
-
-
             Route::get('/city/add/{parent_id?}', 'Admin\CityController@showAddCityForm')->name('add-city-form');
             Route::post('/city/add', 'Admin\CityController@saveCity')->name('do-add-city');
             Route::post('/city/delete/{parent_id?}', 'Admin\CityController@deleteCity')->name('do-delete-city');
             Route::get('/city/edit/{id}', 'Admin\CityController@editCity')->name('edit-city-form');
             Route::post('/city/edit', 'Admin\CityController@doEditCity')->name('do-edit-city');
             Route::get('/city/{parent_id?}', 'Admin\CityController@cities')->name('cities-list');
-
 
             Route::get('/category3/add/{parent_id?}', 'Admin\Category3Controller@showAddCategoryForm')->name('add-category3-form');
             Route::post('/category3/add', 'Admin\Category3Controller@saveCategory')->name('do-add-category3');
@@ -93,7 +85,6 @@ Route::group(['prefix'=>'management'],function(){
             Route::post('/category3/edit', 'Admin\Category3Controller@doEditCategory')->name('do-edit-category3');
             Route::get('/category3/{parent_id?}', 'Admin\Category3Controller@categories')->name('categories3-list');
 
-
             Route::get('contents','Admin\ContentController@showContentList')->name('adminShowContentList');
             Route::get('content','Admin\ContentController@addContent')->name('adminAddContentForm');
             Route::get('content/{id}','Admin\ContentController@editContent')->name('adminEditContentForm');
@@ -101,8 +92,7 @@ Route::group(['prefix'=>'management'],function(){
             Route::post('content/remove','Admin\ContentController@doRemoveContent')->name('adminRemoveContent');
             Route::get('content/category/{content_id}','Admin\ContentController@editContentCategory')->name('adminEditContentCategory');
             Route::post('content/category','Admin\ContentController@doEditContentCategory')->name('adminDoEditContentCategory');
-            Route::get('content/showinbody/{id}','Admin\ContentController@showInBody')->name('adminShowinBody');
-
+            Route::get('content/showinblog/{id}','Admin\ContentController@showInBlog')->name('adminShowinBlog');
 
             Route::get('/category2/add/{parent_id?}', 'Admin\Category2Controller@showAddCategoryForm')->name('add-category2-form');
             Route::post('/category2/add', 'Admin\Category2Controller@saveCategory')->name('do-add-category2');
@@ -118,15 +108,12 @@ Route::group(['prefix'=>'management'],function(){
             Route::post('/category1/edit', 'Admin\Category1Controller@doEditCategory')->name('do-edit-category1');
             Route::get('/category1/{parent_id?}', 'Admin\Category1Controller@categories')->name('categories1-list');
 
-
             Route::get('/property/add/{parent_id?}', 'Admin\PropertyController@showAddPropertyForm')->name('addPropertyForm');
             Route::post('/property/add', 'Admin\PropertyController@saveProperty')->name('saveProperty');
             Route::post('/property/delete/{parent_id?}', 'Admin\PropertyController@deleteProperty')->name('deleteProperty');
             Route::get('/property/edit/{id}', 'Admin\PropertyController@editProperty')->name('editPropertyForm');
             Route::post('/property/edit', 'Admin\PropertyController@doEditProperty')->name('doEditProperty');
             Route::get('/property/{parent_id?}', 'Admin\PropertyController@properties')->name('propertiesList');
-
-
 
             Route::get('/user/renter', 'Admin\RenterUserController@showRenterUsers')->name('renter-user-list');
             Route::get('/user/renter/add', 'Admin\RenterUserController@showAddRenterUserForm')->name('add_renter_form');
@@ -135,14 +122,6 @@ Route::group(['prefix'=>'management'],function(){
             Route::get('/user/renter/edit/{id}', 'Admin\RenterUserController@editRenterUser')->name('edit_renter_form');
             Route::post('/user/renter/edit', 'Admin\RenterUserController@doEditRenterUser')->name('do_edit_renter');
 
-
-
-
-
-
         });
     });
-
-
 });
-

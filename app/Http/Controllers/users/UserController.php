@@ -10,9 +10,15 @@ use Validator;
 use DB;
 class UserController extends Controller
 {
+
+    var $fileUploadDir='/images/users/user-uploads/user-pics';
     public function showUser(){
         $user = RenterUser::where('id',Auth::guard('user')->user()->id)->first();
-        return view('user.dashboard.User',['user'=>$user]);
+        $data=[
+            'actionURL'=>Route('useraction'),
+            'user'=>$user
+        ];
+        return view('user.panel.User',$data);
     }
     public function useraction(Request $request){
 
@@ -69,7 +75,14 @@ class UserController extends Controller
 
                     if ($file->isValid()) {
                         $fileName = str_replace(' ', '', time()) . '.' . $file->guessClientExtension();
-                        $file->move(public_path('/images/users/user-uploads/user-pics'), $fileName);
+                        $destinationPath = public_path() . $this->fileUploadDir;
+                        $imgConf=[
+                            'imgType'=>'renterProfile',
+                            'imgObject'=>$file,
+                            'resultDir'=>$destinationPath.'/'.$fileName,
+                        ];
+                        \Helpers::save_img($imgConf['imgType'],$imgConf['imgObject'],$imgConf['resultDir']);
+                        //$file->move(public_path('/images/users/user-uploads/user-pics'), $fileName);
                         $uploaded_file_dir = $fileName;
                         $removeimg = $user->avatar_dir;
 
@@ -98,8 +111,8 @@ class UserController extends Controller
                 $user->save();
 
                 if($removeimg!=""){
-                    if(file_exists(public_path().'/images/users/user-uploads/user-pics/'.$removeimg))
-                        unlink(public_path().'/images/users/user-uploads/user-pics/'.$removeimg);
+                    if(file_exists(public_path().$this->fileUploadDir.'/'.$removeimg))
+                        unlink(public_path().$this->fileUploadDir.'/'.$removeimg);
                 }
 
             });
@@ -112,8 +125,8 @@ class UserController extends Controller
         catch(Exception $e) {
             catch_block:
 
-            if(file_exists(public_path().'/images/users/user-uploads/user-pics/'.$uploaded_file_dir))
-                unlink(public_path().'/images/users/user-uploads/user-pics/'.$uploaded_file_dir);
+            if(file_exists(public_path().$this->fileUploadDir.'/'.$uploaded_file_dir))
+                unlink(public_path().$this->fileUploadDir.'/'.$uploaded_file_dir);
 
             return redirect()->back()->withInput($request->input())->with('data' , 'تصویر ارسالی مشکل دارد');
 
