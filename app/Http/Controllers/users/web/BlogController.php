@@ -14,11 +14,66 @@ use Validator;
 
 class BlogController extends Controller
 {
-    public function websiteArticles(){
+    public function websiteArticles(Request $request){
         $pinedcontents = Content::where('content_status',1)->where('is_draft',0)->where('show_in_blog',1)->orderBy('content_order','ASC')->orderBy('created_at','DESC')->get();
         $states = City::where('parent_id',null)->where('city_status',1)->orderBy('city_order','ASC')->get();
         $categories = Category3::where('category_status',1)->where('show_in_blog',1)->orderBy('category_order','ASC')->get();
-        $contents = Content::where('content_status',1)->where('is_draft',0)->orderBy('created_at','DESC')->orderBy('content_order','ASC')->paginate(12);
+
+
+        if(isset($request->province_slug) && $request->province_slug!=Null){
+            $province=\App\Models\City::where('city_slug',$request->province_slug)
+                    ->where('city_status',1)
+                    ->first();
+            if($province==Null) abort(404);
+            $cities=\App\Models\City::where('parent_id',$province->id)
+                    ->where('city_status',1)
+                    ->get();
+            $city_id=[];
+            foreach ($cities as $city){
+                $city_id[]=$city->id;
+            }
+            $city_id[]=$province->id;
+            $contents=Content::selectRaw('contents.*, contents.created_at as created_at, contents.updated_at as updated_at')
+                ->where('content_status',1)
+                ->where('is_draft',0)
+                ->join('content_city', function($join) use($city_id){
+                    $join->on('content_id','=','contents.id')
+                    ->whereIn('city_id',$city_id);
+                })
+                ->orderBy('contents.created_at','DESC')
+                ->orderBy('contents.content_order','ASC')
+                ->paginate(12);
+
+        }elseif(isset($request->category_slug) && $request->category_slug!=Null){
+
+
+            $category=\App\Models\Category3::where('category_slug',$request->category_slug)
+                ->where('category_status',1)
+                ->first();
+            if($category==Null) abort(404);
+
+            $contents=$category->Contents()
+                ->where('content_status',1)
+                ->where('is_draft',0)
+                ->orderBy('contents.created_at','DESC')
+                ->orderBy('contents.content_order','ASC')
+                ->paginate(12);
+
+
+
+        }else{
+            $contents = Content::where('content_status',1)
+                ->where('is_draft',0)
+                ->orderBy('created_at','DESC')
+                ->orderBy('content_order','ASC')
+                ->paginate(12);
+        }
+
+
+
+
+
+
         $mostvisitcontents = Content::where('content_status',1)->where('is_draft',0)->orderBy('view_count','DESC')->orderBy('created_at','DESC')->take(6)->get();
 
 

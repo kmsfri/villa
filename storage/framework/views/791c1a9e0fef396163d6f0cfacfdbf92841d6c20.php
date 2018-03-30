@@ -71,7 +71,7 @@
             <td class="text-center">
                 <p class="text"><?php echo e($content->content_title); ?></p>
                 <?php if($content->content_status != 0): ?>
-                    <a href="#" class="btn btn-bloglink">لینک مطلب</a>
+                    <a href="<?php echo e(Route('showArticle',$content->content_slug)); ?>" class="btn btn-bloglink" target="_blank">لینک مطلب</a>
                 <?php endif; ?>
             </td>
             <td class="text-center">

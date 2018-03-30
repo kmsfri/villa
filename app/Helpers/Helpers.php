@@ -80,7 +80,7 @@ class Helpers{
 
         $img->save($resultDir);
 
-        if($withWatermark) {
+        if(isset($watermarkImg)) {
             $watermarkImg->destroy();
         }
         $img->destroy(); //  to free memory in case you have a lot of images to be processed

@@ -313,8 +313,8 @@ class ContentController extends Controller
                     ->first();
         if($content==Null)die('invalid request!');
         $content->Categories3()->sync($request->ctg);
-        $msg=['دسته بندی مطلب مورد نظر با موفقیت بروزرسانی شد'];
-        return redirect(url(Route('showdashboard')))->with('data', $msg);
+        $msg='دسته بندی مطلب مورد نظر با موفقیت بروزرسانی شد';
+        return redirect(url(Route('contents')))->with('data', $msg);
     }
     public function contents(){
         $user = RenterUser::find(Auth::guard('user')->user()->id);

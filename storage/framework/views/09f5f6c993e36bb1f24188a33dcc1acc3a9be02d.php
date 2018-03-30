@@ -21,10 +21,11 @@
         <div class="headera">
 		<a class="logo" href="" alt=""><img src="<?php echo e(asset('users/img/logo.png')); ?>" alt=""></a><a class="link-mobile d-md-none d-inline-block" href="" alt=""><img src="<?php echo e(asset('users/img/icon/icon0108.png')); ?>" alt=""></a></div>
         <div class="box-user"><img src="<?php echo e(asset('images/users/user-uploads/user-pics/'.$user->avatar_dir)); ?>" alt="">
-          <p><?php echo e($user->fullname); ?></p><span class="points">امتیاز شما : 400</span>
+          <p><?php echo e($user->fullname); ?></p><span class="points">امتیاز شما : -</span>
         </div>
         <ul class="ul-sidebar">
           <li><a href="" title=""><img src="<?php echo e(asset('users/img/icon/icon040.png')); ?>" alt=""><img class="img" src="<?php echo e(asset('users/img/icon/icon040-2.png')); ?>" alt=""><span>پیشخوان</span></a></li>
+          <!--
           <li class="subset"><a href="" title="" data-toggle="collapse" data-target="#ul-list1" aria-expanded="false"><img src="<?php echo e(asset('users/img/icon/icon041.png')); ?>" alt=""><img class="img" src="<?php echo e(asset('users/img/icon/icon041-2.png')); ?>" alt=""><span>ملک های من</span></a>
             <ul class="list-subset collapse" id="ul-list1">
               <li><a href="" title="ثبت ملک جدید  "> ثبت ملک جدید</a></li>
@@ -35,9 +36,12 @@
           </li>
           <li><a href="" title=""><img src="<?php echo e(asset('users/img/icon/icon042.png')); ?>" alt=""><img class="img" src="<?php echo e(asset('users/img/icon/icon042-2.png')); ?>" alt=""><span>ارتباط با مهمانان</span></a></li>
           <li><a href="" title=""><img src="<?php echo e(asset('users/img/icon/icon045.png')); ?>" alt=""><img class="img" src="<?php echo e(asset('users/img/icon/icon045-2.png')); ?>" alt=""><span>امور مالی</span></a></li>
+          -->
           <li><a href="<?php echo e(route('contents')); ?>" title=""><img src="<?php echo e(asset('users/img/icon/icon043.png')); ?>" alt=""><img class="img" src="<?php echo e(asset('users/img/icon/icon043-2.png')); ?>" alt=""><span>گردشگری</span></a></li>
           <li><a href="<?php echo e(route('showblog')); ?>" title=""><img src="<?php echo e(asset('users/img/icon/icon045.png')); ?>" alt=""><img class="img" src="<?php echo e(asset('users/img/icon/icon045-2.png')); ?>" alt=""><span>وبلاگ من</span></a></li>
+          <!--
           <li><a href="" title=""><img src="<?php echo e(asset('users/img/icon/icon044.png')); ?>" alt=""><img class="img" src="<?php echo e(asset('users/img/icon/icon044-2.png')); ?>" alt=""><span>پیام ها</span></a></li>
+          -->
           <li><a href="<?php echo e(route('showuser')); ?>" title=""><i class="fa fa-user" style="font-size: 25px;"></i> <span>ویرایش اطلاعات</span></a></li>
           <li><a href="<?php echo e(route('logout')); ?>" title=""><i class="fa fa-unlock" style="font-size: 25px;"></i> <span>خروج از سیستم</span></a></li>
         </ul>

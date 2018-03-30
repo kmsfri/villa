@@ -21,7 +21,7 @@
             <td>
                 <p class="text"><?php echo e($content->content_title); ?></p>
                 <?php if($content->content_status != 0): ?>
-                    <a href="#" class="btn btn-bloglink">لینک مطلب</a>
+                    <a href="<?php echo e(route('showArticle',$content->content_slug)); ?>" class="btn btn-bloglink">لینک مطلب</a>
                 <?php endif; ?>
             </td>
             <td><p class="text"><?php echo e($content->Cities()->first()->city_name); ?></p></td>

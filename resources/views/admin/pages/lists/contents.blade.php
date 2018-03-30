@@ -71,7 +71,7 @@
             <td class="text-center">
                 <p class="text">{{$content->content_title}}</p>
                 @if($content->content_status != 0)
-                    <a href="#" class="btn btn-bloglink">لینک مطلب</a>
+                    <a href="{{Route('showArticle',$content->content_slug)}}" class="btn btn-bloglink" target="_blank">لینک مطلب</a>
                 @endif
             </td>
             <td class="text-center">

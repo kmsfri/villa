@@ -14,6 +14,8 @@
 //Website routes
 
 //blog
+Route::get('گردشگری/استان/{province_slug}','users\web\BlogController@websiteArticles')->name('provinceArticles');
+Route::get('گردشگری/دسته/{category_slug}','users\web\BlogController@websiteArticles')->name('categoryArticles');
 Route::get('گردشگری/','users\web\BlogController@websiteArticles')->name('websiteArticles');
 Route::get('گردشگری/{slug}','users\web\BlogController@showArticle')->name('showArticle');
 Route::post('Article/{id}/Comment','users\web\BlogController@content_comment')->name('content_comment');

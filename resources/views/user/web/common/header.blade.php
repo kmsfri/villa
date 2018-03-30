@@ -9,8 +9,8 @@
                 <li><a href="" title="جاذبه های گردشگری">جاذبه های گردشگری</a></li>
             </ul>
             <ul class="login">
-                <li><a class="login" href="" title="ورود به سایت">ورود به سایت</a></li>
-                <li><a class="record" href="" title="ثبت رایگان ملک">ثبت رایگان ملک</a></li>
+                <li><a class="login" href="{{Route('showdashboard')}}" title="ورود به سایت">ورود به سایت</a></li>
+                <li><a class="record" href="#" title="ثبت رایگان ملک">ثبت رایگان ملک</a></li>
             </ul>
         </nav>
     </div>

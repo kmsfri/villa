@@ -79,7 +79,7 @@ class Category1Controller extends Controller
 
     public function saveCategory(Request $request){
 
-
+        $category_slug_corrected='';
         if(isset($request->category_slug) && $request->category_slug!=null){
             $category_slug_corrected=\Helpers::make_slug($request->category_slug);
         }

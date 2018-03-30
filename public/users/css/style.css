@@ -1161,6 +1161,12 @@ section.blog {
   padding: 20px 0;
   background: url("../img/blog001.jpg") no-repeat center center;
   background-size: cover; }
+article.blog figure {
+  height:120px;
+}
+article.blog figure img{
+  width: 100%;
+}
 
 .box-new {
   background-color: #fff;
@@ -2008,7 +2014,6 @@ article.blog {
         article.blog figure img {
           width: 100%; } }
   article.blog .data {
-    height:260px;
     font-weight: normal;
     font-size: 14px;
     color: #878787;
@@ -2017,6 +2022,13 @@ article.blog {
     border-radius: 0 0 15px 15px;
     position: relative;
     overflow: hidden; }
+
+article.blog .data .data2{
+  height: 250px;
+  overflow: hidden;
+
+}
+
     article.blog .data .more {
       background-color: #7fbb00;
       width: 100%;
@@ -2046,18 +2058,16 @@ article.blog {
       text-align: center;
       display: block; }
     article.blog .data .day {
-      position: absolute;
       bottom: 0;
       left: 0;
-      padding: 8px 16px;
-      display: inline-block;
+      padding: 8px 0px 0px 0px;
       float: left;
       font-size: 12px; }
     article.blog .data .author {
-      position: absolute;
       bottom: 0;
       right: 0;
-      padding: 8px 16px;
+      float: right;
+      padding: 8px 0px 0px 0px;
       font-size: 12px;
       display: inline-block; }
       article.blog .data .author img {

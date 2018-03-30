@@ -9,9 +9,9 @@
                             <div class="col-4 col-md-4">
                                 <figure>
                                     <?php if($mostvisitcontent->ContentImages()->first()!=Null): ?>
-                                    <img src="<?php echo e(asset('images/users/user-uploads/user-contents').'/'.$mostvisitcontent->ContentImages()->first()->image_dir); ?>" alt="<?php echo e($mostvisitcontent->content_title); ?>"/>
+                                        <img src="<?php echo e(asset('images/users/user-uploads/user-contents').'/'.$mostvisitcontent->ContentImages()->first()->image_dir); ?>" alt="<?php echo e($mostvisitcontent->content_title); ?>"/>
                                     <?php else: ?>
-                                    <span>بدون تصویر</span>
+                                        <img src="<?php echo e(asset('images').'/404.jpg'); ?>" alt="<?php echo e($mostvisitcontent->content_title); ?>"/>
                                     <?php endif; ?>
                                 </figure>
                             </div>

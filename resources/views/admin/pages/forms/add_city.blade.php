@@ -29,6 +29,17 @@
     </div>
 
 
+    <div class="form-group{{ $errors->has('city_slug') ? ' has-error' : '' }}">
+        <label for="city_slug" class="col-md-2 pull-right control-label">کلمات کلیدی آدرس:</label>
+        <div class="col-md-6 pull-right">
+            <input type="text" class="form-control" name="city_slug" value="{{ old('city_slug',isset($city->city_slug) ? $city->city_slug : '') }}">
+            @if ($errors->has('city_slug'))
+                <span class="help-block"><strong>{{ $errors->first('city_slug') }}</strong></span>
+            @endif
+        </div>
+    </div>
+
+
 
 
     <div class="form-group{{ $errors->has('city_order') ? ' has-error' : '' }}">

@@ -3,9 +3,6 @@
     @include('user.web.common.header')
 @endsection
 @section('main')
-
-
-
     <!--start section blog-->
     <section class="blog">
         <div class="container">
@@ -18,7 +15,7 @@
                                         @if($pinedcontent->ContentImages()->first()!=Null)
                                         <img src="{{asset('images/users/user-uploads/user-contents').'/'.$pinedcontent->ContentImages()->first()->image_dir}}" alt="{{$pinedcontent->content_title}}">
                                         @else
-                                            <img src="{{asset('images').'/404.jpg'}}" alt="{{$content->content_title}}"/>
+                                            <img src="{{asset('images').'/404.jpg'}}" alt="{{$pinedcontent->content_title}}"/>
                                         @endif
                                     </figure>
                                     <h2 class="title">{{$pinedcontent->content_title}}</h2>
@@ -40,7 +37,7 @@
                     <li class="dropdown"><a class="dropdown-toggle" id="navbarDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="همه استان ها">همه استان ها</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             @foreach($states as $state)
-                                <a class="dropdown-item" href="#" title="{{$state->city_name}}">{{$state->city_name}}</a>
+                                <a class="dropdown-item" href="{{Route('provinceArticles',$state->city_slug)}}" title="{{$state->city_name}}">{{$state->city_name}}</a>
                             @endforeach
                         </div>
                     </li>
@@ -53,17 +50,17 @@
                                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                                     @foreach($cat->SubCategory3EnabledOrdered()->where('show_in_blog',1)->get() as $sub)
                                                         @if($cat->id == $sub->parent_id)
-                                                        <a class="dropdown-item" href="#" title="{{$sub->category_title}}">{{$sub->category_title}}</a>
+                                                        <a class="dropdown-item" href="{{Route('categoryArticles',$sub->category_slug)}}" title="{{$sub->category_title}}">{{$sub->category_title}}</a>
                                                         @endif
                                                     @endforeach
                                                 </div>
                                             </li>
                                     @elseif($cat->parent_id == null)
-                                    <li><a href="" title="{{$cat->category_title}}">{{$cat->category_title}}</a></li>
+                                    <li><a href="{{Route('categoryArticles',$cat->category_slug)}}" title="{{$cat->category_title}}">{{$cat->category_title}}</a></li>
                                     @else
                                         @if($cat->SubCategory3EnabledOrdered()->count() == 0)
                                             @if($cat->ParentCategory3->show_in_blog == 0)
-                                            <li><a href="" title="{{$cat->category_title}}">{{$cat->category_title}}</a></li>
+                                            <li><a href="{{Route('categoryArticles',$cat->category_slug)}}" title="{{$cat->category_title}}">{{$cat->category_title}}</a></li>
                                             @endif
                                         @endif
                                     @endif
@@ -96,7 +93,9 @@
                                             </a></figure>
                                         <div class="data">
                                             <h3><a class="title" href="{{route('showArticle',$content->content_slug)}}" title="{{$content->content_title}}">{{$content->content_title}}</a></h3>
-                                            <p>{{str_limit($content->content_short_desc,190)}}</p>
+                                            <div class="data2">
+                                                <p>{{str_limit($content->content_short_desc,190)}}</p>
+                                            </div>
                                             <p class="author">
                                                 @if($content->authorRenterUser()->first()!=Null)
                                                 <img src="{{asset('images/users/user-uploads/user-pics').'/'.$content->authorRenterUser()->first()->avatar_dir}}" alt="{{$content->authorRenterUser()->first()->fullname}}"/>

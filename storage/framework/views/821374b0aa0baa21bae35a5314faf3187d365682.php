@@ -2,9 +2,6 @@
     <?php echo $__env->make('user.web.common.header', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('main'); ?>
-
-
-
     <!--start section blog-->
     <section class="blog">
         <div class="container">
@@ -17,7 +14,7 @@
                                         <?php if($pinedcontent->ContentImages()->first()!=Null): ?>
                                         <img src="<?php echo e(asset('images/users/user-uploads/user-contents').'/'.$pinedcontent->ContentImages()->first()->image_dir); ?>" alt="<?php echo e($pinedcontent->content_title); ?>">
                                         <?php else: ?>
-                                            <span>بدون تصویر</span>
+                                            <img src="<?php echo e(asset('images').'/404.jpg'); ?>" alt="<?php echo e($pinedcontent->content_title); ?>"/>
                                         <?php endif; ?>
                                     </figure>
                                     <h2 class="title"><?php echo e($pinedcontent->content_title); ?></h2>
@@ -39,7 +36,7 @@
                     <li class="dropdown"><a class="dropdown-toggle" id="navbarDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="همه استان ها">همه استان ها</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <?php $__currentLoopData = $states; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $state): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <a class="dropdown-item" href="#" title="<?php echo e($state->city_name); ?>"><?php echo e($state->city_name); ?></a>
+                                <a class="dropdown-item" href="<?php echo e(Route('provinceArticles',$state->city_slug)); ?>" title="<?php echo e($state->city_name); ?>"><?php echo e($state->city_name); ?></a>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
                     </li>
@@ -52,17 +49,17 @@
                                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                                     <?php $__currentLoopData = $cat->SubCategory3EnabledOrdered()->where('show_in_blog',1)->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                         <?php if($cat->id == $sub->parent_id): ?>
-                                                        <a class="dropdown-item" href="#" title="<?php echo e($sub->category_title); ?>"><?php echo e($sub->category_title); ?></a>
+                                                        <a class="dropdown-item" href="<?php echo e(Route('categoryArticles',$sub->category_slug)); ?>" title="<?php echo e($sub->category_title); ?>"><?php echo e($sub->category_title); ?></a>
                                                         <?php endif; ?>
                                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                 </div>
                                             </li>
                                     <?php elseif($cat->parent_id == null): ?>
-                                    <li><a href="" title="<?php echo e($cat->category_title); ?>"><?php echo e($cat->category_title); ?></a></li>
+                                    <li><a href="<?php echo e(Route('categoryArticles',$cat->category_slug)); ?>" title="<?php echo e($cat->category_title); ?>"><?php echo e($cat->category_title); ?></a></li>
                                     <?php else: ?>
                                         <?php if($cat->SubCategory3EnabledOrdered()->count() == 0): ?>
                                             <?php if($cat->ParentCategory3->show_in_blog == 0): ?>
-                                            <li><a href="" title="<?php echo e($cat->category_title); ?>"><?php echo e($cat->category_title); ?></a></li>
+                                            <li><a href="<?php echo e(Route('categoryArticles',$cat->category_slug)); ?>" title="<?php echo e($cat->category_title); ?>"><?php echo e($cat->category_title); ?></a></li>
                                             <?php endif; ?>
                                         <?php endif; ?>
                                     <?php endif; ?>
@@ -85,17 +82,19 @@
                             <?php $__currentLoopData = $contents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $content): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <div class="col-sm-6 col-lg-4">
                                     <article class="blog">
-                                        <figure><a href="" title="<?php echo e($content->content_title); ?>">
+                                        <figure><a href="<?php echo e(route('showArticle',$content->content_slug)); ?>" title="<?php echo e($content->content_title); ?>">
                                                 <?php if($content->ContentImages()->first()!=Null): ?>
                                                 <img src="<?php echo e(asset('images/users/user-uploads/user-contents').'/'.$content->ContentImages()->first()->image_dir); ?>" alt="<?php echo e($content->content_title); ?>"/>
                                                 <?php else: ?>
-                                                <span>بدون تصویر</span>
+                                                    <img src="<?php echo e(asset('images').'/404.jpg'); ?>" alt="<?php echo e($content->content_title); ?>"/>
                                                 <?php endif; ?>
 
                                             </a></figure>
                                         <div class="data">
-                                            <h3><a class="title" href="" title="<?php echo e($content->content_title); ?>"><?php echo e($content->content_title); ?></a></h3>
-                                            <p><?php echo e(str_limit($content->content_short_desc,190)); ?></p>
+                                            <h3><a class="title" href="<?php echo e(route('showArticle',$content->content_slug)); ?>" title="<?php echo e($content->content_title); ?>"><?php echo e($content->content_title); ?></a></h3>
+                                            <div class="data2">
+                                                <p><?php echo e(str_limit($content->content_short_desc,190)); ?></p>
+                                            </div>
                                             <p class="author">
                                                 <?php if($content->authorRenterUser()->first()!=Null): ?>
                                                 <img src="<?php echo e(asset('images/users/user-uploads/user-pics').'/'.$content->authorRenterUser()->first()->avatar_dir); ?>" alt="<?php echo e($content->authorRenterUser()->first()->fullname); ?>"/>
@@ -107,7 +106,7 @@
                                                 <?php else: ?>
                                                     ناشناس
                                                 <?php endif; ?>
-                                            <p class="day"><?php \Carbon\Carbon::setLocale('fa'); ?> <?php echo e($content->created_at->diffForHumans()); ?></p><a class="more" href="" title="ادامه مطلب">ادامه مطلب</a>
+                                            <p class="day"><?php \Carbon\Carbon::setLocale('fa'); ?> <?php echo e($content->created_at->diffForHumans()); ?></p><a class="more" href="<?php echo e(route('showArticle',$content->content_slug)); ?>" title="ادامه مطلب">ادامه مطلب</a>
                                         </div>
                                     </article>
                                 </div>

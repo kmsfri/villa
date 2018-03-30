@@ -11,7 +11,7 @@ class Category3 extends Model
 
     public function Contents()
     {
-        return $this->belongsToMany('App\Models\Content','content_category3');
+        return $this->belongsToMany('App\Models\Content','content_category3','category_id','content_id');
     }
 
     public function SubCategory3()

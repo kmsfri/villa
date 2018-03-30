@@ -78,26 +78,38 @@ class CityController extends Controller
 
     public function saveCity(Request $request){
 
-        $this->validate($request, [
+        $city_slug_corrected='';
+        if(isset($request->city_slug) && $request->city_slug!=null){
+            $city_slug_corrected=\Helpers::make_slug($request->city_slug);
+        }
+
+        $newRequest = new \Illuminate\Http\Request();
+        $newRequest->replace([
+            'city_name' => $request->city_name,
+            'city_description'=>$request->city_description,
+            'city_order'=>$request->city_order,
+            'city_status'=>$request->city_status,
+            'parent_id' => $request->parent_id,
+            'city_slug'=>$city_slug_corrected,
+        ]);
+
+
+        $this->validate($newRequest, [
             'city_name' => 'required|min:2|max:255|unique:cities',
             'city_description'=>'min:2|max:1000',
             'city_order'=>'required|integer',
             'city_status'=>'required|integer',
             'parent_id' => 'nullable|exists:cities,id',
+            'city_slug'=>'required|unique:cities,city_slug',
         ]);
 
-
-
-
-
-
-
         $city = new \App\Models\City;
-        $city->city_name=$request->city_name;
-        $city->city_description=nl2br($request->city_description);
-        $city->parent_id=$request->parent_id;
-        $city->city_order=$request->city_order;
-        $city->city_status=$request->city_status;
+        $city->city_name=$newRequest->city_name;
+        $city->city_description=nl2br($newRequest->city_description);
+        $city->city_slug=$newRequest->city_slug;
+        $city->parent_id=$newRequest->parent_id;
+        $city->city_order=$newRequest->city_order;
+        $city->city_status=$newRequest->city_status;
         $city->save();
 
         $msg=['مورد جدید با موفقیت اضافه شد'];
@@ -167,22 +179,40 @@ class CityController extends Controller
     public function doEditCity(Request $request){
 
 
-        $this->validate($request, [
-            'city_name' => 'required|min:2|max:255|unique:cities,city_name,'.$request->edit_id,
+
+        $city_slug_corrected='';
+        if(isset($request->city_slug) && $request->city_slug!=null){
+            $city_slug_corrected=\Helpers::make_slug($request->city_slug);
+        }
+
+        $newRequest = new \Illuminate\Http\Request();
+        $newRequest->replace([
+            'city_name' => $request->city_name,
+            'city_description'=>$request->city_description,
+            'city_order'=>$request->city_order,
+            'city_status'=>$request->city_status,
+            'edit_id' => $request->edit_id,
+            'city_slug'=>$city_slug_corrected,
+        ]);
+
+
+        $this->validate($newRequest, [
+            'city_name' => 'required|min:2|max:255|unique:cities,city_name,'.$newRequest->edit_id,
             'city_description'=>'min:2|max:1000',
             'city_order'=>'required|integer',
             'city_status'=>'required|integer',
-            'edit_id' => 'required|exists:cities,id',
+            'edit_id' => 'nullable|exists:cities,id',
+            'city_slug'=>'required|unique:cities,city_slug,'.$newRequest->edit_id,
         ]);
-
 
 
         $city=\App\Models\City::find($request->edit_id);
 
-        $city->city_name=$request->city_name;
-        $city->city_description=nl2br($request->city_description);
-        $city->city_order=$request->city_order;
-        $city->city_status=$request->city_status;
+        $city->city_name=$newRequest->city_name;
+        $city->city_description=nl2br($newRequest->city_description);
+        $city->city_slug=$newRequest->city_slug;
+        $city->city_order=$newRequest->city_order;
+        $city->city_status=$newRequest->city_status;
         $city->save();
 
         $msg=[
