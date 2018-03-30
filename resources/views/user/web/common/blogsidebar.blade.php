@@ -9,9 +9,9 @@
                             <div class="col-4 col-md-4">
                                 <figure>
                                     @if($mostvisitcontent->ContentImages()->first()!=Null)
-                                    <img src="{{asset('images/users/user-uploads/user-contents').'/'.$mostvisitcontent->ContentImages()->first()->image_dir}}" alt="{{$mostvisitcontent->content_title}}"/>
+                                        <img src="{{asset('images/users/user-uploads/user-contents').'/'.$mostvisitcontent->ContentImages()->first()->image_dir}}" alt="{{$mostvisitcontent->content_title}}"/>
                                     @else
-                                    <span>بدون تصویر</span>
+                                        <img src="{{asset('images').'/404.jpg'}}" alt="{{$mostvisitcontent->content_title}}"/>
                                     @endif
                                 </figure>
                             </div>

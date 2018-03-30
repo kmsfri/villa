@@ -503,6 +503,7 @@ body {
   border-bottom: 0; }
 
 .slider-single .item img, .slider-small .item img {
+  width: 100%;
   max-width: 100%;
   height: auto;
   border-radius: 15px; }
@@ -2007,6 +2008,7 @@ article.blog {
         article.blog figure img {
           width: 100%; } }
   article.blog .data {
+    height:260px;
     font-weight: normal;
     font-size: 14px;
     color: #878787;
@@ -2044,10 +2046,18 @@ article.blog {
       text-align: center;
       display: block; }
     article.blog .data .day {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      padding: 8px 16px;
       display: inline-block;
       float: left;
       font-size: 12px; }
     article.blog .data .author {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      padding: 8px 16px;
       font-size: 12px;
       display: inline-block; }
       article.blog .data .author img {

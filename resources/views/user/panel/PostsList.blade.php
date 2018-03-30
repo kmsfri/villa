@@ -22,7 +22,7 @@
             <td>
                 <p class="text">{{$content->content_title}}</p>
                 @if($content->content_status != 0)
-                    <a href="#" class="btn btn-bloglink">لینک مطلب</a>
+                    <a href="{{route('showArticle',$content->content_slug)}}" class="btn btn-bloglink">لینک مطلب</a>
                 @endif
             </td>
             <td><p class="text">{{$content->Cities()->first()->city_name}}</p></td>
