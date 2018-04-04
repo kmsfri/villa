@@ -10,6 +10,10 @@ body {
   direction: rtl;
   text-align: right !important;
 }
+.uploaded_img_preview{
+    max-height: 100px;
+    width: auto;
+}
 .list-table img{
   max-height: 30px;
 }

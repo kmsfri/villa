@@ -21,11 +21,11 @@
                 {{$c}} @php $c++; @endphp
             </td>
             <td class="text-center">
-            @if($parent_id==Null && $prop->has_text_value==0)
+            @if($canHasSubProp && $prop->has_text_value==0)
                 <a href="{{ url(Route('propertiesList',$prop->id))}}">
             @endif
                     {{$prop->prop_title}}
-            @if($parent_id==Null && $prop->has_text_value==0)
+            @if($canHasSubProp && $prop->has_text_value==0)
                 </a>
             @endif
             </td>

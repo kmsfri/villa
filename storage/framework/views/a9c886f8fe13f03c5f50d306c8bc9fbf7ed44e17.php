@@ -20,12 +20,12 @@
                 <?php echo e($c); ?> <?php $c++; ?>
             </td>
             <td class="text-center">
-            <?php if($parent_id==Null && $prop->has_text_value==0): ?>
+            <?php if($canHasSubProp && $prop->has_text_value==0): ?>
                 <a href="<?php echo e(url(Route('propertiesList',$prop->id))); ?>">
             <?php endif; ?>
                     <?php echo e($prop->prop_title); ?>
 
-            <?php if($parent_id==Null && $prop->has_text_value==0): ?>
+            <?php if($canHasSubProp && $prop->has_text_value==0): ?>
                 </a>
             <?php endif; ?>
             </td>
