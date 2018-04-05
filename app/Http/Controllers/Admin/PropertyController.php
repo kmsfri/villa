@@ -4,16 +4,27 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use DB;
 class PropertyController extends Controller
 {
     public function properties(Request $request){
         if($request->parent_id==Null){
             $title="لیست خصوصیات موجود در وب سایت";
+            $canHasSubProp=true;
         }else{
             $prop_val=\App\Models\Property::find($request->parent_id);
+            $parent_prop2=\App\Models\Property::find($prop_val->parent_id);
+
             if($prop_val==Null){die('invalid request');}
             $title="مقادیر تعریف شده برای خصوصیت: ".$prop_val->prop_title;
+            if($parent_prop2==Null){
+                $canHasSubProp=true;
+            }else{
+                $canHasSubProp=false;
+            }
+
+
+
         }
         $properties=\App\Models\Property::select('*')
             ->where('parent_id','=',$request->parent_id)
@@ -26,6 +37,7 @@ class PropertyController extends Controller
             'del_url'=>Route('deleteProperty',$request->parent_id),
             'properties'=>$properties,
             'parent_id'=>$request->parent_id,
+            'canHasSubProp'=>$canHasSubProp,
 
         ];
 
@@ -36,8 +48,21 @@ class PropertyController extends Controller
         if($request->parent_id!=Null){
             $parent_prop=\App\Models\Property::find($request->parent_id);
             $title="افزودن مقدار جدید به خصوصیت ". $parent_prop->prop_title;
+            if($parent_prop==Null){die('invalid request');}
+
+            $parent_prop2=\App\Models\Property::find($parent_prop->parent_id);
+
+            if($parent_prop2==Null){
+                $canHasSubProp=true;
+            }else{
+                $canHasSubProp=false;
+            }
+
+
+
         }else{
             $title="افزودن خصوصیت جدید به سیستم";
+            $canHasSubProp=true;
         }
 
         $resp=[
@@ -45,6 +70,7 @@ class PropertyController extends Controller
             'request_type'=>'add',
             'parent_id'=>$request->parent_id,
             'title'=>$title,
+            'canHasSubProp'=>$canHasSubProp,
         ];
 
         return view('admin.pages.forms.add_property' ,$resp);
@@ -53,12 +79,14 @@ class PropertyController extends Controller
     public function saveProperty(Request $request){
 
         $this->validate($request, [
-            'prop_title' => 'required|min:1|max:20|unique:properties,prop_title',
+            'prop_title' => 'required|min:1|max:50|unique:properties,prop_title',
             'has_text_value'=>'nullable|integer',
+            'multi_assign'=>'required|integer',
             'prop_order'=>'required|integer',
             'prop_status'=>'required|integer',
             'guide_text'=>'nullable|max:140',
             'parent_id' => 'nullable|exists:properties,id',
+            'img_dir' => 'mimes:png,jpg,jpeg|max:1048',
         ]);
 
 
@@ -67,29 +95,92 @@ class PropertyController extends Controller
             if($parent_property->has_text_value==1) die('invalid request!');
         }
 
-        $prop = new \App\Models\Property;
-        $prop->parent_id=$request->parent_id;
-        $prop->prop_title=$request->prop_title;
-        if(isset($request->parent_id) && $request->parent_id!=Null){
-            $prop->has_text_value=0;
-            $prop->guide_text=Null;
+        if($this->changeProperty($request)){
+            if($request->parent_id==Null){
+                $msg=['خصوصیت جدید با موفقیت به سیستم اضافه شد'];
+            }else{
+                $msg=['مقدار جدید با موفقیت اضافه شد'];
+            }
         }else{
-            $prop->has_text_value=$request->has_text_value;
-            $prop->guide_text=$request->guide_text;
-        }
-        $prop->prop_status=$request->prop_status;
-        $prop->prop_order=$request->prop_order;
-        $prop->save();
-
-
-        if($request->parent_id==Null){
-            $msg=['خصوصیت جدید با موفقیت به سیستم اضافه شد'];
-        }else{
-            $msg=['مقدار جدید با موفقیت اضافه شد'];
+            validator_fails:
+            $msg=["عملیات با مشکل مواجه شد!"];
+            return back()
+                ->withInput()
+                ->with(['messages'=>$msg]);
         }
 
         return redirect(url(Route('propertiesList',$request->parent_id)))->with('messages', $msg);
 
+    }
+
+
+    private function changeProperty($request,$propObject=Null){
+        $uploaded_file_dir="";
+        $this->img_upload_error_msg=array();
+        $to_remove_dir="";
+        try {
+            if($request->img_dir!=Null) {
+
+                $file = $request->file('img_dir');
+                $fileName = "";
+
+                if ($file == null) {
+                    $fileName = "";
+                } else {
+
+                    if ($file->isValid()) {
+                        $fileName = time() . '_' . $file->getClientOriginalName();
+                        $destinationPath = '/images/propertyImages/';
+
+                        $file->move(public_path().$destinationPath, $fileName);
+                        $uploaded_file_dir = $destinationPath.'/'.$fileName;
+                        if($request->edit_id!=Null) {
+                            $to_remove_dir = \App\Models\Property::find($request->edit_id)->img_dir;
+                        }
+                    } else {
+                        $this->img_upload_error_msg = 'آپلود تصویر ناموفق بود';
+                        goto catch_block;
+                    }
+                }
+
+            }
+
+            DB::transaction(function() use($request,$uploaded_file_dir,$to_remove_dir,$propObject){
+                if($request->edit_id!=Null) {
+                    $prop = Clone $propObject;
+                }else{
+                    $prop = new \App\Models\Property;
+                    $prop->parent_id=$request->parent_id;
+                }
+
+                $prop->prop_title=$request->prop_title;
+                $prop->has_text_value=$request->has_text_value;
+                $prop->guide_text=$request->guide_text;
+                if($uploaded_file_dir!="") {
+                    $prop->img_dir = $uploaded_file_dir;
+                }
+                $prop->multi_assign=$request->multi_assign;
+                $prop->prop_status=$request->prop_status;
+                $prop->prop_order=$request->prop_order;
+                $prop->save();
+
+
+                if($request->edit_id!=Null && $to_remove_dir!=""){
+                    if(file_exists(public_path().$to_remove_dir)){
+                        unlink(public_path().$to_remove_dir);
+                    }
+                }
+            });
+
+        }
+        catch(Exception $e) {
+            catch_block:
+            if(file_exists(public_path().$uploaded_file_dir)){
+                unlink(public_path().$uploaded_file_dir);
+            }
+            return false;
+        }
+        return true;
     }
 
 
@@ -113,9 +204,18 @@ class PropertyController extends Controller
         if($parent==Null){
             $parent_id=Null;
             $title="ویرایش خصوصیت ".$prop->prop_title;
+            $canHasSubProp=true;
         }else{
             $parent_id=$parent->id;
             $title="ویرایش مقدار ".$prop->prop_title." متعلق به خصوصیت ".$parent->prop_title;
+
+            if($parent->parent_id==Null){
+                $canHasSubProp=true;
+            }else{
+                $canHasSubProp=false;
+            }
+
+
         }
 
 
@@ -126,6 +226,7 @@ class PropertyController extends Controller
             'parent_id'=>$parent_id,
             'title'=>$title,
             'edit_id'=>$prop->id,
+            'canHasSubProp'=>$canHasSubProp,
         ];
 
         return view('admin.pages.forms.add_property' ,$resp);
@@ -136,11 +237,13 @@ class PropertyController extends Controller
 
         $this->validate($request, [
             'edit_id' => 'required|exists:properties,id',
-            'prop_title' => 'required|min:1|max:20|unique:properties,prop_title,'.$request->edit_id,
+            'prop_title' => 'required|min:1|max:50|unique:properties,prop_title,'.$request->edit_id,
             'has_text_value'=>'nullable|integer',
             'guide_text'=>'nullable|max:140',
+            'multi_assign'=>'required|integer',
             'prop_order'=>'required|integer',
             'prop_status'=>'required|integer',
+            'img_dir' => 'mimes:png,jpg,jpeg|max:1048',
         ]);
 
 
@@ -158,21 +261,19 @@ class PropertyController extends Controller
             }
         }
 
-        $prop->prop_title=$request->prop_title;
-        if($prop->parent_id!=Null){
-            $prop->has_text_value=0;
-            $prop->guide_text=Null;
+        if($this->changeProperty($request,$prop)){
+            $msg=[
+                $prop->prop_title.' با موفقیت ویرایش شد'
+            ];
         }else{
-            $prop->has_text_value=$request->has_text_value;
-            $prop->guide_text=$request->guide_text;
+            validator_fails:
+            $msg=["عملیات با مشکل مواجه شد!"];
+            return back()
+                ->withInput()
+                ->with(['messages'=>$msg]);
         }
-        $prop->prop_status=$request->prop_status;
-        $prop->prop_order=$request->prop_order;
-        $prop->save();
 
-        $msg=[
-            $prop->prop_title.' با موفقیت ویرایش شد'
-        ];
+
         return redirect(url(Route('propertiesList',$prop->parent_id)))->with('messages', $msg);
 
     }

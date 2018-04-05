@@ -20,6 +20,8 @@ class CreateProperties extends Migration
             $table->string('prop_title');
             $table->boolean('has_text_value')->default(0)->comment="1: is used for master properties(parent:Null). they hasn't any specified values. the value is a dynamic text ";
             $table->string('guide_text')->nullable();
+            $table->string('img_dir')->nullable();
+            $table->boolean('multi_assign')->default(0)->comment='set multiple property values to each villa';
             $table->smallInteger('prop_order')->unsigned()->default('1');
             $table->boolean('prop_status')->default(1)->comment='0:deactive - 1:active';
             $table->timestamps();

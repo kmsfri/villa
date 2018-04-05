@@ -20,6 +20,7 @@ class CreateVillaPropertyValue extends Migration
             $table->integer('property_id')->unsigned();
             $table->foreign('property_id')->references('id')->on('properties')->onDelete('cascade')->onUpdate('cascade');
             $table->string('text_value',140)->nullable()->default(Null)->comment="for properties that their parent's is Null AND their has_text_value field's is 1";
+            $table->string('description_text')->nullable()->default(Null);
             $table->timestamps();
         });
     }

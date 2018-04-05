@@ -1,5 +1,6 @@
 <?php $__env->startSection('content_add_form'); ?>
     <input type="hidden" name="parent_id" value="<?php echo e(old('parent_id',isset($parent_id) ? $parent_id : Null)); ?>">
+    <input type="hidden" name="canHasSubProp" value="<?php echo e(old('canHasSubProp',isset($canHasSubProp) ? $canHasSubProp : Null)); ?>">
     <div class="form-group<?php echo e($errors->has('prop_title') ? ' has-error' : ''); ?>">
         <label for="prop_title" class="col-md-2 pull-right control-label"><?php echo e(($parent_id==Null)?'عنوان خصوصیت:' : 'مقدار:'); ?></label>
         <div class="col-md-6 pull-right">
@@ -8,7 +9,7 @@
         </div>
     </div>
 
-    <?php if(old('parent_id',isset($parent_id) ? $parent_id : Null)==Null): ?>
+    <?php if(old('canHasSubProp',isset($canHasSubProp) ? $canHasSubProp : True)): ?>
     <div class="form-group<?php echo e($errors->has('has_text_value') ? ' has-error' : ''); ?>">
         <label for="has_text_value" class="col-md-2 pull-right control-label">مقدار:</label>
         <div class="col-md-6 pull-right">
@@ -29,6 +30,16 @@
     <?php endif; ?>
 
 
+    <div class="form-group<?php echo e($errors->has('img_dir') ? ' has-error' : ''); ?>">
+        <label for="img_dir" class="col-md-2 pull-right control-label">آیکن:</label>
+        <div class="col-md-4 pull-right">
+            <input type="file" onchange="readURL(this,'','img_preview')" name="img_dir" id="img_dir" value="<?php echo e(old('img_dir',isset($property->img_dir) ? $property->img_dir : '')); ?>" autocomplete="off">
+            <?php if($errors->has('img_dir')): ?> <span class="help-block"><strong><?php echo e($errors->first('img_dir')); ?></strong></span> <?php endif; ?>
+        </div>
+        <div class="col-md-4 pull-right">
+            <img id="img_preview" class="<?php echo e(isset($property->img_dir) ? '' : 'hide'); ?> uploaded_img_preview" src="<?php echo e(isset($property->img_dir) ? url($property->img_dir) : '#'); ?>" alt="آیکن" autocomplete="off" />
+        </div>
+    </div>
 
 
 
@@ -57,6 +68,36 @@
             <?php if($errors->has('prop_status')): ?> <span class="help-block"><strong><?php echo e($errors->first('prop_status')); ?></strong></span> <?php endif; ?>
         </div>
     </div>
+
+
+
+    <div class="form-group<?php echo e($errors->has('multi_assign') ? ' has-error' : ''); ?>">
+        <label for="multi_assign" class="col-md-2 pull-right control-label">انتخاب چندگانه:</label>
+        <div class="col-md-6 pull-right">
+            <select  name='multi_assign' class='selectpicker form-control pull-right'>
+                <option <?php if(old('multi_assign' , isset($property->multi_assign) ? $property->multi_assign : '')==1): ?> selected <?php endif; ?> value="1" >بله</option>
+                <option <?php if(old('multi_assign' , isset($property->multi_assign) ? $property->multi_assign : '')==0): ?> selected <?php endif; ?> value="0" >خیر</option>
+            </select>
+            <?php if($errors->has('multi_assign')): ?> <span class="help-block"><strong><?php echo e($errors->first('multi_assign')); ?></strong></span> <?php endif; ?>
+        </div>
+    </div>
+
 <?php $__env->stopSection(); ?>
 
+<?php $__env->startSection('jsCustom'); ?>
+    <script type="text/javascript">
+        function readURL(input,img_id,img_preview_id) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#'+img_preview_id+img_id)
+                        .attr('src', e.target.result)
+                        .height(100);
+                };
+                reader.readAsDataURL(input.files[0]);
+                $('#'+img_preview_id+img_id).removeClass('hide');
+            }
+        }
+    </script>
+<?php $__env->stopSection(); ?>
 <?php echo $__env->make('admin.master-add', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
