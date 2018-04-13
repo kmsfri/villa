@@ -31,13 +31,13 @@ class Villa extends Model
 
     public function Comments()
     {
-        return $this->belongsToMany('App\Models\RenterUser','user_villa_comments','villa_id','renter_user_id');
+        return $this->belongsToMany('App\Models\RenterUser','user_villa_comments','villa_id','renter_user_id')->withTimestamps();
     }
 
 
     public function Properties()
     {
-        return $this->belongsToMany('App\Models\Property','villa_property_value','villa_id','property_id');
+        return $this->belongsToMany('App\Models\Property','villa_property_value','villa_id','property_id')->withPivot('description_text','text_value');
     }
 
 
@@ -66,7 +66,18 @@ class Villa extends Model
 
     public function VillaImages()
     {
-        return $this->hasMany('App\Models\VillaImages');
+        return $this->hasMany('App\Models\VillaImage');
     }
+    public function Cities()
+    {
+        return $this->belongsToMany('App\Models\City','villa_city','villa_id','city_id');
+    }
+    public static function related_villas($city_id,$villa_id){
+
+        return $villas = Villa::whereHas('Cities', function ($q) use ($city_id) {
+            $q->whereIn('city_id', $city_id);
+        })->where('villa_status',1)->where('id','!=',$villa_id)->take(6)->get();
+    }
+
 
 }

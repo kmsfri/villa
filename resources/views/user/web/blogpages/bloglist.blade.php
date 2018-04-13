@@ -85,7 +85,7 @@
                                     <article class="blog">
                                         <figure><a href="{{route('showArticle',$content->content_slug)}}" title="{{$content->content_title}}">
                                                 @if($content->ContentImages()->first()!=Null)
-                                                <img src="{{asset('images/users/user-uploads/user-contents').'/'.$content->ContentImages()->first()->image_dir}}" alt="{{$content->content_title}}"/>
+                                                <img src="{{asset('images/users/user-uploads/user-contents').'/'.$content->ContentImages()->orderBy('image_order','ASC')->first()->image_dir}}" alt="{{$content->content_title}}"/>
                                                 @else
                                                     <img src="{{asset('images').'/404.jpg'}}" alt="{{$content->content_title}}"/>
                                                 @endif

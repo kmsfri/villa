@@ -127,7 +127,7 @@ class Helpers{
     public static function convert_date_j_to_g($timestamp,$str){
         $temp=explode(" ",$timestamp);
         $timestamp=$temp[0];
-        list($j_y, $j_m, $j_d) = explode('/', $timestamp);
+        list($j_y, $j_m, $j_d) = explode('-', $timestamp);
 
         $g_days_in_month = array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
         $j_days_in_month = array(31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29);

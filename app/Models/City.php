@@ -23,4 +23,8 @@ class City extends Model
     {
         return $this->belongsToMany('App\Models\Content');
     }
+    public function Villas()
+    {
+        return $this->belongsToMany('App\Models\Villa');
+    }
 }

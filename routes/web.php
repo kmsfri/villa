@@ -13,6 +13,24 @@
 
 //Website routes
 
+//villa
+Route::get('villa/{slug}','users\web\VillaController@showSingleVilla')->name('showvilla');
+Route::get('villas','users\web\VillaController@showallvillas')->name('showvillas');
+Route::post('villas','users\web\VillaController@savewebsitecomment')->name('savewebsitecomment');
+Route::post('villa/{id}/Comment','users\web\VillaController@villa_comment')->name('villa_comment');
+
+Route::get('user/{slug}','users\web\VillaController@userpage')->name('userpage');
+Route::get('search','users\web\VillaSearchController@search')->name('search');
+
+//Reserve Request
+
+Route::post('villa/{id}/Reserve','users\web\VillaController@reserve_request')->name('reserve_request');
+
+//Villa Search
+
+
+
+
 //blog
 Route::get('گردشگری/استان/{province_slug}','users\web\BlogController@websiteArticles')->name('provinceArticles');
 Route::get('گردشگری/دسته/{category_slug}','users\web\BlogController@websiteArticles')->name('categoryArticles');
