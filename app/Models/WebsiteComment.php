@@ -11,6 +11,6 @@ class WebsiteComment extends Model
 
     public function WritenBy()
     {
-        return $this->belongsTo('App\Models\RenterUser');
+        return $this->belongsTo('App\Models\RenterUser','renter_user_id');
     }
 }

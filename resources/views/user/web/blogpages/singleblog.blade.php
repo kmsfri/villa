@@ -85,31 +85,36 @@
 @include('user.web.common.blogsidebar')
 <!--end section details-->
                 <!--start section villas-->
-            <!--    <section class="villas">
-                    <div class="container">
-                        <div class="box-title">
-                            <h2 class="title"><img src="content/img/icon/icon047.png" alt="">ویلا های مرتبط</h2><a class="more" href="" title="مشاهده بیشتر">مشاهده بیشتر</a>
-                        </div>
-                        <div class="slider-villas">
-                            <div class="item">
-                                <article class="vila">
-                                    <figure><img src="content/img/article001.jpg" alt="ویلا استخردار در بابلسر"/><a class="estate" href="" title="مشاهده ملک">مشاهده ملک</a></figure>
-                                    <div class="data">
-                                        <h3 class="title"><a href="" title="ویلا استخردار در بابلسر">ویلا استخردار در بابلسر</a></h3><span class="price">260,000 تومان</span>
-                                        <p class="place">مازندران - بابلسر</p>
-                                        <div class="my-rating-8"></div><span class="number"><span>2</span></span>
+                @if(count($related_villas))
+                    <section class="villas color">
+                        <div class="container">
+                            <div class="box-title">
+                                <h2 class="title"><img src="{{asset('users/img/icon/icon047.png')}}" alt="">ویلا های مرتبط</h2><a class="more" href="" title="مشاهده بیشتر">مشاهده بیشتر</a>
+                            </div>
+                            <div class="slider-villas">
+                                @foreach($related_villas as $related_villa)
+                                    <div class="item">
+                                        <article class="vila">
+                                            <figure><img src="{{asset($related_villa->VillaImages()->orderBy('image_order','ASC')->first()->image_dir)}}" alt="{{$related_villa->villa_title}}"/><a class="estate" href="" title="{{$related_villa->villa_title}}">مشاهده ملک</a><a class="heart" href=""><i class="fa fa-heart-o"></i></a></figure>
+                                            <div class="data">
+                                                <h3 class="title"><a href="" title="{{$related_villa->villa_title}}">{{$related_villa->id}}</a></h3><span class="price">{{number_format($related_villa->rent_daily_price_from)}} تومان</span>
+                                                @php $city = $content->Cities()->first(); @endphp
+                                                <p class="place">{{\App\Models\City::find($city->parent_id)->city_name}} - {{$city->city_name}}</p>
+                                                <div class="my-rating-8"></div><span class="number"><span>{{$related_villa->Comments()->where('comment_status','=',1)->count()}}</span></span>
+                                            </div>
+                                            <ul>
+                                                <li><img src="{{asset('users/img/icon/icon088.png')}}" alt=""><span>{{$related_villa->bed_count}} تخت خواب</span></li>
+                                                <li><img src="{{asset('users/img/icon/icon087.png')}}" alt=""><span>تا {{$related_villa->max_capacity}} مهمان</span></li>
+                                                <li><img src="{{asset('users/img/icon/icon086.png')}}" alt=""><span>{{$related_villa->bedroom_count}} اتاق خواب</span></li>
+                                                <li><img src="{{asset('users/img/icon/icon085.png')}}" alt=""><span>{{$related_villa->foundation_area}} متر زیربنا</span></li>
+                                            </ul>
+                                        </article>
                                     </div>
-                                    <ul>
-                                        <li><img src="content/img/icon/icon005.png" alt=""/><span>8 تخت خواب</span></li>
-                                        <li><img src="content/img/icon/icon004.png" alt=""/><span>تا 6 مهمان</span></li>
-                                        <li><img src="content/img/icon/icon006.png" alt=""/><span>3 اتاق خواب</span></li>
-                                        <li><img src="content/img/icon/icon007.png" alt=""/><span>350 متر زیربنا</span></li>
-                                    </ul>
-                                </article>
+                                @endforeach
                             </div>
                         </div>
-                    </div>
-                </section>    -->
+                    </section>
+                @endif
                 <!--end section villas-->
 
 
