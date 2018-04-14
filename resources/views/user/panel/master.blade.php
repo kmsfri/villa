@@ -25,15 +25,15 @@
         </div>
         <ul class="ul-sidebar">
           <li><a href="" title=""><img src="{{asset('users/img/icon/icon040.png')}}" alt=""><img class="img" src="{{asset('users/img/icon/icon040-2.png')}}" alt=""><span>پیشخوان</span></a></li>
-          <!--
           <li class="subset"><a href="" title="" data-toggle="collapse" data-target="#ul-list1" aria-expanded="false"><img src="{{asset('users/img/icon/icon041.png')}}" alt=""><img class="img" src="{{asset('users/img/icon/icon041-2.png')}}" alt=""><span>ملک های من</span></a>
             <ul class="list-subset collapse" id="ul-list1">
               <li><a href="" title="ثبت ملک جدید  "> ثبت ملک جدید</a></li>
-              <li><a href="" title="ویلا ها  ">ویلا ها</a></li>
+              <li><a href="{{Route('villaList')}}" title="ویلا ها  ">ویلا ها</a></li>
               <li><a href="" title="سوئیت - آپارتمان ها  ">سوئیت - آپارتمان ها</a></li>
               <li><a href="" title="اقامتگاه های بوم گردی  ">اقامتگاه های بوم گردی</a></li>
             </ul>
           </li>
+          <!--
           <li><a href="" title=""><img src="{{asset('users/img/icon/icon042.png')}}" alt=""><img class="img" src="{{asset('users/img/icon/icon042-2.png')}}" alt=""><span>ارتباط با مهمانان</span></a></li>
           <li><a href="" title=""><img src="{{asset('users/img/icon/icon045.png')}}" alt=""><img class="img" src="{{asset('users/img/icon/icon045-2.png')}}" alt=""><span>امور مالی</span></a></li>
           -->

@@ -33,7 +33,11 @@
                             </table>
                         </div>
                     </div>
-
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <?php echo $__env->yieldContent('paginationContainer'); ?>
+                    </div>
                 </div>
             </div>
         </div>

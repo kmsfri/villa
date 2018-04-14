@@ -21,6 +21,8 @@ class CreateCategories1 extends Migration
             $table->smallInteger('category_order')->unsigned()->default('1');
             $table->boolean('category_status')->default(1)->comment='0:deactive - 1:active';
             $table->string('category_slug')->unique()->charset('utf8');
+            $table->string('image_dir')->nullable();
+            $table->string('image_hover_dir')->nullable();
             $table->timestamps();
         });
     }

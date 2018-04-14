@@ -65,6 +65,14 @@
                     <a class="" href="{{url(Route('propertiesList'))}}"><i class="fa fa-book fa-fw"></i>خصوصیات و مقادیر</a>
                 </li>
 
+                <li>
+                    <a class="" href="{{url(Route('adminShowVillaList'))}}"><i class="fa fa-book fa-fw"></i>ویلاها</a>
+                </li>
+
+                <li>
+                    <a class="" href="{{url(Route('adminTariffList'))}}"><i class="fa fa-book fa-fw"></i>تعرفه ها</a>
+                </li>
+
             </ul>
         </div>
     </div>

@@ -46,7 +46,14 @@
             <td class="text-center">
                 <a href="<?php echo e(url(Route('edit_renter_form',$u->id))); ?>" data-toggle="tooltip" title="ویرایش کاربر">
                     ویرایش کاربر
+                </a>|
+                <a href="<?php echo e(url(Route('adminShowVillaList',$u->id))); ?>" data-toggle="tooltip" title="ویلاها">
+                    ویلاها
+                </a>|
+                <a href="<?php echo e(url(Route('adminAddVillaForm',$u->id))); ?>" data-toggle="tooltip" title="افزودن ویلا">
+                    افزودن ویلا
                 </a>
+
             </td>
         </tr>
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

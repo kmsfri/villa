@@ -4,7 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use DB;
 class Category1Controller extends Controller
 {
     public function categories(Request $request){
@@ -25,7 +25,7 @@ class Category1Controller extends Controller
             }
 
         }else{
-            $title="لیست دسته بندیهای مطالب گردشگری";
+            $title="لیست دسته بندیهای ویلاها";
             $backward_url=Route('dashboard');
             $add_url=Route('add-category1-form');
             $canHasSubCategory=true;
@@ -56,13 +56,13 @@ class Category1Controller extends Controller
             $parent_ctg=\App\Models\Category1::find($request->parent_id);
             $parent_ctg_level2=\App\Models\Category1::find($parent_ctg->parent_id);
             if($parent_ctg_level2==Null){
-                $title="افزودن دسته بندی مطالب گردشگری جدید به: ". $parent_ctg->category_title;
+                $title="افزودن دسته بندی جدید به: ". $parent_ctg->category_title;
             }else{
-                $title="افزودن دسته بندی مطالب گردشگری جدید به: ". $parent_ctg->category_title." - متعلق به: ".$parent_ctg_level2->category_title;
+                $title="افزودن دسته بندی جدید به: ". $parent_ctg->category_title." - متعلق به: ".$parent_ctg_level2->category_title;
             }
 
         }else{
-            $title="افزودن دسته بندی مربوط به مطالب گردشگری";
+            $title="افزودن دسته بندی جدید";
         }
         $backward_url=Route('categories1-list',$request->parent_id);
 
@@ -77,6 +77,110 @@ class Category1Controller extends Controller
     }
 
 
+
+    var $upload_dir='/images/categories';
+    private function changeCategory($request){
+        $uploaded_file_dir1="";
+        $uploaded_file_dir2="";
+        $this->img_upload_error_msg=array();
+        $to_remove_dir1="";
+        $to_remove_dir2="";
+        try {
+            if($request->image_dir!=Null) {
+                $file = $request->image_dir;
+                $fileName = "";
+                if ($file == null) {
+                    $fileName = "";
+                } else {
+                    if ($file->isValid()) {
+                        $fileName = time() . '_' . $file->getClientOriginalName();
+                        $file->move( public_path().$this->upload_dir, $fileName);
+                        $uploaded_file_dir1 = $this->upload_dir.'/'.$fileName;
+                        if($request->edit_id!=Null) {
+                            $to_remove_dir1 = \App\Models\Category1::find($request->edit_id)->image_dir;
+                        }
+                    } else {
+                        $this->img_upload_error_msg = ['آپلود تصویر ناموفق بود'];
+                        goto catch_block;
+                    }
+                }
+            }
+
+            if($request->image_hover_dir!=Null) {
+                $file = $request->image_hover_dir;
+                $fileName = "";
+                if ($file == null) {
+                    $fileName = "";
+                } else {
+                    if ($file->isValid()) {
+                        $fileName = time() . '_' . $file->getClientOriginalName();
+                        $file->move(public_path() . $this->upload_dir, $fileName);
+                        $uploaded_file_dir2 = $this->upload_dir . '/' . $fileName;
+                        if ($request->edit_id != Null) {
+                            $to_remove_dir2 = \App\Models\Category1::find($request->edit_id)->image_hover_dir;
+                        }
+                    } else {
+                        $this->img_upload_error_msg = ['آپلود تصویر ناموفق بود'];
+                        goto catch_block;
+                    }
+                }
+            }
+
+
+            DB::transaction(function() use($request,$uploaded_file_dir1,$to_remove_dir1,$uploaded_file_dir2,$to_remove_dir2){
+                if($request->edit_id!=Null) {
+                    $ctg=\App\Models\Category1::find($request->edit_id);
+                }else{
+                    $ctg=new \App\Models\Category1();
+                    $ctg->parent_id=$request->parent_id;
+                }
+
+                $ctg->category_title=$request->category_title;
+                $ctg->category_order=$request->category_order;
+                $ctg->category_status=$request->category_status;
+                $ctg->category_slug=$request->category_slug_corrected;
+                if($uploaded_file_dir1!=""){
+                    $ctg->image_dir=$uploaded_file_dir1;
+                }
+                if($uploaded_file_dir2!=""){
+                    $ctg->image_hover_dir=$uploaded_file_dir2;
+                }
+                $ctg->save();
+
+
+                if($request->edit_id!=Null){
+                    if($to_remove_dir1!=""){
+                        if(file_exists(public_path().$to_remove_dir1)){
+                            unlink(public_path().$to_remove_dir1);
+                        }
+                    }
+                    if($to_remove_dir2!=""){
+                        if(file_exists(public_path().$to_remove_dir2)){
+                            unlink(public_path().$to_remove_dir2);
+                        }
+                    }
+
+
+                }
+            });
+
+        }
+        catch(Exception $e) {
+            catch_block:
+            if(file_exists(public_path().$uploaded_file_dir1)){
+                unlink(public_path().$uploaded_file_dir1);
+            }
+            if(file_exists(public_path().$uploaded_file_dir2)){
+                unlink(public_path().$uploaded_file_dir2);
+            }
+            return false;
+        }
+        return true;
+    }
+
+
+
+
     public function saveCategory(Request $request){
 
         $category_slug_corrected='';
@@ -89,6 +193,8 @@ class Category1Controller extends Controller
             'category_title' => $request->category_title,
             'category_order'=>$request->category_order,
             'category_status'=>$request->category_status,
+            'image_dir'=>$request->image_dir,
+            'image_hover_dir'=>$request->image_hover_dir,
             'category_slug_corrected'=>$category_slug_corrected,
             'parent_id' => $request->parent_id,
         ]);
@@ -97,20 +203,19 @@ class Category1Controller extends Controller
             'category_title' => 'required|min:2|max:255|unique:categories1',
             'category_order'=>'required|integer',
             'category_status'=>'required|integer',
+            'image_dir'=>'nullable|mimes:png,jpg,jpeg|max:1048',
+            'image_hover_dir'=>'nullable|mimes:png,jpg,jpeg|max:1048',
             'category_slug_corrected'=>'required|unique:categories1,category_slug',
             'parent_id' => 'nullable|exists:categories1,id',
         ]);
 
 
-        $ctg = new \App\Models\Category1();
-        $ctg->category_title=$newRequest->category_title;
-        $ctg->parent_id=$newRequest->parent_id;
-        $ctg->category_order=$newRequest->category_order;
-        $ctg->category_status=$newRequest->category_status;
-        $ctg->category_slug=$newRequest->category_slug_corrected;
-        $ctg->save();
+        if($this->changeCategory($newRequest)){
+            $msg=['دسته بندی جدید با موفقیت اضافه شد'];
+        }else{
 
-        $msg=['دسته بندی جدید با موفقیت اضافه شد'];
+            $msg=['عملیات با خطا مواجه شد'];
+        }
 
         return redirect(url(Route('categories1-list',$request->parent_id)))->with('messages', $msg);
 
@@ -166,6 +271,7 @@ class Category1Controller extends Controller
 
     public function doEditCategory(Request $request){
 
+        $category_slug_corrected='';
         if(isset($request->category_slug) && $request->category_slug!=null){
             $category_slug_corrected=\Helpers::make_slug($request->category_slug);
         }
@@ -175,6 +281,8 @@ class Category1Controller extends Controller
             'category_title' => $request->category_title,
             'category_order'=>$request->category_order,
             'category_status'=>$request->category_status,
+            'image_dir'=>$request->image_dir,
+            'image_hover_dir'=>$request->image_hover_dir,
             'category_slug_corrected'=>$category_slug_corrected,
             'edit_id' => $request->edit_id,
         ]);
@@ -184,23 +292,23 @@ class Category1Controller extends Controller
             'category_title' => 'required|min:2|max:255|unique:categories1,category_title,'.$newRequest->edit_id,
             'category_order'=>'required|integer',
             'category_status'=>'required|integer',
+            'image_dir'=>'nullable|mimes:png,jpg,jpeg|max:1048',
+            'image_hover_dir'=>'nullable|mimes:png,jpg,jpeg|max:1048',
             'category_slug_corrected'=>'required|unique:categories1,category_slug,'.$newRequest->edit_id,
             'edit_id' => 'required|exists:categories1,id',
         ]);
 
 
 
-        $ctg=\App\Models\Category1::find($newRequest->edit_id);
-        $ctg->category_title=$newRequest->category_title;
-        $ctg->category_order=$newRequest->category_order;
-        $ctg->category_status=$newRequest->category_status;
-        $ctg->category_slug=$newRequest->category_slug_corrected;
-        $ctg->save();
+        if($this->changeCategory($newRequest)){
+            $msg=['دسته بندی مورد نظر با موفقیت ویرایش شد'];
+        }else{
 
-        $msg=[
-            $ctg->category_title.' با موفقیت ویرایش شد'
-        ];
-        return redirect(url(Route('categories1-list',$ctg->parent_id)))->with('messages', $msg);
+            $msg=['عملیات با خطا مواجه شد'];
+        }
+
+        return redirect(url(Route('categories1-list')))->with('messages', $msg);
+
 
     }
 
@@ -210,11 +318,27 @@ class Category1Controller extends Controller
     public function deleteCategory(Request $request){
 
         if(isset($request->remove_val)){
+            foreach($request->remove_val as $c_id){
+                $ctg=\App\Models\Category1::find($c_id);
+                if($ctg!=Null && $ctg->image_dir!=null && trim($ctg->image_dir)!=''){
+                    if(file_exists(public_path().$ctg->image_dir)){
+                        unlink(public_path().$ctg->image_dir);
+                    }
+                }
+                if($ctg!=Null && $ctg->image_hover_dir!=null && trim($ctg->image_hover_dir)!=''){
+                    if(file_exists(public_path().$ctg->image_hover_dir)){
+                        unlink(public_path().$ctg->image_hover_dir);
+                    }
+                }
+                unset($u);
+            }
+
             \App\Models\Category1::destroy($request->remove_val);
         }
         $msg=['موارد انتخاب شده با موفقیت حذف شدند'];
-
         return redirect(url(Route('categories1-list',$request->parent_id)))->with('messages', $msg);
+
+
 
 
     }

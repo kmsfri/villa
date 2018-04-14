@@ -16,6 +16,10 @@ class getSectionPathParts
     public function handle($request, Closure $next)
     {
 
+        if(\Request::method()=='POST'){
+            return $next($request);
+        }
+
         $routeDetails=[
             'showdashboard'=>[
                 'page_title'=>'پیشخوان',
@@ -167,7 +171,61 @@ class getSectionPathParts
                     (object)['title'=>'جاذبه های گردشگری'],
                 ],
             ],
+            'villaList'=>[
+                'page_title'=>'لیست ویلاها',
+                'headingButton'=>(object)[
+                    'url'=>Route('addVillaForm'),
+                    'title'=>'ثبت ملک جدید',
+                ],
+                'sectionParts'=>[
+                    (object)['title'=>'پیشخوان'],
+                    (object)['title'=>'ملک های من'],
+                ],
+            ],
+            'addVillaForm'=>[
+                'page_title'=>'افزودن ملک جدید',
+                'headingButton'=>(object)[
+                    'url'=>Route('addVillaForm'),
+                    'title'=>'ثبت ملک جدید',
+                ],
+                'sectionParts'=>[
+                    (object)['title'=>'پیشخوان'],
+                    (object)['title'=>'ملک های من'],
+                    (object)['title'=>'ثبت ملک جدید'],
+                ],
+            ],
+            'editVillaForm'=>[
+                'page_title'=>'ویرایش ملک',
+                'headingButton'=>(object)[
+                    'url'=>Route('addVillaForm'),
+                    'title'=>'ثبت ملک جدید',
+                ],
+                'sectionParts'=>[
+                    (object)['title'=>'پیشخوان'],
+                    (object)['title'=>'ملک های من'],
+                    (object)['title'=>'ویرایش ملک'],
+                ],
+            ],
+            'editVillaCategory'=>[
+                'page_title'=>'تعیین دسته بندی ملک',
+                'headingButton'=>(object)[
+                    'url'=>Route('addVillaForm'),
+                    'title'=>'ثبت ملک جدید',
+                ],
+                'sectionParts'=>[
+                    (object)['title'=>'پیشخوان'],
+                    (object)['title'=>'ملک های من'],
+                    (object)['title'=>'دسته بندیها'],
+                ],
+            ],
+
+
+
+
         ];
+
+
+
 
 
         $routeName=\Request::route()->getName();

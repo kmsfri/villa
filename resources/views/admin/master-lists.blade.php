@@ -32,7 +32,11 @@
                             </table>
                         </div>
                     </div>
-
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        @yield('paginationContainer')
+                    </div>
                 </div>
             </div>
         </div>

@@ -43,7 +43,14 @@
             <td class="text-center">
                 <a href="{{url(Route('edit_renter_form',$u->id))}}" data-toggle="tooltip" title="ویرایش کاربر">
                     ویرایش کاربر
+                </a>|
+                <a href="{{url(Route('adminShowVillaList',$u->id))}}" data-toggle="tooltip" title="ویلاها">
+                    ویلاها
+                </a>|
+                <a href="{{url(Route('adminAddVillaForm',$u->id))}}" data-toggle="tooltip" title="افزودن ویلا">
+                    افزودن ویلا
                 </a>
+
             </td>
         </tr>
     @endforeach

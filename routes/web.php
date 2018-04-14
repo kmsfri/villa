@@ -44,10 +44,18 @@ Route::group(['prefix' => 'User',  'middleware' => ['auth:user', 'getSectionPath
         Route::post('Content', 'users\ContentController@addcontentaction')->name('addcontentaction');
         Route::get('Content/category/{content_id}', 'users\ContentController@editContentCategory')->name('editContentCategory');
         Route::post('Content/category', 'users\ContentController@doEditContentCategory')->name('doEditContentCategory');
-
         Route::get('Contents', 'users\ContentController@contents')->name('contents');
         Route::get('Content/showinbody/{id}', 'users\ContentController@showinbody')->name('showinbody');
         Route::get('Content/draft/{id}', 'users\ContentController@draft')->name('draft');
+
+
+        Route::get('Villa', 'users\VillaController@addVilla')->name('addVillaForm');
+        Route::get('Villa/{id}', 'users\VillaController@editVilla')->name('editVillaForm');
+        Route::post('Villa', 'users\VillaController@doSaveVilla')->name('doSaveVilla');
+        Route::get('Villa/category/{villa_id}', 'users\VillaController@editVillaCategory')->name('editVillaCategory');
+        Route::post('Villa/category', 'users\VillaController@doEditVillaCategory')->name('doEditVillaCategory');
+
+        Route::get('Villas', 'users\VillaController@showVillaList')->name('villaList');
     });
 });
 
@@ -57,7 +65,7 @@ Route::group(['prefix'=>'management'],function(){
     Route::get('logout', 'Admin\AuthAdmin\LoginController@logout')->name('do-admin-logout');
 
     Route::group(['middleware'=>['auth:admin'/*,'init_admin_common_data'*/]],function(){
-        Route::group(['middleware'=>['route_permission']],function(){
+        Route::group(['middleware'=>[/*'route_permission'*/]],function(){
             Route::get('/', function(){
                 return redirect(Route('dashboard'));
             });
@@ -123,6 +131,27 @@ Route::group(['prefix'=>'management'],function(){
             Route::post('/user/renter/delete', 'Admin\RenterUserController@deleteRenterUser')->name('delete_renter_user');
             Route::get('/user/renter/edit/{id}', 'Admin\RenterUserController@editRenterUser')->name('edit_renter_form');
             Route::post('/user/renter/edit', 'Admin\RenterUserController@doEditRenterUser')->name('do_edit_renter');
+
+
+
+            Route::get('villa/{user_id?}','Admin\VillaController@showVillaList')->name('adminShowVillaList');
+            Route::get('villa/add/{renter_user_id}','Admin\VillaController@addVilla')->name('adminAddVillaForm');
+            Route::get('villa/edit/{id}','Admin\VillaController@editVilla')->name('adminEditVillaForm');
+            Route::post('villa/save','Admin\VillaController@doSaveVilla')->name('adminDoSaveVilla');
+            Route::post('villa/remove','Admin\VillaController@doRemoveVilla')->name('adminRemoveVilla');
+            Route::get('villa/category/{villa_id}','Admin\VillaController@editVillaCategory')->name('adminEditVillaCategory');
+            Route::post('villa/category','Admin\VillaController@doEditVillaCategory')->name('adminDoEditVillaCategory');
+
+
+            Route::get('/tariff/add', 'Admin\TariffController@showAddTariffForm')->name('addTariffForm');
+            Route::post('/tariff/add', 'Admin\TariffController@saveTariff')->name('doAddTariff');
+            Route::post('/tariff/delete', 'Admin\TariffController@deleteTariff')->name('doDeleteTariff');
+            Route::get('/tariff/edit/{id}', 'Admin\TariffController@editTariff')->name('editTariff');
+            Route::post('/tariff/edit', 'Admin\TariffController@doEditTariff')->name('doEditTariff');
+            Route::get('/tariffs', 'Admin\TariffController@Tariffs')->name('adminTariffList');
+
+
+
 
         });
     });

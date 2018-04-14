@@ -316,6 +316,7 @@ class ContentController extends Controller
         $msg='دسته بندی مطلب مورد نظر با موفقیت بروزرسانی شد';
         return redirect(url(Route('contents')))->with('data', $msg);
     }
+
     public function contents(){
         $user = RenterUser::find(Auth::guard('user')->user()->id);
         $contents = Content::where('renter_user_id',Auth::guard('user')->user()->id)->paginate(11);

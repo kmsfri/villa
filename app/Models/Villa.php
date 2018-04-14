@@ -47,10 +47,16 @@ class Villa extends Model
             ->where('parent_id','=',$prop_id)->first();
     }
 
+    public function AllSpecProperty($prop_id)
+    {
+        return $this->belongsToMany('App\Models\Property','villa_property_value', 'villa_id','property_id')
+            ->where('parent_id','=',$prop_id)->get();
+    }
+
 
     public function Categories1()
     {
-        return $this->belongsToMany('App\Models\Category1');
+        return $this->belongsToMany('App\Models\Category1','villa_category1','villa_id','category_id');
     }
 
     public function Categories2()
@@ -66,7 +72,12 @@ class Villa extends Model
 
     public function VillaImages()
     {
-        return $this->hasMany('App\Models\VillaImages');
+        return $this->hasMany('App\Models\VillaImage');
+    }
+
+    public function Cities()
+    {
+        return $this->belongsToMany('App\Models\City','villa_city','villa_id','city_id');
     }
 
 }

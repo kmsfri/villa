@@ -1,4 +1,9 @@
 <?php $__env->startSection('content_add_form'); ?>
+    <?php if(count($errors)>0): ?>
+        <?php echo e(dd($errors)); ?>
+
+        <?php endif; ?>
+
     <input type="hidden" name="parent_id" value="<?php echo e(old('parent_id',isset($parent_id) ? $parent_id : Null)); ?>">
     <div class="form-group<?php echo e($errors->has('category_title') ? ' has-error' : ''); ?>">
         <label for="category_title" class="col-md-2 pull-right control-label">عنوان:</label>
@@ -70,11 +75,45 @@
     <?php endif; ?>
 
 
+    <div class="form-group<?php echo e($errors->has('image_dir') ? ' has-error' : ''); ?>">
+        <label for="image_dir" class="col-md-2 pull-right control-label">تصویر اصلی:</label>
+        <div class="col-md-4 pull-right">
+            <input type="file" onchange="readURL(this,'','img_dir_preview')" name="image_dir" id="image_dir" value="<?php echo e(old('image_dir',isset($category->image_dir) ? $category->image_dir : '')); ?>" autocomplete="off">
+            <?php if($errors->has('image_dir')): ?> <span class="help-block"><strong><?php echo e($errors->first('image_dir')); ?></strong></span> <?php endif; ?>
+        </div>
+        <div class="col-md-4 pull-right">
+            <img id="img_dir_preview" class="<?php echo e(isset($category->image_dir) ? '' : 'hide'); ?>" src="<?php echo e(isset($category->image_dir) ? url($category->image_dir) : '#'); ?>" alt="تصویر اصلی" autocomplete="off" />
+        </div>
+    </div>
 
+    <div class="form-group<?php echo e($errors->has('image_hover_dir') ? ' has-error' : ''); ?>">
+        <label for="image_hover_dir" class="col-md-2 pull-right control-label">تصویر دوم:</label>
+        <div class="col-md-4 pull-right">
+            <input type="file" onchange="readURL(this,'','image_hover_dir_preview')" name="image_hover_dir" id="image_hover_dir" value="<?php echo e(old('image_hover_dir',isset($category->image_hover_dir) ? $category->image_hover_dir : '')); ?>" autocomplete="off">
+            <?php if($errors->has('image_hover_dir')): ?> <span class="help-block"><strong><?php echo e($errors->first('image_hover_dir')); ?></strong></span> <?php endif; ?>
+        </div>
+        <div class="col-md-4 pull-right">
+            <img id="image_hover_dir_preview" class="<?php echo e(isset($category->image_hover_dir) ? '' : 'hide'); ?>" src="<?php echo e(isset($category->image_hover_dir) ? url($category->image_hover_dir) : '#'); ?>" alt="تصویر دوم" autocomplete="off" />
+        </div>
+    </div>
 
+<?php $__env->stopSection(); ?>
 
-
-
+<?php $__env->startSection('jsCustom'); ?>
+    <script type="text/javascript">
+        function readURL(input,img_id,img_preview_id) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#'+img_preview_id+img_id)
+                        .attr('src', e.target.result)
+                        .height(100);
+                };
+                reader.readAsDataURL(input.files[0]);
+                $('#'+img_preview_id+img_id).removeClass('hide');
+            }
+        }
+    </script>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('admin.master-add', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
