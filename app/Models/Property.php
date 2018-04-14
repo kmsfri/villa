@@ -28,6 +28,6 @@ class Property extends Model
 
     public function Villas()
     {
-        return $this->belongsToMany('App\Models\Villa','villa_property_value','property_id','villa_id');
+        return $this->belongsToMany('App\Models\Villa','villa_property_value','property_id','villa_id')->withTimestamps();
     }
 }

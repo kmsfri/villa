@@ -1790,8 +1790,7 @@ article.vila {
       font-weight: normal;
       font-size: 14px;
       color: #454545;
-      margin-bottom: 0;
-      display: inline-block; }
+      margin-bottom: 0;}
     article.vila .data .my-rating-8 {
       display: inline-block;
       position: relative;
@@ -2795,4 +2794,7 @@ form.newsletters {
 }
 #result div{
   float:left;
+}
+.customheight{
+  height: 52px;
 }

@@ -56,7 +56,7 @@ class Villa extends Model
 
     public function Categories1()
     {
-        return $this->belongsToMany('App\Models\Category1','villa_category1','villa_id','category_id');
+        return $this->belongsToMany('App\Models\Category1');
     }
 
     public function Categories2()
@@ -72,12 +72,7 @@ class Villa extends Model
 
     public function VillaImages()
     {
-        return $this->hasMany('App\Models\VillaImage');
-    }
-
-    public function Cities()
-    {
-        return $this->belongsToMany('App\Models\City','villa_city','villa_id','city_id');
+        return $this->hasMany('App\Models\VillaImages');
     }
 
 }

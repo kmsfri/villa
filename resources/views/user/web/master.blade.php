@@ -23,6 +23,7 @@
     <link href="{{asset('users/plugin/datepicker//bootstrap-datepicker.css')}}" rel="stylesheet">
     <link href="{{asset('users/css/normalize.cs')}}" rel="stylesheet">
     <link href="{{asset('users/css/style.css')}}" rel="stylesheet">
+    <script src="{{asset('users/js/jquery.min.js')}}"></script>
 </head>
 <body>
 <main>
@@ -129,7 +130,7 @@
 </footer>
 <!--end footer-->
 <!--start scripts-->
-<script src="{{asset('users/js/jquery.min.js')}}"></script>
+
 <script src="{{asset('users/js/popover.js')}}"></script>
 <script src="{{asset('users/js/bootstrap.min.js')}}"></script>
 <script src="{{asset('users/js/tether.min.js')}}"></script>

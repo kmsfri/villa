@@ -42,5 +42,11 @@ class Content extends Model
     {
         return $this->belongsToMany('App\Models\City','content_city','content_id','city_id');
     }
+    public static function related_contents($city_id){
+
+        return $contents = Content::whereHas('Cities', function ($q) use ($city_id) {
+            $q->whereIn('city_id', $city_id);
+        })->where('content_status',0)->where('is_draft',0)->take(6)->get();
+    }
 
 }
