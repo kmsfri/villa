@@ -82,4 +82,13 @@ class Villa extends Model
     }
 
 
+
+    public static function related_villas($city_id,$villa_id){
+
+        return $villas = Villa::whereHas('Cities', function ($q) use ($city_id) {
+            $q->whereIn('city_id', $city_id);
+        })->where('villa_status',1)->where('id','!=',$villa_id)->take(6)->get();
+    }
+
+
 }
