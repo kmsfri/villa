@@ -31,13 +31,13 @@ class Villa extends Model
 
     public function Comments()
     {
-        return $this->belongsToMany('App\Models\RenterUser','user_villa_comments','villa_id','renter_user_id');
+        return $this->belongsToMany('App\Models\RenterUser','user_villa_comments','villa_id','renter_user_id')->withTimestamps();
     }
 
 
     public function Properties()
     {
-        return $this->belongsToMany('App\Models\Property','villa_property_value','villa_id','property_id');
+        return $this->belongsToMany('App\Models\Property','villa_property_value','villa_id','property_id')->withPivot('description_text','text_value');
     }
 
 
