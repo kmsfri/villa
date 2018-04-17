@@ -23,7 +23,10 @@ class Content extends Model
     {
         return $this->hasMany('App\Models\ContentImage');
     }
-
+    public function Reports()
+    {
+        return $this->belongsToMany('App\Models\RenterUser','user_villa_reports','content_id','renter_user_id');
+    }
     public function Categories3()
     {
         return $this->belongsToMany('App\Models\Category3','content_category3','content_id','category_id');
@@ -31,7 +34,7 @@ class Content extends Model
 
     public function RenterUserScores()
     {
-        return $this->belongsToMany('App\Models\RenterUser','user_content_scores','content_id','renter_user_id');
+        return $this->belongsToMany('App\Models\RenterUser','user_content_scores','content_id','renter_user_id')->withTimestamps();
     }
 
     public function RenterUserComments()

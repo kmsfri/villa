@@ -8,8 +8,8 @@
     @include('user.web.common.stickyheadsearch')
     <!--start section details-->
     <ul class="floating">
-        <li><a href="" title=""><img src="{{asset('users/img/floating-phone.png')}}"></a></li>
-        <li><a href="" title=""><img src="{{asset('users/img/floating-telegram.png')}}"></a></li>
+        <li><a href="tel://{{$user->mobile_number}}" title=""><img src="{{asset('users/img/floating-phone.png')}}"></a></li>
+        <li><a href="http://t.me/{{$user->telegram_link}}" title=""><img src="{{asset('users/img/floating-telegram.png')}}"></a></li>
     </ul><a class="owner subNavBtn" href="#box-price" title="تماس با مالک"><img src="{{asset('users/img/owner.jpg')}}" alt="تماس با مالک"></a>
     <section class="details">
         <div class="container">
@@ -31,7 +31,7 @@
                             <h1 class="title">{{$villa->villa_title}}</h1><span class="code">کد ملک :<span>{{$villa->id}}</span></span>
                             <div class="clearfix"></div>@php $city = $villa->Cities()->first(); @endphp
                             <p class="place">{{\App\Models\City::find($city->parent_id)->city_name}} - {{$city->city_name}}</p>
-                            <div class="my-rating-8"></div><span class="span">@php \Carbon\Carbon::setLocale('fa'); @endphp {{$villa->created_at->diffForHumans()}}</span>
+                            <div class="my-rating-8 villarate0"></div><span class="span">@php \Carbon\Carbon::setLocale('fa'); @endphp {{$villa->created_at->diffForHumans()}}</span>
                         </div>
                         <div class="data">
                             <ul class="ul-article">
@@ -266,22 +266,22 @@
                             <div class="col-md-11 mr-auto">
                                 <ul class="ul-new width">
                                     <li><span>صحت مطالب :</span>
-                                        <div class="my-rating-8"></div>
+                                        <div class="my-rating-8 villarate1"></div>
                                     </li>
                                     <li><span>پاکیزگی اقامتگاه :</span>
-                                        <div class="my-rating-8"></div>
+                                        <div class="my-rating-8 villarate2"></div>
                                     </li>
                                     <li><span>تحویل به موقع :</span>
-                                        <div class="my-rating-8"></div>
+                                        <div class="my-rating-8 villarate3"></div>
                                     </li>
                                     <li><span>شیوه برخورد میزبان :</span>
-                                        <div class="my-rating-8"></div>
+                                        <div class="my-rating-8 villarate4"></div>
                                     </li>
                                     <li><span>مکان اقامتگاه  :</span>
-                                        <div class="my-rating-8"></div>
+                                        <div class="my-rating-8 villarate5"></div>
                                     </li>
                                     <li><span>کیفیت نسبت به نرخ :</span>
-                                        <div class="my-rating-8"></div>
+                                        <div class="my-rating-8 villarate6"></div>
                                     </li>
                                 </ul>
                             </div>
@@ -385,6 +385,99 @@
 @endsection
 
 @section('jsmap')
+
+    <script type="text/javascript">
+        //rate_func
+        function villa_rate(s_type,s_value) {
+            $.post("{{route('rate_villa',$villa->id)}}",
+                {
+                    s_type : s_type,
+                    s_value: s_value
+                } ,
+                function(data){
+                    if(data != "ok"){
+                        alert('مشکلی در ثبت امتیاز به وجود آمده است، در صورت بروز مجدد، صفحه را دوباره رفرش کنید');
+                    }
+
+                })
+                .fail(function() {
+                    alert( "شما باید وارد حساب کاربری خود شوید" );
+                    window.location = "{{route('showlogin')}}";
+                })
+        }
+        function send_report() {
+            $.post("{{route('villa_report',$villa->id)}}", { _token: $('.rptoken').val(), report_text: $('.crp').val() } , function(data){
+                if(data == "ok"){
+                    $( ".rpform" ).replaceWith( "<p style='color:red;padding: 30px'>با موفقیت ثبت شد</p>" );
+                }
+                else{
+                    alert( "متن گزارش نباید خالی باشد و باید حداکثر 280 کاراکتر باشد" );
+                }
+            })
+                .fail(function() {
+                    alert( "شما باید وارد حساب کاربری خود شوید" );
+                    window.location = "{{route('showlogin')}}";
+                })
+        }
+        function send_reserve() {
+
+            if (isMobile()) {
+                if ($.trim($('.date_in').val()) == "" || $.trim($('.date_out').val()) == "" || $.trim($('.pc').val()) == "" || $.trim($('.fullname').val()) == "" || $.trim($('.phone').val()) == "") {
+                    alert("ورودی های خود را بررسی نمایید");
+                }
+                else {
+                var txt = "درخواست رزرو ویلا" +
+                    "%0a" +
+                    "کد ویلا:{{$villa->id}}" +
+                    "%0a" +
+                    "از تاریخ:" + $('.date_in').val() +
+                    "%0a" +
+                    "تا تاریخ:" + $('.date_out').val() +
+                    "%0a" +
+                    "درخواست دهنده:" + $('.fullname').val() +
+                    "%0a" +
+                    "شماره تماس:" + $('.phone').val() +
+                    "%0a" +
+                    "وبسایت ویلایار"
+                ;
+
+                window.location.href = "sms://{{$user->mobile_number}}?body=" + txt;
+            }
+            }
+            else{
+                if($.trim($('.date_in').val()) == "" || $.trim($('.date_out').val()) == "" || $.trim($('.pc').val()) == "" || $.trim($('.fullname').val()) == "" || $.trim($('.phone').val()) == "") {
+                    alert("ورودی های خود را بررسی نمایید");
+                }
+                else{
+                    $.post("{{route('reserve_request',$villa->id)}}",
+                        {
+                            _token: $('.reserve_token').val(),
+                            date_in: $('.date_in').val(),
+                            date_out: $('.date_out').val(),
+                            pc: $('.pc').val(),
+                            fullname: $('.fullname').val(),
+                            phone: $('.phone').val()
+                        } ,
+                        function(data){
+                        if(data == "ok"){
+                            $( ".reserve_form" ).replaceWith( "<p style='color:red;padding: 30px;text-align: center;'>با موفقیت ثبت شد</p>" );
+                        }
+                        else{
+                            alert("ورودی های خود را بررسی نمایید");
+                        }
+                    })
+                        .fail(function() {
+                            alert( "مشکلی در ارسال به وجود آمده است، در صورت بروز مجدد، صفحه را دوباره رفرش کنید" );
+                        })
+                }
+
+            }
+        }
+        function isMobile() {
+            try{ document.createEvent("TouchEvent"); return true; }
+            catch(e){ return false; }
+        }
+    </script>
     @if($villa->longitude != null && $villa->latitude != 0)
         <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false&key=AIzaSyAUTOnItAcKwoEjTUA8nbIPjdOngcEpJV0"></script>
         <script type="text/javascript">

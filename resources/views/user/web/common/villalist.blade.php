@@ -12,7 +12,7 @@
                                 <h3 class="title"><a href="" title="{{$villa->villa_title}}">{{$villa->villa_title}}</a></h3><span class="price">{{number_format($villa->rent_daily_price_from)}} تومان</span>
                                 @php $city = $villa->Cities()->first(); @endphp
                                 <p class="place customheight">{{\App\Models\City::find($city->parent_id)->city_name}} - {{$city->city_name}}</p>
-                                <div class="my-rating-8"></div><span class="number"><span>{{$villa->Comments()->where('comment_status','=',1)->count()}}</span></span>
+                                <div class="my-rating-8 villalistrate {{$villa->id}}"></div><span class="number"><span>{{$villa->Comments()->where('comment_status','=',1)->count()}}</span></span>
                             </div>
                             <ul>
                                 <li><img src="{{asset('users/img/icon/icon088.png')}}" alt=""><span>{{$villa->bed_count}} تخت خواب</span></li>

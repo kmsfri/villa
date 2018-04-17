@@ -28,6 +28,19 @@ Route::post('villa/{id}/Reserve','users\web\VillaController@reserve_request')->n
 
 //Villa Search
 
+//NewsLetter Register
+Route::post('NewsLetter','users\web\WebsiteGeneralController@newsletter_register')->name('newsletter_register');
+
+//Content_Report
+Route::post('Content/Report/{id}','users\web\WebsiteGeneralController@content_report')->name('content_report');
+//Villa_Report
+Route::post('Villa/Report/{id}','users\web\WebsiteGeneralController@villa_report')->name('villa_report');
+
+//Villa Rating
+Route::post('Villa/Rate/{id}','users\web\WebsiteGeneralController@rate_villa')->name('rate_villa');
+Route::post('VillaRate','users\web\WebsiteGeneralController@rate_villa_list')->name('rate_villa_list');
+//Content Rating
+Route::post('Content/Rate/{id}','users\web\WebsiteGeneralController@rate_content')->name('rate_content');
 
 
 
