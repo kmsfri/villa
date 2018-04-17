@@ -49,7 +49,11 @@
                 </a>|
                 <a href="{{url(Route('adminAddVillaForm',$u->id))}}" data-toggle="tooltip" title="افزودن ویلا">
                     افزودن ویلا
+                </a>|
+                <a href="{{url(Route('adminTicketList',$u->id))}}" data-toggle="tooltip" title="افزودن ویلا">
+                    تیکتها
                 </a>
+
 
             </td>
         </tr>

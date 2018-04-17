@@ -46,9 +46,17 @@
             <td class="text-center">
                 <a href="<?php echo e(url(Route('adminEditVillaForm',$v->id))); ?>" data-toggle="tooltip" title="ویرایش ویلا">
                     ویرایش
-                </a>|<a href="<?php echo e(url(Route('adminEditVillaCategory',$v->id))); ?>" data-toggle="tooltip" title="ویرایش دسته بندیها">
+                </a>|
+                <a href="<?php echo e(url(Route('adminEditVillaCategory',$v->id))); ?>" data-toggle="tooltip" title="ویرایش دسته بندیها">
                     دسته بندیها
+                </a>|
+                <a href="<?php echo e(url(Route('adminReportList',$v->id))); ?>" data-toggle="tooltip" title="گزارش تخلف">
+                    گزارش تخلف
+                </a>|
+                <a href="<?php echo e(url(Route('adminVillaCommentList',$v->id))); ?>" data-toggle="tooltip" title="نظرات">
+                    نظرات
                 </a>
+
             </td>
         </tr>
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

@@ -6,27 +6,27 @@
             <div class="row">
                 <div class="col-sm-6 col-md-2">
                     <div class="form-group arrow">
-                        <select class="custom-select" name="state" id="state1" required="">
-                            <option value="0">همه استان ها</option>
-                            @if(count($states))
-                                @foreach($states as $state)
-                                    <option value="{{$state->id}}">{{$state->city_name}}</option>
-                                @endforeach
-                            @endif
+                        <select class="custom-select" id="state1" name="state" autocomplete="off">
+                            <option {{(!old('state', isset($search->state) ? $search->state : '')? 'selected' : '')}} value="0" >همه استانها</option>
+                            @foreach($states as $pr)
+                                <option @if(old('state', isset($search->state) ? $search->state : '')==$pr->id) selected @endif value="{{$pr->id}}" >{{$pr->city_name}}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-2">
                     <div class="form-group arrow">
-                        <select class="custom-select" name="city" id="city1" required="">
-                            <option value="0" selected>همه شهر ها</option>
-
+                        <select class="custom-select" id="city1" name="city" autocomplete="off">
+                            <option {{(!old('city', isset($search->city) ? \App\Models\City::find($search->city)->province()->first()->id : '')? 'selected' : '')}} value="" disabled>شهر را انتخاب کنید</option>
+                            @foreach($cities as $city)
+                                <option @if(old('city', isset($search->city) ? $search->city : '')==$city->id) selected @endif value="{{$city->id}}" >{{$city->city_name}}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-2">
                     <div class="form-group">
-                        <input class="form-control" type="text" placeholder="کد ملک ">
+                        <input class="form-control" name="villa_code" type="text" placeholder="کد ملک" value="{{old('villa_code', isset($search->villa_code) ? $search->villa_code : '')}}">
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-3">

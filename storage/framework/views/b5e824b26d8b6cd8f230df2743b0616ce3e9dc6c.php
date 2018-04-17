@@ -72,6 +72,19 @@
                             </select>
                             <?php if($errors->has('district')): ?> <span class="help-block"><strong><?php echo e($errors->first('district')); ?></strong></span> <?php endif; ?>
                         </div>
+
+                        <div class="form-group arrow">
+                            <label>نوع ملک/ویلا</label>
+                            <select class="form-control" id="villa_type_id" name="villa_type_id" required autocomplete="off">
+                                <option <?php echo e((!old('villa_type_id', isset($villa->villa_type_id) ? $villa->villa_type_id : '')? 'selected' : '')); ?> value="" >انتخاب نوع ملک/ویلا</option>
+                                <?php $__currentLoopData = $villaTypes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $VT): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option <?php if(old('villa_type_id', isset($villa->villa_type_id) ? $villa->villa_type_id : '')==$VT->id): ?> selected <?php endif; ?> value="<?php echo e($VT->id); ?>" ><?php echo e($VT->villa_type_title); ?></option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </select>
+                            <?php if($errors->has('villa_type_id')): ?> <span class="help-block"><strong><?php echo e($errors->first('villa_type_id')); ?></strong></span> <?php endif; ?>
+                        </div>
+
+
                     </div>
                 </div>
             </div>

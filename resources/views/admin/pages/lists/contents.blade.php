@@ -53,6 +53,7 @@
                 آخرین ویرایش
             </center>
         </td>
+        <td class="text-center">عملیات</td>
 
     </tr>
 
@@ -110,6 +111,11 @@
             </td>
             <td class="text-center">
                 <p class="text">{{Helpers::convert_date_g_to_j($content->updated_at,true)}}<br>{{$content->updated_at->format('H:i:s')}}</p>
+            </td>
+            <td class="text-center">
+                <a href="{{url(Route('adminContentCommentList',$content->id))}}" data-toggle="tooltip" title="نظرات">
+                    نظرات
+                </a>
             </td>
         </tr>
     @endforeach

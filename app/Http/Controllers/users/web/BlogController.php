@@ -108,10 +108,10 @@ class BlogController extends Controller
 
         ]);
     }
-    public function showArticle($slug){
+    public function showArticle(Request $request){
 
-        $content = Content::where('content_slug','=',$slug)->where('content_status',1)->where('is_draft',0)->first();
-        if(!isset($content)) abort(404);
+        $content=$request->contentData;
+
         $mostvisitcontents = Content::where('content_status',1)->where('is_draft',0)->orderBy('view_count','DESC')->orderBy('created_at','DESC')->take(6)->get();
         $province_id = City::where('parent_id',$content->Cities()->first()->province()->first()->id);
         $related_villas = Villa::related_villas($province_id->pluck('id')->toArray(),0);

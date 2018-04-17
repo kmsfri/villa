@@ -14,19 +14,24 @@
 //Website routes
 
 //villa
-Route::get('villa/{slug}','users\web\VillaController@showSingleVilla')->name('showvilla');
-Route::get('villas','users\web\VillaController@showallvillas')->name('showvillas');
-Route::post('villas','users\web\VillaController@savewebsitecomment')->name('savewebsitecomment');
-Route::post('villa/{id}/Comment','users\web\VillaController@villa_comment')->name('villa_comment');
 
-Route::get('user/{slug}','users\web\VillaController@userpage')->name('userpage');
-Route::get('search','users\web\VillaSearchController@search')->name('search');
+Route::group(['middleware'=>['saveVisitor']],function() {
+    Route::get('villa/{slug}', 'users\web\VillaController@showSingleVilla')
+        ->middleware('saveVillaVisitor')
+        ->name('showvilla');
+    Route::get('villas', 'users\web\VillaController@showallvillas')->name('showvillas');
+    Route::post('villas', 'users\web\VillaController@savewebsitecomment')->name('savewebsitecomment');
+    Route::post('villa/{id}/Comment', 'users\web\VillaController@villa_comment')->name('villa_comment');
 
-//Reserve Request
+    Route::get('user/{slug}', 'users\web\VillaController@userpage')->name('userpage');
+    Route::get('search', 'users\web\VillaController@search')->name('search');
 
-Route::post('villa/{id}/Reserve','users\web\VillaController@reserve_request')->name('reserve_request');
+    //Reserve Request
 
-//Villa Search
+    Route::post('villa/{id}/Reserve', 'users\web\VillaController@reserve_request')->name('reserve_request');
+
+    //Villa Search
+});
 
 
 
@@ -35,7 +40,9 @@ Route::post('villa/{id}/Reserve','users\web\VillaController@reserve_request')->n
 Route::get('گردشگری/استان/{province_slug}','users\web\BlogController@websiteArticles')->name('provinceArticles');
 Route::get('گردشگری/دسته/{category_slug}','users\web\BlogController@websiteArticles')->name('categoryArticles');
 Route::get('گردشگری/','users\web\BlogController@websiteArticles')->name('websiteArticles');
-Route::get('گردشگری/{slug}','users\web\BlogController@showArticle')->name('showArticle');
+Route::get('گردشگری/{slug}','users\web\BlogController@showArticle')
+    ->middleware('saveContentVisitor')
+    ->name('showArticle');
 Route::post('Article/{id}/Comment','users\web\BlogController@content_comment')->name('content_comment');
 
 Route::post('/ajax/get_province_cities', 'API\AjaxServicesController@get_province_cities');
@@ -72,8 +79,15 @@ Route::group(['prefix' => 'User',  'middleware' => ['auth:user', 'getSectionPath
         Route::post('Villa', 'users\VillaController@doSaveVilla')->name('doSaveVilla');
         Route::get('Villa/category/{villa_id}', 'users\VillaController@editVillaCategory')->name('editVillaCategory');
         Route::post('Villa/category', 'users\VillaController@doEditVillaCategory')->name('doEditVillaCategory');
-
         Route::get('Villas', 'users\VillaController@showVillaList')->name('villaList');
+
+
+        Route::get('tickets', 'users\TicketController@showTicketList')->name('ticketList');
+        Route::post('ticket/save', 'users\TicketController@doSaveTicket')->name('doSaveTicket');
+        Route::get('ticket/messages/{ticket_id?}', 'users\TicketController@showTicketMessages')->name('ticketMessages');
+        Route::get('ticket/message', 'users\TicketController@doAddTicketMessage')->name('doAddTicketMessage');
+
+
     });
 });
 
@@ -167,6 +181,45 @@ Route::group(['prefix'=>'management'],function(){
             Route::get('/tariff/edit/{id}', 'Admin\TariffController@editTariff')->name('editTariff');
             Route::post('/tariff/edit', 'Admin\TariffController@doEditTariff')->name('doEditTariff');
             Route::get('/tariffs', 'Admin\TariffController@Tariffs')->name('adminTariffList');
+
+
+            Route::get('/villaType/add', 'Admin\VillaController@showAddVillaTypeForm')->name('addVillaTypeForm');
+            Route::post('/villaType/add', 'Admin\VillaController@saveVillaType')->name('doAddVillaType');
+            Route::post('/villaType/delete', 'Admin\VillaController@deleteVillaType')->name('doDeleteVillaType');
+            Route::get('/villaType/edit/{id}', 'Admin\VillaController@editVillaType')->name('editVillaType');
+            Route::post('/villaType/edit', 'Admin\VillaController@doEditVillaType')->name('doEditVillaType');
+            Route::get('/villaTypes', 'Admin\VillaController@villaTypes')->name('adminVillaTypeList');
+
+
+
+            Route::get('tickets/{renter_user_id?}', 'Admin\TicketController@showTicketList')->name('adminTicketList');
+            Route::post('ticket/save', 'Admin\TicketController@doSaveTicket')->name('adminDoSaveTicket');
+            Route::post('ticket/delete', 'Admin\TicketController@deleteTicket')->name('adminDeleteTicket');
+            Route::get('ticket/messages/{ticket_id?}', 'Admin\TicketController@showTicketMessages')->name('adminTicketMessages');
+
+
+
+            Route::post('/reports/delete', 'Admin\ReportController@deleteReport')->name('doDeleteReport');
+            Route::get('/reports/edit/{id}', 'Admin\ReportController@editReport')->name('editReport');
+            Route::post('/reports/edit', 'Admin\ReportController@doEditReport')->name('doEditReport');
+            Route::get('/reports/{villa_id?}', 'Admin\ReportController@Reports')->name('adminReportList');
+
+            Route::post('/commant/villa/delete', 'Admin\VillaController@deleteComment')->name('doDeleteVillaComment');
+            Route::get('/commant/villa/edit/{id}', 'Admin\VillaController@editComment')->name('editVillaComment');
+            Route::post('/commant/villa/edit', 'Admin\VillaController@doEditComment')->name('doEditVillaComment');
+            Route::get('/commant/villa/{villa_id?}', 'Admin\VillaController@Comments')->name('adminVillaCommentList');
+
+
+            Route::post('/commant/content/delete', 'Admin\ContentController@deleteComment')->name('doDeleteContentComment');
+            Route::get('/commant/content/edit/{id}', 'Admin\ContentController@editComment')->name('editContentComment');
+            Route::post('/commant/content/edit', 'Admin\ContentController@doEditComment')->name('doEditContentComment');
+            Route::get('/commant/content/{content_id?}', 'Admin\ContentController@Comments')->name('adminContentCommentList');
+
+            Route::post('/commant/website/delete', 'Admin\WebsiteController@deleteComment')->name('doDeleteWebsiteComment');
+            Route::get('/commant/website/edit/{id}', 'Admin\WebsiteController@editComment')->name('editWebsiteComment');
+            Route::post('/commant/website/edit', 'Admin\WebsiteController@doEditComment')->name('doEditWebsiteComment');
+            Route::get('/commant/website', 'Admin\WebsiteController@Comments')->name('adminWebsiteCommentList');
+
 
 
 

@@ -43,9 +43,17 @@
             <td class="text-center">
                 <a href="{{url(Route('adminEditVillaForm',$v->id))}}" data-toggle="tooltip" title="ویرایش ویلا">
                     ویرایش
-                </a>|<a href="{{url(Route('adminEditVillaCategory',$v->id))}}" data-toggle="tooltip" title="ویرایش دسته بندیها">
+                </a>|
+                <a href="{{url(Route('adminEditVillaCategory',$v->id))}}" data-toggle="tooltip" title="ویرایش دسته بندیها">
                     دسته بندیها
+                </a>|
+                <a href="{{url(Route('adminReportList',$v->id))}}" data-toggle="tooltip" title="گزارش تخلف">
+                    گزارش تخلف
+                </a>|
+                <a href="{{url(Route('adminVillaCommentList',$v->id))}}" data-toggle="tooltip" title="نظرات">
+                    نظرات
                 </a>
+
             </td>
         </tr>
     @endforeach

@@ -91,4 +91,10 @@ class Villa extends Model
     }
 
 
+    public function VillaType()
+    {
+        return $this->belongsTo('App\Models\VillaType');
+    }
+
+
 }

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\City;
 use App\Models\ContentImage;
 use DB;
-
+use \App\Models\UserContentComments;
 class ContentController extends Controller
 {
     public function showContentList(Request $request){
@@ -397,6 +397,158 @@ class ContentController extends Controller
 
         return redirect(url(Route('adminShowContentList')))->with('messages', $msg);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public function Comments(Request $request){
+
+        if(isset($request->content_id) && $request->content_id!=Null){
+            $content=content::find($request->content_id);
+            if($content==Null) abort(404);
+
+            $comments=UserContentComments::where('content_id',$content->id)
+                ->orderBy('created_at','DESC')
+                ->orderBy('updated_at','DESC')
+                ->get();
+
+            $title="نظرات مطلب: ".$content->content_title;
+
+        }else{
+            $comments=UserContentComments::orderBy('created_at','DESC')
+                ->orderBy('updated_at','DESC')
+                ->get();
+            $title="نظرات ثبت شده برای مطالب";
+        }
+
+        $backward_url=Route('dashboard');
+        $add_url=Null;
+        $del_url=Route('doDeleteContentComment');
+
+        $resp=[
+            'comments'=>$comments,
+            'title'=>$title,
+            'backward_url'=>$backward_url,
+            'add_url'=>$add_url,
+            'del_url'=>$del_url
+        ];
+
+
+
+        return view('admin.pages.lists.contentComments' ,$resp);
+    }
+
+
+    public function editComment(Request $request){
+        if($request->id!=Null){
+            $comment=UserContentComments::find($request->id);
+            if($comment==Null) abort(404);
+            $title="مشاهده نظر ";
+            $backward_url=Route('adminContentCommentList');
+        }else{
+            abort(404);
+        }
+
+
+        $data=[
+            'request_type'=>'edit',
+            'comment'=>$comment,
+            'title'=>$title,
+            'backward_url'=>$backward_url,
+            'post_edit_url'=>Route('doEditContentComment'),
+            'edit_id'=>$comment->id,
+        ];
+
+        return view('admin.pages.forms.add_contentComment' ,$data);
+
+    }
+
+
+
+    public function doEditComment(Request $request){
+
+        $validator = Validator::make($request->all(),[
+            'comment_text'=>'required|max:280',
+            'comment_status'=>'required|integer',
+            'edit_id'=>'required|integer|exists:user_content_comments,id',
+        ]);
+
+
+        if ($validator->fails()) {
+            validator_fails:
+            return back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+
+        if($this->changeUserContentComment($request)){
+            $msg=['نظر مورد نظر با موفقیت بروزرسانی شد'];
+        }else{
+            goto validator_fails;
+        }
+
+        return redirect(url(Route('adminContentCommentList')))->with('messages', $msg);
+
+    }
+
+
+    private function changeUserContentComment($request){
+        if($request->edit_id!=Null) {
+            $comment=UserContentComments::find($request->edit_id);
+            if($comment==Null) abort(404);
+        }else{
+            abort(404);
+        }
+
+
+
+        $comment->comment_text=nl2br($request->comment_text);
+        $comment->comment_status=$request->comment_status;
+        $comment->save();
+
+        return True;
+
+    }
+
+
+
+    public function deleteComment(Request $request){
+
+        if(isset($request->remove_val)){
+            UserContentComments::destroy($request->remove_val);
+        }
+        $msg=['موارد انتخاب شده با موفقیت حذف شدند'];
+
+        return redirect(url(Route('adminContentCommentList')))->with('messages', $msg);
+    }
+
+
+
+
+
+
 
 
 

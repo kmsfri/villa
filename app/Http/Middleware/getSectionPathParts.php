@@ -218,6 +218,31 @@ class getSectionPathParts
                     (object)['title'=>'دسته بندیها'],
                 ],
             ],
+            'ticketList'=>[
+                'page_title'=>'لیست تیکتها',
+                'headingButton'=>(object)[
+                    'url'=>Route('ticketMessages'),
+                    'title'=>'ارسال تیکت جدید',
+                ],
+                'sectionParts'=>[
+                    (object)['title'=>'پیشخوان'],
+                    (object)['title'=>'تیکت های من'],
+                ],
+            ],
+            'ticketMessages'=>[
+                'page_title'=>'تیکت',
+                'headingButton'=>(object)[
+                    'url'=>Route('ticketMessages'),
+                    'title'=>'ارسال تیکت جدید',
+                ],
+                'sectionParts'=>[
+                    (object)['title'=>'پیشخوان'],
+                    (object)['title'=>'تیکت های من'],
+                    (object)['title'=>'مشاهده تیکت'],
+                ],
+            ],
+
+
 
 
 

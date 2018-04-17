@@ -31,6 +31,7 @@
                             </output>
                             @if ($errors->has('newImg.*')) <span class="help-block"><strong>{{ $errors->first('newImg.*') }}</strong></span> @endif
                         </div>
+
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
@@ -68,6 +69,20 @@
                             </select>
                             @if ($errors->has('district')) <span class="help-block"><strong>{{ $errors->first('district') }}</strong></span> @endif
                         </div>
+
+
+                        <div class="form-group arrow">
+                            <label>نوع ملک/ویلا</label>
+                            <select class="form-control" id="villa_type_id" name="villa_type_id" required autocomplete="off">
+                                <option {{(!old('villa_type_id', isset($villa->villa_type_id) ? $villa->villa_type_id : '')? 'selected' : '')}} value="" >انتخاب نوع ملک/ویلا</option>
+                                @foreach($villaTypes as $VT)
+                                    <option @if(old('villa_type_id', isset($villa->villa_type_id) ? $villa->villa_type_id : '')==$VT->id) selected @endif value="{{$VT->id}}" >{{$VT->villa_type_title}}</option>
+                                @endforeach
+                            </select>
+                            @if ($errors->has('villa_type_id')) <span class="help-block"><strong>{{ $errors->first('villa_type_id') }}</strong></span> @endif
+                        </div>
+
+
                     </div>
                 </div>
             </div>

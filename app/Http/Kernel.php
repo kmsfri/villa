@@ -64,5 +64,12 @@ class Kernel extends HttpKernel
         'renterProfileCompletionCheck' => \App\Http\Middleware\RenterProfileCompletionCheck::class,
         'getSectionPathParts' => \App\Http\Middleware\getSectionPathParts::class,
 
+
+        'saveVisitor' => \App\Http\Middleware\saveVisitor::class,
+        'saveVillaVisitor' => \App\Http\Middleware\saveVillaVisitor::class,
+        'saveContentVisitor' => \App\Http\Middleware\saveContentVisitor::class,
+
+
+
     ];
 }

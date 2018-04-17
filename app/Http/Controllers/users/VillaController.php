@@ -38,6 +38,9 @@ class VillaController extends Controller
             ->orderBy('prop_order','ASC')
             ->get();
 
+
+        $villaTypes=\App\Models\VillaType::orderBy('villa_type_order','ASC')->get();
+
         $data=[
             'user'=>$renter_user,
             'actionURL'=>Route('doSaveVilla'),
@@ -45,6 +48,7 @@ class VillaController extends Controller
             'cities'=>$cities,
             'districts'=>$districts,
             'properties'=>$properties,
+            'villaTypes'=>$villaTypes,
         ];
         return view('user.panel.addVilla',$data);
     }
@@ -142,6 +146,8 @@ class VillaController extends Controller
 
         $renter_user = Auth::guard('user')->user();
 
+        $villaTypes=\App\Models\VillaType::orderBy('villa_type_order','ASC')->get();
+
         $data=[
             'user'=>$renter_user,
             'actionURL'=>Route('doSaveVilla'),
@@ -151,6 +157,7 @@ class VillaController extends Controller
             'properties'=>$properties,
             'villa'=>$villa,
             'edit_id'=>$villa->id,
+            'villaTypes'=>$villaTypes,
         ];
         return view('user.panel.addVilla',$data);
 
@@ -201,6 +208,7 @@ class VillaController extends Controller
             'latitude'=>$request->latitude,
             'longitude'=>$request->longitude,
             'villa_slug'=>$villa_slug,
+            'villa_type_id'=>$request->villa_type_id,
         ]);
 
 
@@ -240,6 +248,7 @@ class VillaController extends Controller
                 'latitude'=>['nullable', 'regex:/^(?=.+)(?:[1-9]\d*|0)?(?:\.\d+)?$/'],
                 'longitude'=>['nullable', 'regex:/^(?=.+)(?:[1-9]\d*|0)?(?:\.\d+)?$/'],
                 'villa_slug'=>'required|max:30|unique:villa,villa_slug,'.$request->edit_id,
+                'villa_type_id'=>'nullable|integer|exists:villa_type,id'
             ]
         );
 

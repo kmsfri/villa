@@ -47,7 +47,7 @@
                             <a href="{{Route('categories1-list')}}">ویلاها(نوع اول)</a>
                         </li>
                         <li>
-                            <a href="{{Route('categories2-list')}}">ویلاها(نوع دوم)</a>
+                            <a href="{{Route('adminVillaTypeList')}}">نوع ویلا</a>
                         </li>
                     </ul>
                 </li>
@@ -71,6 +71,31 @@
 
                 <li>
                     <a class="" href="{{url(Route('adminTariffList'))}}"><i class="fa fa-book fa-fw"></i>تعرفه ها</a>
+                </li>
+
+                <li>
+                    <a class="" href="{{url(Route('adminTicketList'))}}"><i class="fa fa-book fa-fw"></i>تیکت ها</a>
+                </li>
+
+
+                <li>
+                    <a href="#"><i class="fa fa-book fa-fw"></i>ارتباطات<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="{{Route('adminReportList')}}">گزارش تخلف ویلاها</a>
+                        </li>
+                        <li>
+                            <a href="{{Route('adminVillaCommentList')}}">نظرات ویلاها</a>
+                        </li>
+                        <li>
+                            <a href="{{Route('adminContentCommentList')}}">نظرات مطالب</a>
+                        </li>
+                        <li>
+                            <a href="{{Route('adminWebsiteCommentList')}}">نظرات وبسایت</a>
+                        </li>
+
+
+                    </ul>
                 </li>
 
             </ul>

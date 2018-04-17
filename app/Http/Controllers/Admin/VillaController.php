@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use \App\Models\Villa;
 use \App\Models\VillaImage;
+use \App\Models\VillaType;
+use App\Models\UserVillaComments;
 use Validator;
 use DB;
 use Auth;
@@ -47,6 +50,10 @@ class VillaController extends Controller
             ->orderBy('prop_order','ASC')
             ->get();
 
+
+        $villaTypes=\App\Models\VillaType::orderBy('villa_type_order','ASC')->get();
+
+
         $data=[
             'title'=>'افزودن اقامتگاه جدید',
             'request_type'=>'add',
@@ -56,6 +63,7 @@ class VillaController extends Controller
             'districts'=>$districts,
             'properties'=>$properties,
             'renter_user_id'=>$renter_user->id,
+            'villaTypes'=>$villaTypes,
         ];
         return view('admin.pages.forms.add_villa',$data);
     }
@@ -149,6 +157,8 @@ class VillaController extends Controller
             ->orderBy('prop_order','ASC')
             ->get();
 
+        $villaTypes=\App\Models\VillaType::orderBy('villa_type_order','ASC')->get();
+
         $data=[
             'title'=>'ویرایش اطلاعات ویلا',
             'request_type'=>'edit',
@@ -159,7 +169,10 @@ class VillaController extends Controller
             'districts'=>$districts,
             'properties'=>$properties,
             'edit_id'=>$villa->id,
+            'villaTypes'=>$villaTypes,
         ];
+
+
 
 
 
@@ -218,6 +231,7 @@ class VillaController extends Controller
             'longitude'=>$request->longitude,
             'villa_status'=>$request->villa_status,
             'villa_slug'=>$villa_slug,
+            'villa_type_id'=>$request->villa_type_id,
         ]);
 
 
@@ -259,6 +273,7 @@ class VillaController extends Controller
                 'longitude'=>['nullable', 'regex:/^(?=.+)(?:[1-9]\d*|0)?(?:\.\d+)?$/'],
                 'villa_status'=>'required|integer',
                 'villa_slug'=>'required|max:30|unique:villa,villa_slug,'.$request->edit_id,
+                'villa_type_id'=>'nullable|integer|exists:villa_type,id'
             ]
         );
 
@@ -375,6 +390,7 @@ class VillaController extends Controller
             DB::transaction(function() use($newRequest,$request,$uploaded_files_dir,$removableOldImgID,$removableOldImgDir,$villa,$villa_slug){
 
 
+                $villa->villa_type_id=$newRequest->villa_type_id;
                 $villa->villa_title=$newRequest->villa_title;
                 $villa->villa_slug=$newRequest->villa_slug;
                 $villa->villa_description=$newRequest->villa_description;
@@ -558,9 +574,6 @@ class VillaController extends Controller
     }
 
 
-
-
-
     public function doRemoveVilla(Request $request){
         if(isset($request->remove_val)){
             \App\Models\Villa::destroy($request->remove_val);
@@ -569,4 +582,334 @@ class VillaController extends Controller
 
         return redirect(url(Route('adminShowVillaList')))->with('messages', $msg);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public function villaTypes(){
+
+
+
+
+        $villaTypes=VillaType::select('*')
+            ->orderBy('villa_type_order','ASC')
+            ->orderBy('created_at','DESC')->get();
+
+        $title="لیست نوع ویلاهای تعریف شده";
+        $backward_url=Route('dashboard');
+        $add_url=Route('doAddVillaType');
+        $del_url=Route('doDeleteVillaType');
+
+        $resp=[
+            'villaTypes'=>$villaTypes,
+            'title'=>$title,
+            'backward_url'=>$backward_url,
+            'add_url'=>$add_url,
+            'del_url'=>$del_url
+        ];
+
+        return view('admin.pages.lists.villa_types' ,$resp);
+    }
+
+
+    public function showAddVillaTypeForm(Request $request){
+
+        $title="افزودن نوع ویلای جدید";
+        $backward_url=Route('adminVillaTypeList');
+
+        $data=[
+            'request_type'=>'add',
+            'title'=>$title,
+            'backward_url'=>$backward_url,
+            'post_add_url'=>Route('doAddVillaType'),
+
+        ];
+        return view('admin.pages.forms.add_villa_type' ,$data);
+    }
+
+
+    public function saveVillaType(Request $request){
+
+        $validator = Validator::make($request->all(),[
+            'villa_type_title'=>'required|max:80',
+            'villa_type_order'=>'required|integer',
+        ]);
+
+
+        if ($validator->fails()) {
+            validator_fails:
+            return back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        if($this->changeVillaType($request)){
+            $msg=['نوع ویلای جدید با موفقیت اضافه شد'];
+        }else{
+            goto validator_fails;
+        }
+
+        return redirect(url(Route('adminVillaTypeList')))->with('messages', $msg);
+
+    }
+
+
+
+
+    public function editVillaType(Request $request){
+        if($request->id!=Null){
+            $villaType=VillaType::find($request->id);
+            if($villaType==Null) abort(404);
+            $title="ویرایش نوع ویلا ";
+            $backward_url=Route('adminVillaTypeList');
+        }else{
+            abort(404);
+        }
+
+
+        $data=[
+            'request_type'=>'edit',
+            'villaType'=>$villaType,
+            'title'=>$title,
+            'backward_url'=>$backward_url,
+            'post_edit_url'=>Route('doEditVillaType'),
+            'edit_id'=>$villaType->id,
+        ];
+
+        return view('admin.pages.forms.add_villa_type' ,$data);
+
+    }
+
+
+
+    public function doEditVillaType(Request $request){
+
+        $validator = Validator::make($request->all(),[
+            'villa_type_title'=>'required|max:80',
+            'villa_type_order'=>'required|integer',
+            'edit_id'=>'required|integer|exists:villa_type,id',
+        ]);
+
+
+        if ($validator->fails()) {
+            validator_fails:
+            return back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+
+        if($this->changeVillaType($request)){
+            $msg=['نوع ویلای مورد نظر با موفقیت ویرایش شد'];
+        }else{
+            goto validator_fails;
+        }
+
+        return redirect(url(Route('adminVillaTypeList')))->with('messages', $msg);
+
+    }
+
+
+    private function changeVillaType($request){
+        if($request->edit_id!=Null) {
+            $villaType=VillaType::find($request->edit_id);
+        }else{
+            $villaType=new VillaType();
+        }
+
+        $villaType->villa_type_title=$request->villa_type_title;
+        $villaType->villa_type_order=$request->villa_type_order;
+
+        $villaType->save();
+
+        return True;
+
+    }
+
+
+
+    public function deleteVillaType(Request $request){
+
+        if(isset($request->remove_val)){
+            VillaType::destroy($request->remove_val);
+        }
+        $msg=['موارد انتخاب شده با موفقیت حذف شدند'];
+
+        return redirect(url(Route('adminVillaTypeList')))->with('messages', $msg);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public function Comments(Request $request){
+
+        if(isset($request->villa_id) && $request->villa_id!=Null){
+            $villa=Villa::find($request->villa_id);
+            if($villa==Null) abort(404);
+
+            $comments=UserVillaComments::where('villa_id',$villa->id)
+                ->orderBy('created_at','DESC')
+                ->orderBy('updated_at','DESC')
+                ->get();
+
+            $title="نظرات ویلای: ".$villa->villa_title;
+
+        }else{
+            $comments=UserVillaComments::orderBy('created_at','DESC')
+                ->orderBy('updated_at','DESC')
+                ->get();
+            $title="نظرات ثبت شده برای ویلاها";
+        }
+
+        $backward_url=Route('dashboard');
+        $add_url=Null;
+        $del_url=Route('doDeleteVillaComment');
+
+        $resp=[
+            'comments'=>$comments,
+            'title'=>$title,
+            'backward_url'=>$backward_url,
+            'add_url'=>$add_url,
+            'del_url'=>$del_url
+        ];
+
+
+
+        return view('admin.pages.lists.villaComments' ,$resp);
+    }
+
+
+    public function editComment(Request $request){
+        if($request->id!=Null){
+            $comment=UserVillaComments::find($request->id);
+            if($comment==Null) abort(404);
+            $title="مشاهده نظر ";
+            $backward_url=Route('adminVillaCommentList');
+        }else{
+            abort(404);
+        }
+
+
+        $data=[
+            'request_type'=>'edit',
+            'comment'=>$comment,
+            'title'=>$title,
+            'backward_url'=>$backward_url,
+            'post_edit_url'=>Route('doEditVillaComment'),
+            'edit_id'=>$comment->id,
+        ];
+
+        return view('admin.pages.forms.add_villaComment' ,$data);
+
+    }
+
+
+
+    public function doEditComment(Request $request){
+
+        $validator = Validator::make($request->all(),[
+            'comment_text'=>'required|max:280',
+            'comment_status'=>'required|integer',
+            'edit_id'=>'required|integer|exists:user_villa_comments,id',
+        ]);
+
+
+        if ($validator->fails()) {
+            validator_fails:
+            return back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+
+        if($this->changeUserVillaComment($request)){
+            $msg=['نظر مورد نظر با موفقیت بروزرسانی شد'];
+        }else{
+            goto validator_fails;
+        }
+
+        return redirect(url(Route('adminVillaCommentList')))->with('messages', $msg);
+
+    }
+
+
+    private function changeUserVillaComment($request){
+        if($request->edit_id!=Null) {
+            $comment=UserVillaComments::find($request->edit_id);
+            if($comment==Null) abort(404);
+        }else{
+            abort(404);
+        }
+
+
+
+        $comment->comment_text=nl2br($request->comment_text);
+        $comment->comment_status=$request->comment_status;
+        $comment->save();
+
+        return True;
+
+    }
+
+
+
+    public function deleteComment(Request $request){
+
+        if(isset($request->remove_val)){
+            UserVillaComments::destroy($request->remove_val);
+        }
+        $msg=['موارد انتخاب شده با موفقیت حذف شدند'];
+
+        return redirect(url(Route('adminVillaCommentList')))->with('messages', $msg);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

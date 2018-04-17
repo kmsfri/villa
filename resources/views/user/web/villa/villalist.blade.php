@@ -119,7 +119,7 @@
             {
 
                 selected_city = $('#'+id).attr('data-selected') || null;
-                $('#'+id).html('').fadeIn(800).append('<option value="0">لطفا کمی صبر کنید ...</option>');
+                $('#'+id).html('').fadeIn(800).append('<option value="">لطفا کمی صبر کنید ...</option>');
 
                 $.ajax({
                     type: "POST",
@@ -131,7 +131,7 @@
                     {
                         var cities = $.parseJSON(data);
 
-                        $('#'+id).html('').fadeIn(800).append('<option value="0">انتخاب کنید</option>');
+                        $('#'+id).html('').fadeIn(800).append('<option value="">انتخاب کنید</option>');
                         $.each(cities, function(i, city){
                             if(selected_city == city.id) $('#'+id).append('<option value="' + city.id + '" selected>' + city.city_name + '</option>');
                             else $('#'+id).append('<option value="' + city.id + '">' + city.city_name + '</option>');
