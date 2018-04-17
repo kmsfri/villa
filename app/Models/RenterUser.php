@@ -33,7 +33,10 @@ class RenterUser extends Authenticatable
     {
         return $this->belongsToMany('App\Models\Content','user_content_scores','renter_user_id','content_id');
     }
-
+    public function VillaGivenScores()
+    {
+        return $this->belongsToMany('App\Models\Villa','user_villa_scores','renter_user_id','villa_id');
+    }
     public function ContentSavedComments()
     {
         return $this->belongsToMany('App\Models\Content','user_content_comments','renter_user_id','content_id');

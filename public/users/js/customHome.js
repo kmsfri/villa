@@ -4,9 +4,62 @@ $(document).ready(function () {
     $('.subMenu').smint({
         'scrollSpeed' : 1000
     });
-    $(".my-rating-8").starRating({
-        useFullStars: true
+    $(".villarate0").starRating({
+        useFullStars: true,
+        callback: function(currentRating){
+            villa_rate(0,currentRating);
+        }
     });
+    $(".villarate1").starRating({
+        useFullStars: true,
+        callback: function(currentRating){
+            villa_rate(1,currentRating);
+        }
+    });
+    $(".villarate2").starRating({
+        useFullStars: true,
+        callback: function(currentRating){
+            villa_rate(2,currentRating);
+        }
+    });
+    $(".villarate3").starRating({
+        useFullStars: true,
+        callback: function(currentRating){
+            villa_rate(3,currentRating);
+        }
+    });
+    $(".villarate4").starRating({
+        useFullStars: true,
+        callback: function(currentRating){
+            villa_rate(4,currentRating);
+        }
+    });
+    $(".villarate5").starRating({
+        useFullStars: true,
+        callback: function(currentRating){
+            villa_rate(5,currentRating);
+        }
+    });
+    $(".villarate6").starRating({
+        useFullStars: true,
+        callback: function(currentRating){
+            villa_rate(6,currentRating);
+        }
+    });
+    $(".content_rate").starRating({
+        useFullStars: true,
+        callback: function(currentRating){
+            content_rate(currentRating);
+        }
+    });
+    $(".villalistrate").starRating({
+        useFullStars: true,
+        callback: function(currentRating,el){
+            list_villa_rate(currentRating,el[0].classList[2]);
+        }
+    });
+
+
 	$('[data-toggle="popover"]').on('click', function(e) {e.preventDefault(); return true;});
     $('[data-toggle="popover"]').popover(); 
     $(' .slider-tourism').slick({

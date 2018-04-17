@@ -36,13 +36,14 @@
             <div class="row">
                 <div class="col-lg-4">
                     <h4 class="title">عضویت در خبرنامه</h4>
-                    <form class="newsletters">
+                    <form class="newsletters nlform">
+                        <input type="hidden" value="{{csrf_token()}}" class="mailtoken">
                         <div class="form-row align-items-center">
                             <div class="col-sm-7 col-md-8">
-                                <input class="form-control" type="text" placeholder="آدرس ایمیل خود را وارد نمایید">
+                                <input class="form-control nl" type="email" name="email" placeholder="آدرس ایمیل خود را وارد نمایید">
                             </div>
                             <div class="col-sm-5 col-md-4 no-p">
-                                <button class="btn" type="submit">ثبت نام در خبرنامه</button>
+                                <button class="btn" type="button" onclick="register_mail();">ثبت نام در خبرنامه</button>
                             </div>
                         </div>
                     </form>
@@ -141,6 +142,25 @@
 <script src="{{asset('users/plugin/sticky/theia-sticky-sidebar.js')}}"></script>
 <script src="{{asset('users/plugin/smint/jquery.smint.js')}}"></script>
 @yield('jsmap')
+<script type="text/javascript">
+    function register_mail() {
+        $.post("{{route('newsletter_register')}}", { _token: $('.mailtoken').val(), email: $('.nl').val() } , function(data){
+            if(data == "ok"){
+                $( ".nlform" ).replaceWith( "<p style='color:red'>با موفقیت ثبت شد</p>" );
+            }
+            else if(data == "exist"){
+                alert('این ایمیل قبلا ثبت شده است');
+            }
+            else{
+                alert( "فرمت ایمیل صحیح نمی باشد" );
+            }
+        })
+            .fail(function() {
+                alert( "دوباره تلاش کنید" );
+            })
+
+    }
+</script>
 <script type="text/javascript" src="{{asset('users/js/customHome.js')}}"></script>
 <!--end scripts-->
 </body>

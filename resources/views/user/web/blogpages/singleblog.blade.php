@@ -25,7 +25,7 @@
                             <p class="author"><img src="{{asset('images/users/user-uploads/user-pics').'/'.$content->authorRenterUser()->first()->avatar_dir}}" alt="{{$content->authorRenterUser()->first()->fullname}}">{{$content->authorRenterUser()->first()->fullname}}</p>
                             <div class="clearfix"></div>@php $city = $content->Cities()->first(); @endphp
                             <p class="place">{{\App\Models\City::find($city->parent_id)->city_name}} - {{$city->city_name}}</p>
-                            <div class="my-rating-8"></div><span>@php \Carbon\Carbon::setLocale('fa'); @endphp {{$content->created_at->diffForHumans()}}</span>
+                            <div class="my-rating-8 content_rate"></div><span>@php \Carbon\Carbon::setLocale('fa'); @endphp {{$content->created_at->diffForHumans()}}</span>
                         </div>
                         <div class="data">
                             {!! $content->content_body !!}
@@ -121,6 +121,38 @@
 
 @endsection
 @section('jsmap')
+    <script type="text/javascript">
+        function content_rate(s_value) {
+            $.post("{{route('rate_content',$content->id)}}",
+                {
+                    s_value: s_value
+                } ,
+                function(data){
+                    if(data != "ok"){
+                        alert('مشکلی در ثبت امتیاز به وجود آمده است، در صورت بروز مجدد، صفحه را دوباره رفرش کنید');
+                    }
+
+                })
+                .fail(function() {
+                    alert( "شما باید وارد حساب کاربری خود شوید" );
+                    window.location = "{{route('showlogin')}}";
+                })
+        }
+        function send_report() {
+            $.post("{{route('content_report',$content->id)}}", { _token: $('.rptoken').val(), report_text: $('.crp').val() } , function(data){
+                if(data == "ok"){
+                    $( ".rpform" ).replaceWith( "<p style='color:red;padding: 30px'>با موفقیت ثبت شد</p>" );
+                }
+                else{
+                    alert( "متن گزارش نباید خالی باشد و باید حداکثر 280 کاراکتر باشد" );
+                }
+            })
+                .fail(function() {
+                    alert( "شما باید وارد حساب کاربری خود شوید" );
+                    window.location = "{{route('showlogin')}}";
+                })
+        }
+    </script>
     @if($content->longitude != null && $content->latitude != 0)
                     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false&key=AIzaSyAUTOnItAcKwoEjTUA8nbIPjdOngcEpJV0"></script>
                     <script type="text/javascript">

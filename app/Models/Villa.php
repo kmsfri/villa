@@ -80,7 +80,10 @@ class Villa extends Model
     {
         return $this->belongsToMany('App\Models\City','villa_city','villa_id','city_id');
     }
-
+    public function RenterUserScores()
+    {
+        return $this->belongsToMany('App\Models\RenterUser','user_villa_scores','villa_id','renter_user_id')->withPivot('score_type','score_value')->withTimestamps();
+    }
 
 
     public static function related_villas($city_id,$villa_id){
