@@ -173,8 +173,7 @@ class VillaController extends Controller
         );
         if($validator->fails()){
 
-            return redirect()->back()->withInput($request->input())
-                ->withErrors($validator->errors())->with('errorcomment','<script>alert("ارسال درخواست رزرو با مشکل مواجه شد، ورودی های خود را بررسی کنید");</script>');
+            echo "error";exit();
         }
         $reserve = new VillaReserveRequest();
         $reserve->date_in = \Helpers::convert_date_j_to_g($request->date_in,'/');
@@ -184,7 +183,7 @@ class VillaController extends Controller
         $reserve->phone = $request->phone;
         $reserve->villa_id = $id;
         $reserve->save();
-        return redirect()->back()->with('errorcomment','<script>alert("درخواست رزرو با موفقیت ارسال شد");</script>');
+        echo "ok";
     }
 
 
