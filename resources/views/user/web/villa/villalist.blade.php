@@ -9,7 +9,7 @@
     <a class="filter" href="" title="Filter"><img src="{{asset('users/img/ic_filter_icon.png')}}" alt=""></a>
     <ul class="ul-rent">
         @foreach($categories1 as $category1)
-        <li><a href="" title="{{$category1->category_title}}"><img src="" alt="{{$category1->category_title}}">{{$category1->category_title}}</a></li>
+        <li><a href="" title="{{$category1->category_title}}"><img src="{{asset($category1->image_dir)}}" width="30px" alt="{{$category1->category_title}}">{{$category1->category_title}}</a></li>
         @endforeach
     </ul>
     @endif
@@ -38,9 +38,9 @@
                         @foreach($categories1 as $category1)
                         <div class="col-sm-6 col-md-6 col-lg-4">
                             <div class="box-follow-up">
-                                <figure><img src="{{asset($category1->img1)}}" alt=""><img class="img" src="{{asset($category1->img_hover)}}" alt="{{$category1->category_title}}"></figure>
+                                <figure><img src="{{asset($category1->image_dir)}}" alt=""><img class="img" src="{{asset($category1->image_hover_dir)}}" alt="{{$category1->category_title}}"></figure>
                                 <h3 class="title">{{$category1->category_title}}</h3>
-                                <div class="link"><a href="" title="نمایش ویلاها">نمایش ویلاها</a></div>
+                                <div class="link"><a href="{{route('villas_based_category1',$category1->category_slug)}}" title="نمایش ویلاها">نمایش ویلاها</a></div>
                             </div>
                         </div>
                         @endforeach

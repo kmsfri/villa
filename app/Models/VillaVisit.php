@@ -22,19 +22,19 @@ class VillaVisit extends Model
     }
 
 
-    public function today_visits(){
-        return $this->whereRaw('DATE(created_at) =CURDATE()');
+    public static function today_visits(){
+        return VillaVisit::whereRaw('DATE(created_at) =CURDATE()');
     }
-    public function last24_visits(){
-        return $this->whereRaw('created_at >= ("'.\Carbon\Carbon::now()->toDateTimeString().'" -INTERVAL 24 HOUR)');
+    public static function last24_visits(){
+        return VillaVisit::whereRaw('created_at >= ("'.\Carbon\Carbon::now()->toDateTimeString().'" -INTERVAL 24 HOUR)');
     }
-    public function lastWeek_visits(){
-        return $this->whereRaw('created_at >= ("'.\Carbon\Carbon::now()->toDateTimeString().'" -INTERVAL 7 DAY)');
+    public static function lastWeek_visits(){
+        return VillaVisit::whereRaw('created_at >= ("'.\Carbon\Carbon::now()->toDateTimeString().'" -INTERVAL 7 DAY)')->get();
     }
-    public function lastMonth_visits(){
-        return $this->whereRaw('created_at >= ("'.\Carbon\Carbon::now()->toDateTimeString().'" -INTERVAL 1 MONTH)');
+    public static function lastMonth_visits(){
+        return VillaVisit::whereRaw('created_at >= ("'.\Carbon\Carbon::now()->toDateTimeString().'" -INTERVAL 1 MONTH)');
     }
-    public function all_visits(){
-        return $this;
+    public static function all_visits(){
+        return VillaVisit::all();
     }
 }
