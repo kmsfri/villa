@@ -52,4 +52,10 @@ class Content extends Model
         })->where('content_status',0)->where('is_draft',0)->take(6)->get();
     }
 
+
+    public function GrantedPoints()
+    {
+        return $this->belongsToMany('App\Models\RenterUser','user_granted_points','content_id','renter_user_id');
+    }
+
 }

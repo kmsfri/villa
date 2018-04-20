@@ -60,71 +60,25 @@
                         </div>
                         <div class="col-md-12">
                             <ul class="footer-social">
-                                <li><a href="" title=""><img src="{{asset('users/img/icon/icon026.png')}}" alt=""><img class="img" src="{{asset('users/img/icon/icon026.png')}}" alt=""></a></li>
-                                <li><a href="" title=""><img src="{{asset('users/img/icon/icon027.png')}}" alt=""><img class="img" src="{{asset('users/img/icon/icon027.png')}}" alt=""></a></li>
-                                <li><a href="" title=""><img src="{{asset('users/img/icon/icon028.png')}}" alt=""><img class="img" src="{{asset('users/img/icon/icon028.png')}}" alt=""></a></li>
-                                <li><a href="" title=""><img src="{{asset('users/img/icon/icon029.png')}}" alt=""><img class="img" src="{{asset('users/img/icon/icon029.png')}}" alt=""></a></li>
-                                <li><a href="" title=""><img src="{{asset('users/img/icon/icon030.png')}}" alt=""><img class="img" src="{{asset('users/img/icon/icon030.png')}}" alt=""></a></li>
-                                <li><a href="" title=""><img src="{{asset('users/img/icon/icon031.png')}}" alt=""><img class="img" src="{{asset('users/img/icon/icon031.png')}}" alt=""></a></li>
-                                <li><a href="" title=""><img src="{{asset('users/img/icon/icon032.png')}}" alt=""><img class="img" src="{{asset('users/img/icon/icon032.png')}}" alt=""></a></li>
+                                @foreach($socialMedia as $sM)
+                                    <li><a href="{{$sM->s_link}}" title=""><img src="{{asset($sM->img_dir)}}" alt="{{$sM->s_title}}"><img class="img" src="{{asset($sM->img_dir)}}" alt="{{$sM->s_title}}"></a></li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>
                 </div>
+
+                @foreach($footerLinks as $fT)
                 <div class="col-6 col-lg-2">
-                    <h4 class="title">لینک های مفید</h4>
+                    <h4 class="title">{{$fT->link_title}}</h4>
                     <ul class="list-footer">
-                        <li><a href="" title="صفحه اصلی">صفحه اصلی</a></li>
-                        <li><a href="" title="اجاره ویلا">اجاره ویلا</a></li>
-                        <li><a href="" title="اجاره سوئیت ">اجاره سوئیت</a></li>
-                        <li><a href="" title="جاذبه های گردشگرری">جاذبه های گردشگرری</a></li>
-                        <li><a href="" title="درباره ما">درباره ما</a></li>
-                        <li><a href="" title="تماس با ما">تماس با ما</a></li>
-                        <li><a href="" title="راهنمای سایت">راهنمای سایت</a></li>
-                        <li><a href="" title="راهنمای سایت">راهنمای سایت</a></li>
+                        @foreach($fT->SubLinkEnabledOrdered()->get() as $fTSL)
+                        <li><a href="{{$fTSL->link_url}}" title="{{$fTSL->link_title}}">{{$fTSL->link_title}}</a></li>
+                        @endforeach
                     </ul>
                 </div>
-                <div class="col-6 col-lg-2">
-                    <h4 class="title">میهمانان</h4>
-                    <ul class="list-footer">
-                        <li><a href="" title="راهنمای سایت">راهنمای سایت</a></li>
-                        <li><a href="" title="چگونه رزور کنم ؟">چگونه رزور کنم ؟</a></li>
-                        <li><a href="" title="مقررات لغو رزرو">مقررات لغو رزرو</a></li>
-                        <li><a href="" title="ضمانت برگشت وجه">ضمانت برگشت وجه</a></li>
-                    </ul>
-                    <h4 class="title">میزبانان</h4>
-                    <ul class="list-footer">
-                        <li><a href="" title="چگونه میزبان شوم ؟">چگونه میزبان شوم ؟</a></li>
-                        <li><a href="" title="مقررات و قوانین "> مقررات و قوانین</a></li>
-                        <li><a href="" title="استاندارد های میزبانی">استاندارد های میزبانی</a></li>
-                    </ul>
-                </div>
-                <div class="col-6 col-lg-2">
-                    <h4 class="title">شهر های پرطرفدار</h4>
-                    <ul class="list-footer">
-                        <li><a href="" title="مازندران - ساری">مازندران - ساری</a></li>
-                        <li><a href="" title="مازندران - بایلسر">مازندران - بایلسر</a></li>
-                        <li><a href="" title="مازندران - خزر شهر">مازندران - خزر شهر</a></li>
-                        <li><a href="" title="گیلان - رشت">گیلان - رشت</a></li>
-                        <li><a href="" title="گلستان - گرگان">گلستان - گرگان</a></li>
-                        <li><a href="" title="فارس - شیراز">فارس - شیراز</a></li>
-                        <li><a href="" title="تبریز - سراب">تبریز - سراب</a></li>
-                        <li><a href="" title="مازندران - فریدون کنار">مازندران - فریدون کنار</a></li>
-                    </ul>
-                </div>
-                <div class="col-6 col-lg-2">
-                    <h4 class="title">جاذبه های گردشگری برتر</h4>
-                    <ul class="list-footer">
-                        <li><a href="" title="عمارت چهل ستون">عمارت چهل ستون</a></li>
-                        <li><a href="" title="مسجد شیخ لطف الله">مسجد شیخ لطف الله</a></li>
-                        <li><a href="" title="برج آجری قابوس">برج آجری قابوس</a></li>
-                        <li><a href="" title="عمارت چهل ستون">عمارت چهل ستون</a></li>
-                        <li><a href="" title="مسجد شیخ لطف الله">مسجد شیخ لطف الله</a></li>
-                        <li><a href="" title="برج آجری قابوس">برج آجری قابوس</a></li>
-                        <li><a href="" title="عمارت چهل ستون">عمارت چهل ستون</a></li>
-                        <li><a href="" title="مسجد شیخ لطف الله">مسجد شیخ لطف الله</a></li>
-                    </ul>
-                </div>
+                @endforeach
+
             </div>
         </div>
     </div>

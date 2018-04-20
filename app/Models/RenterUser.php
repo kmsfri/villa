@@ -64,12 +64,28 @@ class RenterUser extends Authenticatable
 
     public function SpecialVillas() //has a Paid Tariff(n to n Database Relation)
     {
-        return $this->belongsToMany('App\Models\Villa','renter_user_villa_tairff','renter_user_id','villa_id');
+        return $this->belongsToMany('App\Models\Villa','renter_user_villa_tariff','renter_user_id','villa_id');
     }
 
     public function BoutghtTariffs()
     {
-        return $this->belongsToMany('App\Models\Tariffs','renter_user_villa_tairff','renter_user_id','tariff_id');
+        return $this->belongsToMany('App\Models\Tariff','renter_user_villa_tariff','renter_user_id','tariff_id');
+    }
+
+
+    public function VillaGrantedPoints()
+    {
+        return $this->belongsToMany('App\Models\Villa','user_granted_points','renter_user_id','villa_id');
+    }
+
+    public function ContentGrantedPoints()
+    {
+        return $this->belongsToMany('App\Models\Content','user_granted_points','renter_user_id','content_id');
+    }
+
+    public function UserRegistrationGrantedPoints()
+    {
+        return $this->belongsToMany('App\Models\RenterUser','user_granted_points','renter_user_id','renter_user_id');
     }
 
 }

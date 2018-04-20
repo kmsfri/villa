@@ -43,7 +43,7 @@
                     {{$rp_status[$rp->report_status]}}
                 </p>
             </td>
-            <td class="text-center"><a href="{{Route('editReport',$rp->id)}}">مشاهده</a></td>
+            <td class="text-center"><a href="{{Route((isset($reportType) && $reportType=='content')?'editContentReport':'editReport',$rp->id)}}">مشاهده</a></td>
         </tr>
     @endforeach
     </tbody>

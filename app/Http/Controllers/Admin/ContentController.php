@@ -252,9 +252,24 @@ class ContentController extends Controller
 
                 $content->Cities()->sync($request->city);
 
-
-
                 $content->ContentImages()->saveMany($img_data);
+
+
+                //points
+                if($request->content_status==1 && $content->renter_user_id!=Null){
+                    if($content->GrantedPoints()->count()==0){
+                        $content->GrantedPoints()->sync([
+                            $content->renter_user_id=>[
+                                'number_of_points'=>50 //--Config
+                            ]
+                        ]);
+
+                        $renter_user=RenterUser::find($content->renter_user_id);
+                        $renter_user->points+=50; //--Config
+                        $renter_user->save();
+                    }
+                }
+                //points
 
                 if($request->edit_id!=Null){
                     foreach($removableOldImgDir as $uimg_dir){

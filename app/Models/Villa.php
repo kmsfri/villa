@@ -16,12 +16,12 @@ class Villa extends Model
 
     public function SpecialRenterUser() //has a Paid Tariff(n to n Database Relation)
     {
-        return $this->belongsToMany('App\Models\RenterUser','renter_user_villa_tairff','villa_id','renter_user_id');
+        return $this->belongsToMany('App\Models\RenterUser','renter_user_villa_tariff','villa_id','renter_user_id');
     }
 
     public function BoutghtTariffs()
     {
-        return $this->belongsToMany('App\Models\Tariffs','renter_user_villa_tairff','villa_id','tariff_id');
+        return $this->belongsToMany('App\Models\Tariff','renter_user_villa_tariff','villa_id','tariff_id');
     }
 
     public function Reports()
@@ -97,6 +97,11 @@ class Villa extends Model
     public function VillaType()
     {
         return $this->belongsTo('App\Models\VillaType');
+    }
+
+    public function GrantedPoints()
+    {
+        return $this->belongsToMany('App\Models\RenterUser','user_granted_points','villa_id','renter_user_id');
     }
 
 

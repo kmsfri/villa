@@ -40,7 +40,14 @@ class VillaController extends Controller
             $openGraph->image=asset('tmp').'/'.$villa->VillaImages()->first()->image_dir;
         }
         $villaprop = $villa->Properties()->get();
-        $properties = Property::all();
+
+
+        $properties=\App\Models\Property::where('parent_id',Null)
+            ->where('prop_status',1)
+            ->orderBy('prop_order','ASC')
+            ->get();
+
+
         $states = City::where('parent_id',null)->where('city_status',1)->orderBy('city_order','ASC')->get();
         $province_id = City::where('parent_id',$villa->Cities()->first()->province()->first()->id);
         $related_villas = Villa::related_villas($province_id->pluck('id')->toArray(),$villa->id);
@@ -57,6 +64,7 @@ class VillaController extends Controller
             'related_villas'=>$related_villas,
             'contents'=>$related_contents,
             'user'=>$user,
+            'cities'=>array(),
         ]);
         //end set seo tags
     }

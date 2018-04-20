@@ -7,20 +7,31 @@ use App\Http\Controllers\Controller;
 use \App\Models\RenterUser;
 use \App\Models\Villa;
 use \App\Models\VillaImage;
+use \App\Models\Tariff;
 use Auth;
 use Validator;
 use DB;
-
 class VillaController extends Controller
 {
     public function showVillaList(Request $request){
         $user = RenterUser::find(Auth::guard('user')->user()->id);
         $add_url=Route('addVillaForm');
-        $villas = $user->Villas()->orderBy('villa.updated_at','DESC')->orderBy('villa.created_at','ASC')->paginate(10);
+        $villas = $user->Villas()
+            ->selectRaw('*, (villa.special_to >= CURRENT_TIMESTAMP) as is_special,(villa.updated_at+INTERVAL '.'60'.' MINUTE >= CURRENT_TIMESTAMP) as updated') //--Config ex. 60 minute - yani bad az chand daghighe waziatash beroozresani nashode neshan dade shawad
+            ->orderBy('villa.updated_at','DESC')->orderBy('villa.created_at','ASC')->paginate(10);
+
+
+
+        $tariffs=Tariff::where('tariff_status',1)
+            ->orderBy('tariff_duration','ASC')
+            ->orderBy('created_at','DESC')
+            ->get();
+
 
         $data=[
             'user'=>$user,
             'villas'=>$villas,
+            'tariffs'=>$tariffs,
         ];
         return view('user.panel.VillaList',$data);
     }
@@ -239,7 +250,7 @@ class VillaController extends Controller
                 'bathroom_count'=>'nullable|integer',
                 'max_capacity'=>'nullable|integer',
                 'wc_count'=>'nullable|integer',
-                'propDesc.*'=>'nullable|max:255',
+                'propDesc.*'=>'nullable|max:1000',
                 'props.*'=>'nullable|integer',
                 'propCheck.*'=>'nullable|integer',
                 'propText.*'=>'nullable|max:140',
@@ -293,7 +304,7 @@ class VillaController extends Controller
             return redirect()->back()
                 ->withInput($request->input())
                 ->withErrors($validator->errors())
-                ->with('messages',['ورودی های خود را بررسی کنید'])
+                ->with('data','ورودی های خود را بررسی کنید')
                 ->with(['cities'=>$cities,'districts'=>$districts]);
         }
 
@@ -370,6 +381,7 @@ class VillaController extends Controller
             DB::transaction(function() use($newRequest,$request,$uploaded_files_dir,$removableOldImgID,$removableOldImgDir,$villa,$villa_slug){
 
 
+                $villa->villa_type_id=$newRequest->villa_type_id;
                 $villa->villa_title=$newRequest->villa_title;
                 $villa->villa_slug=$newRequest->villa_slug;
                 $villa->villa_description=$newRequest->villa_description;
@@ -471,16 +483,16 @@ class VillaController extends Controller
             }
             return redirect()->back()
                 ->withInput($request->input())
-                ->with('messages',['عملیات با شکست مواجه شد، دوباره تلاش کنید']);
+                ->with('data','عملیات با شکست مواجه شد، دوباره تلاش کنید');
 
         }
 
         if(isset($request->edit_id) && $request->edit_id!=Null){
-            $msg=["مطلب مورد نظر با موفقیت ویرایش شد"];
+            $msg="مطلب مورد نظر با موفقیت ویرایش شد";
         }else{
-            $msg=["مطلب جدید با موفقیت اضافه شد"];
+            $msg="مطلب جدید با موفقیت اضافه شد";
         }
-        return redirect(url(Route('editVillaCategory',$villa->id)))->with('messages', $msg);
+        return redirect(url(Route('editVillaCategory',$villa->id)))->with('data', $msg);
     }
 
 
@@ -536,7 +548,7 @@ class VillaController extends Controller
             return redirect()->back()
                 ->withInput($request->input())
                 ->withErrors($validator->errors())
-                ->with('messages',['ورودی های خود را بررسی کنید']);
+                ->with('data','ورودی های خود را بررسی کنید');
         }
 
 
@@ -552,22 +564,118 @@ class VillaController extends Controller
         $villa->Categories1()->sync($request->ctg);
 
 
-        $msg=['دسته بندی مطلب مورد نظر با موفقیت بروزرسانی شد'];
-        return redirect(url(Route('villaList')))->with('messages', $msg);
+        $msg='دسته بندی مورد نظر با موفقیت بروزرسانی شد';
+        return redirect(url(Route('villaList')))->with('data', $msg);
 
 
     }
 
 
 
+    public function specializeVilla(Request $request){
 
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'villa_id_to_specialize'=>'required|integer|exists:villa,id',
+                'tariffID'=>'required|integer|exists:tariffs,id',
+                'payType'=>'required|integer'
+            ]
+        );
 
-    public function doRemoveVilla(Request $request){
-        if(isset($request->remove_val)){
-            \App\Models\Villa::destroy($request->remove_val);
+        if($validator->fails()){
+            return redirect()->back()
+                ->withInput($request->input())
+                ->withErrors($validator->errors())
+                ->with('data','ورودی های خود را بررسی کنید');
         }
-        $msg=['موارد انتخاب شده با موفقیت حذف شدند'];
 
-        return redirect(url(Route('adminShowVillaList')))->with('messages', $msg);
+        $villa=Villa::findOrFail($request->villa_id_to_specialize);
+        $user=Auth::guard('user')->user();
+        $tariff=Tariff::where('id',$request->tariffID)->where('tariff_status',1)->first();
+        if($tariff==Null) abort(404);
+
+        if($request->payType==1) { //pay from points
+            if ($tariff->tariff_needed_points > $user->points) {
+                return redirect()->back()
+                    ->withInput($request->input())
+                    ->withErrors($validator->errors())
+                    ->with('data', 'شما امتیاز کافی برای اینکار ندارید. لطفا یا از روش پرداخت دیگری استفاده کنید و یا تعرفه ی دیگری را انتخاب نمایید.');
+            }
+
+
+            DB::transaction(function () use ($villa, $tariff, $user) {
+
+                $user->points -= $tariff->tariff_needed_points;
+                $user->save();
+
+                $user->BoutghtTariffs()->attach([
+                    $tariff->id => [
+                        'paid_status' => 1,
+                        'paid_amount' => $tariff->tariff_needed_points,
+                        'paid_from' => 1,
+                        'pay_time' => \Carbon\Carbon::now()->toDateTimeString(),
+                    ]
+                ]);
+
+
+                $current = \Carbon\Carbon::now();
+                $expire_date = $current->addDays($tariff->tariff_duration)->toDateTimeString();
+
+                $villa->special_to = $expire_date;
+                $villa->save();
+
+
+            });
+
+            return redirect(url(Route('villaList')))->with('data', 'ویلای مورد نظر با موفقیت ویژه شد');
+
+        }else{
+            //go to payment gateway
+        }
+
+
+
     }
+
+
+
+
+
+
+
+
+    public function updateVilla(Request $request){
+        if(isset($request->villa_id) && $request->villa_id!=Null){
+            $villa=Villa::selectRaw('*,(villa.updated_at+INTERVAL '.'60'.' MINUTE >= CURRENT_TIMESTAMP) as updated') //--Config ex. 60 minute; har chand daghighe 1 bar ghabeliate beroozresani dashte bashad
+            ->where('id',$request->villa_id)->first();
+
+
+
+            if($villa->updated==1) return redirect(url(Route('villaList')))->with('data', 'شما هر  '.'60'.' دقیقه یکبار میتوانید ویلای خود را بروزرسانی کنید'); //--Config - haman balayi
+
+            if($villa==Null)abort(404);
+
+            if($villa->villa_status!=1) return redirect(url(Route('villaList')))->with('data', 'ویلای تایید نشده قابلیت بروزرسانی ندارد');
+
+            $villa->touch();
+
+
+        }else{
+            abort(404);
+        }
+
+
+        return redirect(url(Route('villaList')))->with('data', 'ویلای مورد نظر با موفقیت بروزرسانی شد');
+
+    }
+
+
+
+
+
+
+
+
+
 }

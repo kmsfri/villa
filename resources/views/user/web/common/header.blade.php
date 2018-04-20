@@ -3,10 +3,9 @@
     <div class="container-fluid">
         <nav class="navbar navbar-expand-lg nav-vila"><a class="navbar-brand" href="#"><img class="logo" src="{{asset('users/img/logo.png')}}"></a>
             <ul class="navbar-nav ul-nav">
-                <li><a href="" title="اجاره ویلا">اجاره ویلا</a></li>
-                <li><a href="" title="اجاره سوئیت">اجاره سوئیت</a></li>
-                <li><a href="" title="رزرو اقامتگاه بوم گردی">رزرو اقامتگاه بوم گردی</a></li>
-                <li><a href="" title="جاذبه های گردشگری">جاذبه های گردشگری</a></li>
+                @foreach($menuLinks as $mL)
+                    <li><a href="{{$mL->link_url}}" title="{{$mL->link_title}}">{{$mL->link_title}}</a></li>
+                @endforeach
             </ul>
             <ul class="login">
                 <li><a class="login" href="{{Route('showdashboard')}}" title="ورود به سایت">ورود به سایت</a></li>

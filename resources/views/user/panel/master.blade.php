@@ -21,7 +21,7 @@
         <div class="headera">
 		<a class="logo" href="" alt=""><img src="{{asset('users/img/logo.png')}}" alt=""></a><a class="link-mobile d-md-none d-inline-block" href="" alt=""><img src="{{asset('users/img/icon/icon0108.png')}}" alt=""></a></div>
         <div class="box-user"><img src="{{asset('images/users/user-uploads/user-pics/'.$user->avatar_dir)}}" alt="">
-          <p>{{$user->fullname}}</p><span class="points">امتیاز شما : -</span>
+          <p>{{$user->fullname}}</p><span class="points">امتیاز شما : {{$user->points }}</span>
         </div>
         <ul class="ul-sidebar">
           <li><a href="" title=""><img src="{{asset('users/img/icon/icon040.png')}}" alt=""><img class="img" src="{{asset('users/img/icon/icon040-2.png')}}" alt=""><span>پیشخوان</span></a></li>

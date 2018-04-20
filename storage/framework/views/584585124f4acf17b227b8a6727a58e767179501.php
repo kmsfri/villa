@@ -116,6 +116,23 @@
 
     <?php $__env->startSection('jsmap'); ?>
         <script>
+            function list_villa_rate(s_value,vid) {
+                $.post("<?php echo e(route('rate_villa_list')); ?>",
+                    {
+                        s_value: s_value,
+                        villa_id:vid
+                    } ,
+                    function(data){
+                        if(data != "ok"){
+                            alert('مشکلی در ثبت امتیاز به وجود آمده است، در صورت بروز مجدد، صفحه را دوباره رفرش کنید');
+                        }
+
+                    })
+                    .fail(function() {
+                        alert( "شما باید وارد حساب کاربری خود شوید" );
+                        window.location = "<?php echo e(route('showlogin')); ?>";
+                    })
+            }
             function getCities(th,id)
             {
 

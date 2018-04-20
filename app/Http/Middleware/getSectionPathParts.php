@@ -241,6 +241,19 @@ class getSectionPathParts
                     (object)['title'=>'مشاهده تیکت'],
                 ],
             ],
+            'updateVilla'=>[
+                'page_title'=>'بروزرسانی ویلا',
+                'headingButton'=>(object)[
+                    'url'=>Route('addVillaForm'),
+                    'title'=>'ثبت ملک جدید',
+                ],
+                'sectionParts'=>[
+                    (object)['title'=>'پیشخوان'],
+                    (object)['title'=>'ملک های من'],
+                    (object)['title'=>'بروزرسانی'],
+                ],
+            ],
+
 
 
 

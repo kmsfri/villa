@@ -54,6 +54,7 @@ class TariffController extends Controller
             'tariff_title'=>'required|max:50',
             'tariff_duration'=>'required|integer',
             'tariff_price'=>'required|numeric|max:2000000',
+            'tariff_needed_points'=>'required|numeric|max:2000000',
             'tariff_status'=>'required|integer',
         ]);
 
@@ -109,6 +110,7 @@ class TariffController extends Controller
             'tariff_title'=>'required|max:50',
             'tariff_duration'=>'required|integer',
             'tariff_price'=>'required|numeric|max:2000000',
+            'tariff_needed_points'=>'required|numeric|max:2000000',
             'tariff_status'=>'required|integer',
             'edit_id'=>'required|integer|exists:tariffs,id',
         ]);
@@ -143,6 +145,7 @@ class TariffController extends Controller
         $tariff->tariff_title=$request->tariff_title;
         $tariff->tariff_duration=$request->tariff_duration;
         $tariff->tariff_price=$request->tariff_price;
+        $tariff->tariff_needed_points=$request->tariff_needed_points;
         $tariff->tariff_status=$request->tariff_status;
         $tariff->save();
 

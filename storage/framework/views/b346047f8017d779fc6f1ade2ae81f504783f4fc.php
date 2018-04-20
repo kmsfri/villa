@@ -7,8 +7,8 @@
     <?php echo $__env->make('user.web.common.stickyheadsearch', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
     <!--start section details-->
     <ul class="floating">
-        <li><a href="" title=""><img src="<?php echo e(asset('users/img/floating-phone.png')); ?>"></a></li>
-        <li><a href="" title=""><img src="<?php echo e(asset('users/img/floating-telegram.png')); ?>"></a></li>
+        <li><a href="tel://<?php echo e($user->mobile_number); ?>" title=""><img src="<?php echo e(asset('users/img/floating-phone.png')); ?>"></a></li>
+        <li><a href="http://t.me/<?php echo e($user->telegram_link); ?>" title=""><img src="<?php echo e(asset('users/img/floating-telegram.png')); ?>"></a></li>
     </ul><a class="owner subNavBtn" href="#box-price" title="تماس با مالک"><img src="<?php echo e(asset('users/img/owner.jpg')); ?>" alt="تماس با مالک"></a>
     <section class="details">
         <div class="container">
@@ -30,7 +30,7 @@
                             <h1 class="title"><?php echo e($villa->villa_title); ?></h1><span class="code">کد ملک :<span><?php echo e($villa->id); ?></span></span>
                             <div class="clearfix"></div><?php $city = $villa->Cities()->first(); ?>
                             <p class="place"><?php echo e(\App\Models\City::find($city->parent_id)->city_name); ?> - <?php echo e($city->city_name); ?></p>
-                            <div class="my-rating-8"></div><span class="span"><?php \Carbon\Carbon::setLocale('fa'); ?> <?php echo e($villa->created_at->diffForHumans()); ?></span>
+                            <div class="my-rating-8 villarate0"></div><span class="span"><?php \Carbon\Carbon::setLocale('fa'); ?> <?php echo e($villa->created_at->diffForHumans()); ?></span>
                         </div>
                         <div class="data">
                             <ul class="ul-article">
@@ -91,168 +91,106 @@
                             </div>
                         </div>
                     </div>
-                    <?php
-                        $ul_class_list=[
-                        0=>'ul-new width',
-                        2=>'new-ul',
-                        3=>'ul-img',
-                        4=>'',
-                        ];
-                    ?>
-                    <?php $__currentLoopData = $properties; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $property): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <?php if($property->parent_id == null): ?>
-                    <div class="box-new">
-                        <h3 class="title"> <?php echo e($property->prop_title); ?> </h3>
-                        <div class="row">
-                            <div class="col-md-11 mr-auto">
-                                <?php if($property->show_type == 0): ?>
-                                        <?php $desc=array(); $ps = $property->PropEnabledValues()->get(); ?>
-                                        <ul class='<?php echo e($ul_class_list[$property->show_type]); ?>'>
 
-                                            <?php $__currentLoopData = $villaprop; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $prop): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <?php $__currentLoopData = $properties; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pr): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <div class="box-new">
+                            <h3 class="title"><?php echo e($pr->prop_title); ?></h3>
+                                <?php $counter1=1; $colorClassFlag=true; $firstID=$pr->PropEnabledValues()->first()->id ?>
+                                <?php $__currentLoopData = $pr->PropEnabledValues()->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $propValue1): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <?php if($propValue1->has_text_value==1 && ($propValue1->img_dir==Null || $propValue1->img_dir=='')): ?>
 
-                                            <?php $__currentLoopData = $ps; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                    <?php if($prop->parent_id == $p->id && $prop->has_text_value != 1): ?>
-
-                                                            <li><span><?php echo e($p->prop_title); ?> :</span><span class="bold"><?php echo e($prop->prop_title); ?></span>
-                                                                
-                                                            </li>
-                                                            <?php
-                                                                if($prop->pivot->description_text != null)
-                                                                array_push($desc,$prop->pivot->description_text)
-                                                            ?>
-
-                                                        <?php elseif($prop->id == $p->id && $prop->has_text_value != 0): ?>
-                                                            <li><span><?php echo e($p->prop_title); ?> :</span><span class="bold"><?php echo e($prop->pivot->text_value); ?></span>
-                                                                
-                                                            </li>
-                                                            <?php
-                                                                if($prop->pivot->description_text != null)
-                                                                array_push($desc,$prop->pivot->description_text)
-                                                            ?>
-                                                        <?php endif; ?>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                        </ul>
-                                    <?php if(count($desc)): ?>
+                                        <?php if(($VT=$villa->Properties()->withPivot(['text_value'])->where('property_id',$propValue1->id)->first())!=Null): ?>
                                         <div class="data-rules">
                                             <div class="row">
                                                 <div class="col-md-11 mr-auto">
-                                                    <p class="bold">توضیحات</p>
-                                                    <?php $__currentLoopData = $desc; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ds): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                    <p><?php echo e($ds); ?></p>
-                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                    <p class="bold"><?php echo e($propValue1->prop_title); ?></p>
+                                                    <p><?php echo e($VT->pivot->text_value); ?></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <?php endif; ?>
+
+
+                                    <?php elseif($propValue1->has_text_value==1): ?>
+                                    <?php if($firstID==$propValue1->id): ?>
+                                        <div class="row">
+                                            <div class="col-md-11 mr-auto">
+                                                <div class="box-see2">
+                                                    <ul class="ul-img">
+                                    <?php endif; ?>
+                                    <?php if($villa->Properties()->where('property_id',$propValue1->id)->count()>0): ?>
+
+                                                            <li>
+                                                                <img src="<?php echo e(asset($propValue1->img_dir)); ?>" alt="<?php echo e($propValue1->prop_title); ?>">
+                                                                <span><?php echo e($propValue1->prop_title); ?></span>
+                                                                <?php if(($VP=$villa->Properties()->withPivot(['text_value'])->where('property_id',$propValue1->id)->first()->pivot->text_value)!=Null): ?>
+                                                                    <button class="btn" type="button" data-toggle="popover" data-content="<?php echo e($VP); ?>">؟</button>
+                                                                <?php endif; ?>
+                                                            </li>
+
+
+
+                                    <?php endif; ?>
+                                    <?php if($loop->last): ?>
+                                                    </ul>
                                                 </div>
                                             </div>
                                         </div>
                                     <?php endif; ?>
 
 
-                                <?php elseif($property->show_type == 2): ?>
-                                    <?php $desc=array(); $ps = $property->PropEnabledValues()->get(); ?>
 
-                                        <ul class='<?php echo e($ul_class_list[$property->show_type]); ?>'>
-                                            <?php $__currentLoopData = $villaprop; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $prop): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
-                                                <?php $__currentLoopData = $ps; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
-                                                    <?php if($prop->parent_id == $p->id): ?>
+                                    <?php else: ?>
+                                        <?php if(isset($villa)): ?>
 
-                                                        <li><img src="<?php echo e(asset($p->img_dir)); ?>" alt="">
-                                                            <span class="bold"><?php echo e($p->prop_title); ?> :</span>
-                                                            <span><?php echo e($prop->prop_title); ?></span>
+                                                <?php if($firstID==$propValue1->id): ?>
+                                                <div class="row">
+                                                    <div class="col-md-11 mr-auto">
+                                                        <ul class="<?php echo e(($propValue1->img_dir!=Null)?'new-ul':'ul-new width'); ?>">
+                                                <?php endif; ?>
+                                                        <?php $__currentLoopData = $villa->AllSpecProperty($propValue1->id); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $oneSP): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                        <li>
+                                                            <?php if($propValue1->img_dir!=Null): ?>
+                                                            <img src="<?php echo e(asset($propValue1->img_dir)); ?>" alt="">
+                                                            <?php endif; ?>
+                                                            <span><?php echo e($propValue1->prop_title); ?>:</span><span class="bold"><?php echo e($oneSP->prop_title); ?></span>
+                                                            <?php if($propValue1->guide_text!=Null && $propValue1->guide_text!=''): ?>
+                                                            <button class="btn" type="button" data-toggle="popover" data-content="<?php echo e($propValue1->guide_text); ?>">؟</button>
+                                                            <?php endif; ?>
                                                         </li>
-                                                        <?php
-                                                            if($prop->pivot->description_text != null)
-                                                            array_push($desc,$prop->pivot->description_text)
-                                                        ?>
-                                                    <?php endif; ?>
-                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-                                        </ul>
-                                    <?php if(count($desc)): ?>
-                                        <div class="data-rules">
-                                            <div class="row">
-                                                <div class="col-md-11 mr-auto">
-                                                    <p class="bold">توضیحات</p>
-                                                    <?php $__currentLoopData = $desc; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ds): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                        <p><?php echo e($ds); ?></p>
-                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                <?php if($loop->last): ?>
+                                                        </ul>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    <?php endif; ?>
-                                <?php elseif($property->show_type == 3): ?>
-                                    <?php $desc=array(); $ps = $property->PropEnabledValues()->get(); ?>
-                                    <div class="box-see2">
-                                    <ul class='<?php echo e($ul_class_list[$property->show_type]); ?>'>
-                                        <?php $__currentLoopData = $villaprop; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $prop): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-
-                                            <?php $__currentLoopData = $ps; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-
-                                                <?php if($prop->id == $p->id): ?>
-                                                    <li><img src="<?php echo e(asset($prop->img_dir)); ?>" alt=""><span><?php echo e($prop->prop_title); ?></span></li>
-                                                    <?php
-                                                        if($prop->pivot->description_text != null)
-                                                        array_push($desc,$prop->pivot->description_text)
-                                                    ?>
                                                 <?php endif; ?>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                    </ul>
-                                    </div><a class="link-see2" href="" title="">+ مشاهده بیشتر . . .</a>
-                                    <?php if(count($desc)): ?>
-                                        <div class="data-rules">
-                                            <div class="row">
-                                                <div class="col-md-11 mr-auto">
-                                                    <p class="bold">توضیحات</p>
-                                                    <?php $__currentLoopData = $desc; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ds): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                        <p><?php echo e($ds); ?></p>
-                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                </div>
-                                            </div>
-                                        </div>
+
+
+
+
+
+                                        <?php endif; ?>
+
+
                                     <?php endif; ?>
-                                <?php elseif($property->show_type == 4): ?>
-                                    <?php $desc=array(); $ps = $property->PropEnabledValues()->get(); ?>
-
-
-                                        <?php $__currentLoopData = $villaprop; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $prop): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-
-                                            <?php $__currentLoopData = $ps; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <?php if($prop->id == $p->id && $prop->has_text_value != 0): ?>
-                                                    <p class="bold"><?php echo e($p->prop_title); ?> :</p>
-                                                    <p><?php echo e($prop->pivot->text_value); ?></p>
-                                                <hr>
-                                                    <?php
-                                                        if($prop->pivot->description_text != null)
-                                                        array_push($desc,$prop->pivot->description_text)
-                                                    ?>
-                                                <?php endif; ?>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-                                    <?php if(count($desc)): ?>
-                                        <div class="data-rules">
-                                            <div class="row">
-                                                <div class="col-md-11 mr-auto">
-                                                    <p class="bold">توضیحات</p>
-                                                    <?php $__currentLoopData = $desc; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ds): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                        <p><?php echo e($ds); ?></p>
-                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                </div>
-                                            </div>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php if(($VP=$villa->Properties()->withPivot(['text_value'])->where('property_id',$pr->id))->count()>0): ?>
+                                <div class="data-rules">
+                                    <div class="row">
+                                        <div class="col-md-11 mr-auto">
+                                            <p class="bold">توضیحات <?php echo e($pr->prop_title); ?></p>
+                                            <p><?php echo nl2br($VP->first()->pivot->text_value); ?></p>
                                         </div>
-                                    <?php endif; ?>
+                                    </div>
+                                </div>
                                 <?php endif; ?>
-                            </div>
-                        </div>
 
-                    </div>
-                            <?php endif; ?>
+
+
+
+                        </div>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
 
@@ -266,22 +204,22 @@
                             <div class="col-md-11 mr-auto">
                                 <ul class="ul-new width">
                                     <li><span>صحت مطالب :</span>
-                                        <div class="my-rating-8"></div>
+                                        <div class="my-rating-8 villarate1"></div>
                                     </li>
                                     <li><span>پاکیزگی اقامتگاه :</span>
-                                        <div class="my-rating-8"></div>
+                                        <div class="my-rating-8 villarate2"></div>
                                     </li>
                                     <li><span>تحویل به موقع :</span>
-                                        <div class="my-rating-8"></div>
+                                        <div class="my-rating-8 villarate3"></div>
                                     </li>
                                     <li><span>شیوه برخورد میزبان :</span>
-                                        <div class="my-rating-8"></div>
+                                        <div class="my-rating-8 villarate4"></div>
                                     </li>
                                     <li><span>مکان اقامتگاه  :</span>
-                                        <div class="my-rating-8"></div>
+                                        <div class="my-rating-8 villarate5"></div>
                                     </li>
                                     <li><span>کیفیت نسبت به نرخ :</span>
-                                        <div class="my-rating-8"></div>
+                                        <div class="my-rating-8 villarate6"></div>
                                     </li>
                                 </ul>
                             </div>
@@ -387,6 +325,99 @@
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('jsmap'); ?>
+
+    <script type="text/javascript">
+        //rate_func
+        function villa_rate(s_type,s_value) {
+            $.post("<?php echo e(route('rate_villa',$villa->id)); ?>",
+                {
+                    s_type : s_type,
+                    s_value: s_value
+                } ,
+                function(data){
+                    if(data != "ok"){
+                        alert('مشکلی در ثبت امتیاز به وجود آمده است، در صورت بروز مجدد، صفحه را دوباره رفرش کنید');
+                    }
+
+                })
+                .fail(function() {
+                    alert( "شما باید وارد حساب کاربری خود شوید" );
+                    window.location = "<?php echo e(route('showlogin')); ?>";
+                })
+        }
+        function send_report() {
+            $.post("<?php echo e(route('villa_report',$villa->id)); ?>", { _token: $('.rptoken').val(), report_text: $('.crp').val() } , function(data){
+                if(data == "ok"){
+                    $( ".rpform" ).replaceWith( "<p style='color:red;padding: 30px'>با موفقیت ثبت شد</p>" );
+                }
+                else{
+                    alert( "متن گزارش نباید خالی باشد و باید حداکثر 280 کاراکتر باشد" );
+                }
+            })
+                .fail(function() {
+                    alert( "شما باید وارد حساب کاربری خود شوید" );
+                    window.location = "<?php echo e(route('showlogin')); ?>";
+                })
+        }
+        function send_reserve() {
+
+            if (isMobile()) {
+                if ($.trim($('.date_in').val()) == "" || $.trim($('.date_out').val()) == "" || $.trim($('.pc').val()) == "" || $.trim($('.fullname').val()) == "" || $.trim($('.phone').val()) == "") {
+                    alert("ورودی های خود را بررسی نمایید");
+                }
+                else {
+                var txt = "درخواست رزرو ویلا" +
+                    "%0a" +
+                    "کد ویلا:<?php echo e($villa->id); ?>" +
+                    "%0a" +
+                    "از تاریخ:" + $('.date_in').val() +
+                    "%0a" +
+                    "تا تاریخ:" + $('.date_out').val() +
+                    "%0a" +
+                    "درخواست دهنده:" + $('.fullname').val() +
+                    "%0a" +
+                    "شماره تماس:" + $('.phone').val() +
+                    "%0a" +
+                    "وبسایت ویلایار"
+                ;
+
+                window.location.href = "sms://<?php echo e($user->mobile_number); ?>?body=" + txt;
+            }
+            }
+            else{
+                if($.trim($('.date_in').val()) == "" || $.trim($('.date_out').val()) == "" || $.trim($('.pc').val()) == "" || $.trim($('.fullname').val()) == "" || $.trim($('.phone').val()) == "") {
+                    alert("ورودی های خود را بررسی نمایید");
+                }
+                else{
+                    $.post("<?php echo e(route('reserve_request',$villa->id)); ?>",
+                        {
+                            _token: $('.reserve_token').val(),
+                            date_in: $('.date_in').val(),
+                            date_out: $('.date_out').val(),
+                            pc: $('.pc').val(),
+                            fullname: $('.fullname').val(),
+                            phone: $('.phone').val()
+                        } ,
+                        function(data){
+                        if(data == "ok"){
+                            $( ".reserve_form" ).replaceWith( "<p style='color:red;padding: 30px;text-align: center;'>با موفقیت ثبت شد</p>" );
+                        }
+                        else{
+                            alert("ورودی های خود را بررسی نمایید");
+                        }
+                    })
+                        .fail(function() {
+                            alert( "مشکلی در ارسال به وجود آمده است، در صورت بروز مجدد، صفحه را دوباره رفرش کنید" );
+                        })
+                }
+
+            }
+        }
+        function isMobile() {
+            try{ document.createEvent("TouchEvent"); return true; }
+            catch(e){ return false; }
+        }
+    </script>
     <?php if($villa->longitude != null && $villa->latitude != 0): ?>
         <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false&key=AIzaSyAUTOnItAcKwoEjTUA8nbIPjdOngcEpJV0"></script>
         <script type="text/javascript">

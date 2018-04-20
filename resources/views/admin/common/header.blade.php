@@ -85,6 +85,9 @@
                             <a href="{{Route('adminReportList')}}">گزارش تخلف ویلاها</a>
                         </li>
                         <li>
+                            <a href="{{Route('adminContentReportList')}}">گزارش تخلف مطالب</a>
+                        </li>
+                        <li>
                             <a href="{{Route('adminVillaCommentList')}}">نظرات ویلاها</a>
                         </li>
                         <li>
@@ -97,6 +100,30 @@
 
                     </ul>
                 </li>
+
+
+                <li>
+                    <a href="#"><i class="fa fa-book fa-fw"></i>تنظیمات وبسایت<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="{{Route('footerLink_list')}}">لینک های فوتر</a>
+                        </li>
+                        <li>
+                            <a href="{{Route('menuLink_list')}}">لینک های منوی اصلی</a>
+                        </li>
+                        <li>
+                            <a href="{{Route('adminSocials')}}">شبکه های اجتماعی</a>
+                        </li>
+
+                    </ul>
+                </li>
+
+
+
+
+
+
+
 
             </ul>
         </div>

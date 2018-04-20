@@ -85,6 +85,9 @@
                             <a href="<?php echo e(Route('adminReportList')); ?>">گزارش تخلف ویلاها</a>
                         </li>
                         <li>
+                            <a href="<?php echo e(Route('adminContentReportList')); ?>">گزارش تخلف مطالب</a>
+                        </li>
+                        <li>
                             <a href="<?php echo e(Route('adminVillaCommentList')); ?>">نظرات ویلاها</a>
                         </li>
                         <li>
@@ -97,6 +100,30 @@
 
                     </ul>
                 </li>
+
+
+                <li>
+                    <a href="#"><i class="fa fa-book fa-fw"></i>تنظیمات وبسایت<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a href="<?php echo e(Route('footerLink_list')); ?>">لینک های فوتر</a>
+                        </li>
+                        <li>
+                            <a href="<?php echo e(Route('menuLink_list')); ?>">لینک های منوی اصلی</a>
+                        </li>
+                        <li>
+                            <a href="<?php echo e(Route('adminSocials')); ?>">شبکه های اجتماعی</a>
+                        </li>
+
+                    </ul>
+                </li>
+
+
+
+
+
+
+
 
             </ul>
         </div>

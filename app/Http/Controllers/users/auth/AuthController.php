@@ -86,9 +86,29 @@ class AuthController extends Controller
             $number = ltrim($request->phone, 0);
             if(\Helpers::sendsms($number,$randompass) == 0){
                 $user->save();
+
+
+                //points
+
+                if($user->UserRegistrationGrantedPoints()->count()==0){
+                    $user->UserRegistrationGrantedPoints()->sync([
+                        $user->id=>[
+                            'number_of_points'=>50, //--Config
+                            'grant_reason'=>'ثبت نام در سیستم',
+                        ]
+                    ]);
+
+                    $user->points+=50; //--Config
+                    $user->save();
+
+                }
+
+                //points
+
+
                 return redirect(url('User/Login'))
                     ->with('data', 'رمز عبور جدید برای شماره ی وارد شده ارسال شد، بعد از دریافت می توانید وارد شوید');
-            }
+           }
             else {
                 goto catch_block;
             }

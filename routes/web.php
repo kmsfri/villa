@@ -15,7 +15,7 @@
 
 //villa
 
-Route::group(['middleware'=>['saveVisitor']],function() {
+Route::group(['middleware'=>['saveVisitor','webInitCommonData']],function() {
     Route::get('villa/{slug}', 'users\web\VillaController@showSingleVilla')
         ->middleware('saveVillaVisitor')
         ->name('showvilla');
@@ -26,11 +26,7 @@ Route::group(['middleware'=>['saveVisitor']],function() {
     Route::get('user/{slug}', 'users\web\VillaController@userpage')->name('userpage');
     Route::get('search', 'users\web\VillaController@search')->name('search');
 
-    //Reserve Request
-
     Route::post('villa/{id}/Reserve', 'users\web\VillaController@reserve_request')->name('reserve_request');
-
-    //Villa Search
 });
 
 //NewsLetter Register
@@ -93,6 +89,9 @@ Route::group(['prefix' => 'User',  'middleware' => ['auth:user', 'getSectionPath
         Route::get('Villa/category/{villa_id}', 'users\VillaController@editVillaCategory')->name('editVillaCategory');
         Route::post('Villa/category', 'users\VillaController@doEditVillaCategory')->name('doEditVillaCategory');
         Route::get('Villas', 'users\VillaController@showVillaList')->name('villaList');
+
+        Route::post('Villa/specialize', 'users\VillaController@specializeVilla')->name('specializeVilla');
+        Route::get('Villa/Update/{villa_id}', 'users\VillaController@updateVilla')->name('updateVilla');
 
 
         Route::get('tickets', 'users\TicketController@showTicketList')->name('ticketList');
@@ -217,6 +216,11 @@ Route::group(['prefix'=>'management'],function(){
             Route::post('/reports/edit', 'Admin\ReportController@doEditReport')->name('doEditReport');
             Route::get('/reports/{villa_id?}', 'Admin\ReportController@Reports')->name('adminReportList');
 
+            Route::post('/contentReports/delete', 'Admin\ReportController@deleteContentReport')->name('doDeleteContentReport');
+            Route::get('/contentReports/edit/{id}', 'Admin\ReportController@editContentReport')->name('editContentReport');
+            Route::post('/contentReports/edit', 'Admin\ReportController@doEditContentReport')->name('doEditContentReport');
+            Route::get('/contentReports/{content_id?}', 'Admin\ReportController@ContentReports')->name('adminContentReportList');
+
             Route::post('/commant/villa/delete', 'Admin\VillaController@deleteComment')->name('doDeleteVillaComment');
             Route::get('/commant/villa/edit/{id}', 'Admin\VillaController@editComment')->name('editVillaComment');
             Route::post('/commant/villa/edit', 'Admin\VillaController@doEditComment')->name('doEditVillaComment');
@@ -232,6 +236,34 @@ Route::group(['prefix'=>'management'],function(){
             Route::get('/commant/website/edit/{id}', 'Admin\WebsiteController@editComment')->name('editWebsiteComment');
             Route::post('/commant/website/edit', 'Admin\WebsiteController@doEditComment')->name('doEditWebsiteComment');
             Route::get('/commant/website', 'Admin\WebsiteController@Comments')->name('adminWebsiteCommentList');
+
+
+            Route::get('/footer/links/add/{parent_id?}', 'Admin\WebsiteController@showAddFooterLinkForm')->name('add_footerLink_form');
+            Route::post('/footer/links/add', 'Admin\WebsiteController@saveFooterLink')->name('do_add_footerLink');
+            Route::post('/footer/links/delete/{parent_id?}', 'Admin\WebsiteController@deleteFooterLink')->name('do_delete_footerLink');
+            Route::get('/footer/links/edit/{id}', 'Admin\WebsiteController@editFooterLink')->name('edit_footerLink_form');
+            Route::post('/footer/links/edit', 'Admin\WebsiteController@doEditFooterLink')->name('do_edit_footerLink');
+            Route::get('/footer/links/{parent_id?}', 'Admin\WebsiteController@footerLinks')->name('footerLink_list');
+
+
+
+            Route::get('/social', 'Admin\WebsiteController@socials')->name('adminSocials');
+            Route::get('/social/add', 'Admin\WebsiteController@showAddSocialForm')->name('addSocialForm');
+            Route::post('/social/add', 'Admin\WebsiteController@saveSocial')->name('doAddSocial');
+            Route::post('/social/delete', 'Admin\WebsiteController@deleteSocial')->name('doDeleteSocial');
+            Route::get('/social/edit/{id}', 'Admin\WebsiteController@editSocial')->name('editSocialForm');
+            Route::post('/social/edit', 'Admin\WebsiteController@doEditSocial')->name('doEditSocial');
+
+
+
+
+            Route::get('/menu/links/add/{parent_id?}', 'Admin\WebsiteController@showAddMenuLinkForm')->name('add_menuLink_form');
+            Route::post('/menu/links/add', 'Admin\WebsiteController@saveMenuLink')->name('do_add_menuLink');
+            Route::post('/menu/links/delete/{parent_id?}', 'Admin\WebsiteController@deleteMenuLink')->name('do_delete_menuLink');
+            Route::get('/menu/links/edit/{id}', 'Admin\WebsiteController@editMenuLink')->name('edit_menuLink_form');
+            Route::post('/menu/links/edit', 'Admin\WebsiteController@doEditMenuLink')->name('do_edit_menuLink');
+            Route::get('/menu/links/{parent_id?}', 'Admin\WebsiteController@menuLinks')->name('menuLink_list');
+
 
 
 

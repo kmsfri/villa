@@ -31,6 +31,20 @@
         </div>
     </div>
 
+
+
+    <div class="form-group<?php echo e($errors->has('tariff_needed_points') ? ' has-error' : ''); ?>">
+        <label for="tariff_needed_points" class="col-md-2 pull-right control-label">امتیاز مورد نیاز:</label>
+        <div class="col-md-6 pull-right">
+            <input type="text" class="form-control" name="tariff_needed_points" value="<?php echo e(old('tariff_needed_points',isset($tariff->tariff_needed_points) ? $tariff->tariff_needed_points : '')); ?>" autocomplete="off">
+            <?php if($errors->has('tariff_needed_points')): ?><span class="help-block"><strong><?php echo e($errors->first('tariff_needed_points')); ?></strong></span><?php endif; ?>
+        </div>
+    </div>
+
+
+
+
+
     <div class="form-group<?php echo e($errors->has('tariff_status') ? ' has-error' : ''); ?>">
         <label for="tariff_status" class="col-md-2 pull-right control-label">وضعیت:</label>
         <div class="col-md-6 pull-right">

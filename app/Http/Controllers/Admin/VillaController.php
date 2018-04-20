@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 
+use App\Models\RenterUser;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use \App\Models\Villa;
@@ -263,7 +264,7 @@ class VillaController extends Controller
                 'bathroom_count'=>'nullable|integer',
                 'max_capacity'=>'nullable|integer',
                 'wc_count'=>'nullable|integer',
-                'propDesc.*'=>'nullable|max:255',
+                'propDesc.*'=>'nullable|max:1000',
                 'props.*'=>'nullable|integer',
                 'propCheck.*'=>'nullable|integer',
                 'propText.*'=>'nullable|max:140',
@@ -470,6 +471,37 @@ class VillaController extends Controller
 
 
                 $villa->Properties()->sync($props);
+
+
+
+
+
+
+
+
+                //points
+                if($newRequest->villa_status==1){
+                    if($villa->GrantedPoints()->count()==0){
+                        $villa->GrantedPoints()->sync([
+                            $villa->renter_user_id=>[
+                                'number_of_points'=>50 //--Config
+                            ]
+                        ]);
+
+                        $renter_user=RenterUser::find($villa->renter_user_id);
+                        $renter_user->points+=50; //--Config
+                        $renter_user->save();
+
+                    }
+                }
+                //points
+
+
+
+
+
+
+
 
 
                 if($request->edit_id!=Null){

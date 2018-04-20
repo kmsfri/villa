@@ -6,7 +6,6 @@
         <th scope="col">نرخ اجاره بها</th>
         <th scope="col">بروزرسانی</th>
         <th scope="col">ویــژه</th>
-        <th scope="col">بروزرسانی</th>
         <th scope="col">درخواست</th>
         <th scope="col">آمار</th>
         <th scope="col">وضعیت</th>
@@ -36,9 +35,7 @@
         <td>
             <input class="form-control" type="text">
         </td>
-        <td>
-            <input class="form-control" type="text">
-        </td>
+
         <td>
             <input class="form-control" type="text">
         </td>
@@ -55,9 +52,8 @@
         <td>
             <input class="form-control rate" type="text" placeholder="<?php echo e($villa->rent_daily_price_from); ?> تومان">
         </td>
-        <td><a class="update" href="" title="بروزرسانی">بروزرسانی</a></td>
-        <td><a class="special" href="">ویژه کن</a></td>
-        <td><p class="text-update">بروز نشده</p></td>
+        <td><a class="update" href="<?php echo e(($villa->updated==1)?'javascript:void':Route('updateVilla',$villa->id)); ?>"><?php echo e(($villa->updated==1)?'بروز شده':'بروزرسانی'); ?></a></td>
+        <td><a <?php if($villa->is_special==0): ?> data-toggle="modal" data-target="#specializeModal" onclick="$('#villa_id_to_specialize').val('<?php echo e($villa->id); ?>')" <?php endif; ?> class="special <?php echo e(($villa->is_special==1)?'active':''); ?>" href="javascript:void"><?php echo e(($villa->is_special==1)?'ویژه':'ویژه کن'); ?></a></td>
         <td><span class="request">39</span></td>
         <td><img class="img" src="<?php echo e(asset('images/icon097.png')); ?>"></td>
         <td>
@@ -67,6 +63,64 @@
     </tr>
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </tbody>
+
+    <div class="modal fade" id="specializeModal" tabindex="-1" role="dialog" aria-labelledby="specializeModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">ویژه کردن آگهی</h5>
+                        <span aria-hidden="true" id="close_first_modal" style="cursor:pointer;">×</span>
+                    </div>
+
+                    <div class="modal-body">
+                        <form id="chooseSpecializeTariffFrm" method="POST" action="<?php echo e(Route('specializeVilla')); ?>">
+                            <?php echo e(csrf_field()); ?>
+
+                            <input type="hidden" name="villa_id_to_specialize" id="villa_id_to_specialize" value="" autocomplete="off" required>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        یکی از تعرفه های زیر را انتخاب کنید.
+                                    </div>
+                                </div>
+                            <div class="row">
+                                <?php $__currentLoopData = $tariffs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tariff): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <div class="col-md-4">
+                                        <p>
+                                        <h5><input type="radio" class="radio" name="tariffID" value="<?php echo e($tariff->id); ?>" required><?php echo e($tariff->tariff_title); ?></h5>
+                                        <span>مدت زمان: <?php echo e($tariff->tariff_duration); ?> روز</span></br>
+                                        <span>هزینه: <?php echo e($tariff->tariff_price); ?>تومان</span></br>
+                                        <span>امتیاز مورد نیاز: <?php echo e($tariff->tariff_needed_points); ?></span></br>
+                                        </p>
+                                    </div>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h5>نحوه پرداخت</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input required type="radio" class="radio" name="payType" value="0">درگاه پرداخت</br>
+                                        <input required type="radio" class="radio" name="payType" value="1">پرداخت از امتیازات</br>
+                                    </div>
+                                </div>
+                            <div class="modal-footer">
+                                <button form="chooseSpecializeTariffFrm" class="btn btn-primary" type="submit">انجام</button>
+                            </div>
+
+
+
+
+                        </form>
+
+                    </div>
+
+            </div>
+        </div>
+    </div>
+
 
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('pagination'); ?>

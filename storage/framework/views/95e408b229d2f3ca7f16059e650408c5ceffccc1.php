@@ -19,10 +19,9 @@
                 </ul>
             </div>
         </div>
-        <div class="box-price d-none d-md-inline-block">
-            <form class="search" method="post" action="<?php echo e(route('reserve_request',$villa->id)); ?>">
-                <?php echo e(csrf_field()); ?>
-
+        <div class="box-price d-none d-md-inline-block reserveform" style="width: 100%;">
+            <form class="search reserve_form" method="post" action="<?php echo e(route('reserve_request',$villa->id)); ?>">
+                <input type="hidden" value="<?php echo e(csrf_token()); ?>" class="reserve_token">
                 <div class="form-group width">
                     <ul class="ul-date">
                         <li>
@@ -33,13 +32,13 @@
                         </li>
                     </ul>
                     <div class="width">
-                        <input class="form-control datepicker" name="date_in" type="text" value="<?php echo e(old('date_in')); ?>" placeholder="تاریخ ورود" required>
-                        <input class="form-control datepicker" name="date_out" type="text" value="<?php echo e(old('date_out')); ?>" placeholder="تاریخ خروج" required>
+                        <input class="form-control datepicker date_in" name="date_in" type="text" value="<?php echo e(old('date_in')); ?>" placeholder="تاریخ ورود" required>
+                        <input class="form-control datepicker date_out" name="date_out" type="text" value="<?php echo e(old('date_out')); ?>" placeholder="تاریخ خروج" required>
                     </div>
                 </div>
                 <div class="form-group guest arrow">
                     <label>تعداد میهمانان</label>
-                    <select class="custom-select" required="" name="pc">
+                    <select class="custom-select pc" required="" name="pc">
                         <option value="">انتخاب تعداد نفرات</option>
                         <?php for($i=1;$i <= $villa->max_capacity;$i++): ?>
                             <option value="<?php echo e($i); ?>"><?php echo e($i); ?></option>
@@ -48,13 +47,13 @@
                 </div><span>   کودکان بیش از 2 سال ((یک نفر )) محسوب می شوند</span>
                 <div class="form-group name">
                     <label>نام و نام خانوادگی</label>
-                    <input class="form-control" type="text" name="fullname" value="<?php echo e(old('fullname')); ?>" placeholder="نام و نام خانوادگی" required>
+                    <input class="form-control fullname" type="text" name="fullname" value="<?php echo e(old('fullname')); ?>" placeholder="نام و نام خانوادگی" required>
                 </div>
                 <div class="form-group contact">
                     <label>شماره تماس</label>
-                    <input class="form-control" type="tel" name="phone" value="<?php echo e(old('phone')); ?>" placeholder="شماره تماس- مثال(0912000000)" required>
+                    <input class="form-control phone" type="tel" name="phone" value="<?php echo e(old('phone')); ?>" placeholder="شماره تماس- مثال(0912000000)" required>
                 </div>
-                <button class="btn btn-form" type="submit" placeholder="ارسال درخواست رزرو ویلا">ارسال درخواست رزرو ویلا</button>
+                <button class="btn btn-form" type="button" onclick="send_reserve()" placeholder="ارسال درخواست رزرو ویلا">ارسال درخواست رزرو ویلا</button>
             </form>
         </div>
         <div class="box-aside text-center">
@@ -64,11 +63,45 @@
                 <li><a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo e(url()->current()); ?>" title=""><img src="<?php echo e(asset('users/img/icon/icon034.png')); ?>" alt=""><img class="img" src="<?php echo e(asset('users/img/icon/icon034.png')); ?>" alt=""></a></li>
                 <li><a href="tg://msg_url?url=<?php echo e(url()->current()); ?>" title=""><img src="<?php echo e(asset('users/img/icon/icon035.png')); ?>" alt=""><img class="img" src="<?php echo e(asset('users/img/icon/icon035.png')); ?>" alt=""></a></li>
                 <li><a href="" title=""><img src="<?php echo e(asset('users/img/icon/icon036.png')); ?>" alt=""><img class="img" src="<?php echo e(asset('users/img/icon/icon036.png')); ?>" alt=""></a></li>
-            </ul><a class="link-violation" href="" title="گزارش تخلف این مطلب"><img src="<?php echo e(asset('users/img/icon/icon037.png')); ?>" alt="">گزارش تخلف این مطلب</a>
+            </ul><a class="link-violation" href="" data-toggle="modal" data-target="#reportmodal" title="گزارش تخلف این مطلب"><img src="<?php echo e(asset('users/img/icon/icon037.png')); ?>" alt="">گزارش تخلف این مطلب</a>
         </div>
         <ul class="ul-aside">
             <li><a href="" title=""><img src="<?php echo e(asset('users/img/icon/icon038.png')); ?>" alt=""><span>کانال تلگرام ویلایار</span></a></li>
             <li><a href="" title=""><img src="<?php echo e(asset('users/img/icon/icon039.png')); ?>" alt=""><span>اینستاگرام ویلایار</span></a></li>
         </ul>
     </aside>
+</div>
+<div class="modal fade" id="reportmodal" tabindex="-1" role="dialog" aria-labelledby="reportmodallabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form class="rpform">
+                <input type="hidden" value="<?php echo e(csrf_token()); ?>" class="rptoken">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">گزارش تخلف این مطلب</h5>
+                    <span aria-hidden="true" id="close_first_modal" style="cursor:pointer;">×</span>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <?php if(\Illuminate\Support\Facades\Auth::guard('user')->check()): ?>
+                                <?php echo e(csrf_field()); ?>
+
+                                <textarea name="content_report" rows="5" maxlength="280" style="width: 100%" type="text" class="crp" placeholder="گزارش خود را شرح دهید" required></textarea>
+                            <?php else: ?>
+                                <p>برای ثبت گزارش باید وارد وبسایت شوید.</p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <?php if(\Illuminate\Support\Facades\Auth::guard('user')->check()): ?>
+                        <button class="btn btn-primary" onclick="send_report()" type="button">ارسال</button>
+                    <?php endif; ?>
+
+                </div>
+            </form>
+        </div>
+    </div>
 </div>

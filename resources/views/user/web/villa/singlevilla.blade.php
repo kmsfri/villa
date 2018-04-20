@@ -4,7 +4,6 @@
 @endsection
 @section('main')
 
-
     @include('user.web.common.stickyheadsearch')
     <!--start section details-->
     <ul class="floating">
@@ -91,172 +90,93 @@
                             </div>
                         </div>
                     </div>
-                    @php
-                        $ul_class_list=[
-                        0=>'ul-new width',
-                        2=>'new-ul',
-                        3=>'ul-img',
-                        4=>'',
-                        ];
-                    @endphp
-                    @foreach($properties as $property)
-                        @if($property->parent_id == null)
-                    <div class="box-new">
-                        <h3 class="title"> {{$property->prop_title}} </h3>
-                        <div class="row">
-                            <div class="col-md-11 mr-auto">
-                                @if($property->show_type == 0)
-                                        @php $desc=array(); $ps = $property->PropEnabledValues()->get(); @endphp
-                                        <ul class='{{$ul_class_list[$property->show_type]}}'>
 
-                                            @foreach($villaprop as $prop)
+                    @foreach($properties as $pr)
+                        <div class="box-new">
+                            <h3 class="title">{{$pr->prop_title}}</h3>
+                                @php $counter1=1; $colorClassFlag=true; $firstID=$pr->PropEnabledValues()->first()->id @endphp
+                                @foreach($pr->PropEnabledValues()->get() as $propValue1)
+                                    @if($propValue1->has_text_value==1 && ($propValue1->img_dir==Null || $propValue1->img_dir==''))
 
-                                            @foreach($ps as $p)
-                                                    @if($prop->parent_id == $p->id && $prop->has_text_value != 1)
-
-                                                            <li><span>{{$p->prop_title}} :</span><span class="bold">{{$prop->prop_title}}</span>
-                                                                {{--<button class="btn" type="button" data-toggle="popover" data-content="متن راهنما">؟</button>--}}
-                                                            </li>
-                                                            @php
-                                                                if($prop->pivot->description_text != null)
-                                                                array_push($desc,$prop->pivot->description_text)
-                                                            @endphp
-
-                                                        @elseif($prop->id == $p->id && $prop->has_text_value != 0)
-                                                            <li><span>{{$p->prop_title}} :</span><span class="bold">{{$prop->pivot->text_value}}</span>
-                                                                {{--<button class="btn" type="button" data-toggle="popover" data-content="متن راهنما">؟</button>--}}
-                                                            </li>
-                                                            @php
-                                                                if($prop->pivot->description_text != null)
-                                                                array_push($desc,$prop->pivot->description_text)
-                                                            @endphp
-                                                        @endif
-                                            @endforeach
-
-                                            @endforeach
-                                        </ul>
-                                    @if(count($desc))
+                                        @if(($VT=$villa->Properties()->withPivot(['text_value'])->where('property_id',$propValue1->id)->first())!=Null)
                                         <div class="data-rules">
                                             <div class="row">
                                                 <div class="col-md-11 mr-auto">
-                                                    <p class="bold">توضیحات</p>
-                                                    @foreach($desc as $ds)
-                                                    <p>{{$ds}}</p>
-                                                    @endforeach
+                                                    <p class="bold">{{$propValue1->prop_title}}</p>
+                                                    <p>{{$VT->pivot->text_value}}</p>
                                                 </div>
                                             </div>
                                         </div>
+                                        @endif
+
+                                    @elseif($propValue1->has_text_value==1)
+
+                                    @if($firstID==$propValue1->id)
+                                        <div class="row">
+                                            <div class="col-md-11 mr-auto">
+                                                <div class="box-see2">
+                                                    <ul class="ul-img">
                                     @endif
 
-
-                                @elseif($property->show_type == 2)
-                                    @php $desc=array(); $ps = $property->PropEnabledValues()->get(); @endphp
-
-                                        <ul class='{{$ul_class_list[$property->show_type]}}'>
-                                            @foreach($villaprop as $prop)
-
-                                                @foreach($ps as $p)
-
-                                                    @if($prop->parent_id == $p->id)
-
-                                                        <li><img src="{{asset($p->img_dir)}}" alt="">
-                                                            <span class="bold">{{$p->prop_title}} :</span>
-                                                            <span>{{$prop->prop_title}}</span>
+                                    @if($villa->Properties()->where('property_id',$propValue1->id)->count()>0)
+                                                        <li>
+                                                            <img src="{{asset($propValue1->img_dir)}}" alt="{{$propValue1->prop_title}}">
+                                                            <span>{{$propValue1->prop_title}}</span>
+                                                            @if(($VP=$villa->Properties()->withPivot(['text_value'])->where('property_id',$propValue1->id)->first()->pivot->text_value)!=Null)
+                                                                <button class="btn" type="button" data-toggle="popover" data-content="{{$VP}}">؟</button>
+                                                            @endif
                                                         </li>
-                                                        @php
-                                                            if($prop->pivot->description_text != null)
-                                                            array_push($desc,$prop->pivot->description_text)
-                                                        @endphp
-                                                    @endif
-                                                @endforeach
-                                            @endforeach
 
-                                        </ul>
-                                    @if(count($desc))
-                                        <div class="data-rules">
-                                            <div class="row">
-                                                <div class="col-md-11 mr-auto">
-                                                    <p class="bold">توضیحات</p>
-                                                    @foreach($desc as $ds)
-                                                        <p>{{$ds}}</p>
-                                                    @endforeach
+                                    @endif
+
+                                    @if($loop->last)
+                                                    </ul>
                                                 </div>
                                             </div>
                                         </div>
                                     @endif
-                                @elseif($property->show_type == 3)
-                                    @php $desc=array(); $ps = $property->PropEnabledValues()->get(); @endphp
-                                    <div class="box-see2">
-                                    <ul class='{{$ul_class_list[$property->show_type]}}'>
-                                        @foreach($villaprop as $prop)
 
-                                            @foreach($ps as $p)
+                                    @else
+                                        @if(isset($villa))
 
-                                                @if($prop->id == $p->id)
-                                                    <li><img src="{{asset($prop->img_dir)}}" alt=""><span>{{$prop->prop_title}}</span></li>
-                                                    @php
-                                                        if($prop->pivot->description_text != null)
-                                                        array_push($desc,$prop->pivot->description_text)
-                                                    @endphp
-                                                @endif
-                                            @endforeach
-                                        @endforeach
-                                    </ul>
-                                    </div><a class="link-see2" href="" title="">+ مشاهده بیشتر . . .</a>
-                                    @if(count($desc))
-                                        <div class="data-rules">
+                                            @if($firstID==$propValue1->id)
                                             <div class="row">
                                                 <div class="col-md-11 mr-auto">
-                                                    <p class="bold">توضیحات</p>
-                                                    @foreach($desc as $ds)
-                                                        <p>{{$ds}}</p>
+                                                    <ul class="{{($propValue1->img_dir!=Null)?'new-ul':'ul-new width'}}">
+                                            @endif
+                                                    @foreach($villa->AllSpecProperty($propValue1->id) as $oneSP)
+                                                    <li>
+                                                        @if($propValue1->img_dir!=Null)
+                                                        <img src="{{asset($propValue1->img_dir)}}" alt="">
+                                                        @endif
+                                                        <span>{{$propValue1->prop_title}}:</span><span class="bold">{{$oneSP->prop_title}}</span>
+                                                        @if($propValue1->guide_text!=Null && $propValue1->guide_text!='')
+                                                        <button class="btn" type="button" data-toggle="popover" data-content="{{$propValue1->guide_text}}">؟</button>
+                                                        @endif
+                                                    </li>
                                                     @endforeach
+                                            @if($loop->last)
+                                                    </ul>
                                                 </div>
                                             </div>
-                                        </div>
+                                            @endif
+
+                                        @endif
+
                                     @endif
-                                @elseif($property->show_type == 4)
-                                    @php $desc=array(); $ps = $property->PropEnabledValues()->get(); @endphp
-
-
-                                        @foreach($villaprop as $prop)
-
-                                            @foreach($ps as $p)
-                                                @if($prop->id == $p->id && $prop->has_text_value != 0)
-                                                    <p class="bold">{{$p->prop_title}} :</p>
-                                                    <p>{{$prop->pivot->text_value}}</p>
-                                                <hr>
-                                                    @php
-                                                        if($prop->pivot->description_text != null)
-                                                        array_push($desc,$prop->pivot->description_text)
-                                                    @endphp
-                                                @endif
-                                            @endforeach
-
-                                        @endforeach
-
-                                    @if(count($desc))
-                                        <div class="data-rules">
-                                            <div class="row">
-                                                <div class="col-md-11 mr-auto">
-                                                    <p class="bold">توضیحات</p>
-                                                    @foreach($desc as $ds)
-                                                        <p>{{$ds}}</p>
-                                                    @endforeach
-                                                </div>
-                                            </div>
+                                @endforeach
+                                @if(($VP=$villa->Properties()->withPivot(['text_value'])->where('property_id',$pr->id))->count()>0)
+                                <div class="data-rules">
+                                    <div class="row">
+                                        <div class="col-md-11 mr-auto">
+                                            <p class="bold">توضیحات {{$pr->prop_title}}</p>
+                                            <p>{!! nl2br($VP->first()->pivot->text_value)!!}</p>
                                         </div>
-                                    @endif
+                                    </div>
+                                </div>
                                 @endif
-                            </div>
                         </div>
-
-                    </div>
-                            @endif
                     @endforeach
-
-
-
 
                     <div class="box-new">
                         <div class="header">
@@ -375,12 +295,6 @@
     <!--start section tourism-->
     @include('user.web.common.contents-slider')
     <!--end section tourism-->
-
-
-
-
-
-
 
 @endsection
 

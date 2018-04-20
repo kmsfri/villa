@@ -37,13 +37,14 @@
             <div class="row">
                 <div class="col-lg-4">
                     <h4 class="title">عضویت در خبرنامه</h4>
-                    <form class="newsletters">
+                    <form class="newsletters nlform">
+                        <input type="hidden" value="<?php echo e(csrf_token()); ?>" class="mailtoken">
                         <div class="form-row align-items-center">
                             <div class="col-sm-7 col-md-8">
-                                <input class="form-control" type="text" placeholder="آدرس ایمیل خود را وارد نمایید">
+                                <input class="form-control nl" type="email" name="email" placeholder="آدرس ایمیل خود را وارد نمایید">
                             </div>
                             <div class="col-sm-5 col-md-4 no-p">
-                                <button class="btn" type="submit">ثبت نام در خبرنامه</button>
+                                <button class="btn" type="button" onclick="register_mail();">ثبت نام در خبرنامه</button>
                             </div>
                         </div>
                     </form>
@@ -60,71 +61,25 @@
                         </div>
                         <div class="col-md-12">
                             <ul class="footer-social">
-                                <li><a href="" title=""><img src="<?php echo e(asset('users/img/icon/icon026.png')); ?>" alt=""><img class="img" src="<?php echo e(asset('users/img/icon/icon026.png')); ?>" alt=""></a></li>
-                                <li><a href="" title=""><img src="<?php echo e(asset('users/img/icon/icon027.png')); ?>" alt=""><img class="img" src="<?php echo e(asset('users/img/icon/icon027.png')); ?>" alt=""></a></li>
-                                <li><a href="" title=""><img src="<?php echo e(asset('users/img/icon/icon028.png')); ?>" alt=""><img class="img" src="<?php echo e(asset('users/img/icon/icon028.png')); ?>" alt=""></a></li>
-                                <li><a href="" title=""><img src="<?php echo e(asset('users/img/icon/icon029.png')); ?>" alt=""><img class="img" src="<?php echo e(asset('users/img/icon/icon029.png')); ?>" alt=""></a></li>
-                                <li><a href="" title=""><img src="<?php echo e(asset('users/img/icon/icon030.png')); ?>" alt=""><img class="img" src="<?php echo e(asset('users/img/icon/icon030.png')); ?>" alt=""></a></li>
-                                <li><a href="" title=""><img src="<?php echo e(asset('users/img/icon/icon031.png')); ?>" alt=""><img class="img" src="<?php echo e(asset('users/img/icon/icon031.png')); ?>" alt=""></a></li>
-                                <li><a href="" title=""><img src="<?php echo e(asset('users/img/icon/icon032.png')); ?>" alt=""><img class="img" src="<?php echo e(asset('users/img/icon/icon032.png')); ?>" alt=""></a></li>
+                                <?php $__currentLoopData = $socialMedia; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sM): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <li><a href="<?php echo e($sM->s_link); ?>" title=""><img src="<?php echo e(asset($sM->img_dir)); ?>" alt="<?php echo e($sM->s_title); ?>"><img class="img" src="<?php echo e(asset($sM->img_dir)); ?>" alt="<?php echo e($sM->s_title); ?>"></a></li>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </ul>
                         </div>
                     </div>
                 </div>
+
+                <?php $__currentLoopData = $footerLinks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fT): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="col-6 col-lg-2">
-                    <h4 class="title">لینک های مفید</h4>
+                    <h4 class="title"><?php echo e($fT->link_title); ?></h4>
                     <ul class="list-footer">
-                        <li><a href="" title="صفحه اصلی">صفحه اصلی</a></li>
-                        <li><a href="" title="اجاره ویلا">اجاره ویلا</a></li>
-                        <li><a href="" title="اجاره سوئیت ">اجاره سوئیت</a></li>
-                        <li><a href="" title="جاذبه های گردشگرری">جاذبه های گردشگرری</a></li>
-                        <li><a href="" title="درباره ما">درباره ما</a></li>
-                        <li><a href="" title="تماس با ما">تماس با ما</a></li>
-                        <li><a href="" title="راهنمای سایت">راهنمای سایت</a></li>
-                        <li><a href="" title="راهنمای سایت">راهنمای سایت</a></li>
+                        <?php $__currentLoopData = $fT->SubLinkEnabledOrdered()->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fTSL): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <li><a href="<?php echo e($fTSL->link_url); ?>" title="<?php echo e($fTSL->link_title); ?>"><?php echo e($fTSL->link_title); ?></a></li>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </ul>
                 </div>
-                <div class="col-6 col-lg-2">
-                    <h4 class="title">میهمانان</h4>
-                    <ul class="list-footer">
-                        <li><a href="" title="راهنمای سایت">راهنمای سایت</a></li>
-                        <li><a href="" title="چگونه رزور کنم ؟">چگونه رزور کنم ؟</a></li>
-                        <li><a href="" title="مقررات لغو رزرو">مقررات لغو رزرو</a></li>
-                        <li><a href="" title="ضمانت برگشت وجه">ضمانت برگشت وجه</a></li>
-                    </ul>
-                    <h4 class="title">میزبانان</h4>
-                    <ul class="list-footer">
-                        <li><a href="" title="چگونه میزبان شوم ؟">چگونه میزبان شوم ؟</a></li>
-                        <li><a href="" title="مقررات و قوانین "> مقررات و قوانین</a></li>
-                        <li><a href="" title="استاندارد های میزبانی">استاندارد های میزبانی</a></li>
-                    </ul>
-                </div>
-                <div class="col-6 col-lg-2">
-                    <h4 class="title">شهر های پرطرفدار</h4>
-                    <ul class="list-footer">
-                        <li><a href="" title="مازندران - ساری">مازندران - ساری</a></li>
-                        <li><a href="" title="مازندران - بایلسر">مازندران - بایلسر</a></li>
-                        <li><a href="" title="مازندران - خزر شهر">مازندران - خزر شهر</a></li>
-                        <li><a href="" title="گیلان - رشت">گیلان - رشت</a></li>
-                        <li><a href="" title="گلستان - گرگان">گلستان - گرگان</a></li>
-                        <li><a href="" title="فارس - شیراز">فارس - شیراز</a></li>
-                        <li><a href="" title="تبریز - سراب">تبریز - سراب</a></li>
-                        <li><a href="" title="مازندران - فریدون کنار">مازندران - فریدون کنار</a></li>
-                    </ul>
-                </div>
-                <div class="col-6 col-lg-2">
-                    <h4 class="title">جاذبه های گردشگری برتر</h4>
-                    <ul class="list-footer">
-                        <li><a href="" title="عمارت چهل ستون">عمارت چهل ستون</a></li>
-                        <li><a href="" title="مسجد شیخ لطف الله">مسجد شیخ لطف الله</a></li>
-                        <li><a href="" title="برج آجری قابوس">برج آجری قابوس</a></li>
-                        <li><a href="" title="عمارت چهل ستون">عمارت چهل ستون</a></li>
-                        <li><a href="" title="مسجد شیخ لطف الله">مسجد شیخ لطف الله</a></li>
-                        <li><a href="" title="برج آجری قابوس">برج آجری قابوس</a></li>
-                        <li><a href="" title="عمارت چهل ستون">عمارت چهل ستون</a></li>
-                        <li><a href="" title="مسجد شیخ لطف الله">مسجد شیخ لطف الله</a></li>
-                    </ul>
-                </div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
             </div>
         </div>
     </div>
@@ -142,6 +97,25 @@
 <script src="<?php echo e(asset('users/plugin/sticky/theia-sticky-sidebar.js')); ?>"></script>
 <script src="<?php echo e(asset('users/plugin/smint/jquery.smint.js')); ?>"></script>
 <?php echo $__env->yieldContent('jsmap'); ?>
+<script type="text/javascript">
+    function register_mail() {
+        $.post("<?php echo e(route('newsletter_register')); ?>", { _token: $('.mailtoken').val(), email: $('.nl').val() } , function(data){
+            if(data == "ok"){
+                $( ".nlform" ).replaceWith( "<p style='color:red'>با موفقیت ثبت شد</p>" );
+            }
+            else if(data == "exist"){
+                alert('این ایمیل قبلا ثبت شده است');
+            }
+            else{
+                alert( "فرمت ایمیل صحیح نمی باشد" );
+            }
+        })
+            .fail(function() {
+                alert( "دوباره تلاش کنید" );
+            })
+
+    }
+</script>
 <script type="text/javascript" src="<?php echo e(asset('users/js/customHome.js')); ?>"></script>
 <!--end scripts-->
 </body>

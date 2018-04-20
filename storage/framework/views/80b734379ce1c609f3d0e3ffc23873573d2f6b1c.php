@@ -12,7 +12,7 @@
                                 <h3 class="title"><a href="" title="<?php echo e($villa->villa_title); ?>"><?php echo e($villa->villa_title); ?></a></h3><span class="price"><?php echo e(number_format($villa->rent_daily_price_from)); ?> تومان</span>
                                 <?php $city = $villa->Cities()->first(); ?>
                                 <p class="place customheight"><?php echo e(\App\Models\City::find($city->parent_id)->city_name); ?> - <?php echo e($city->city_name); ?></p>
-                                <div class="my-rating-8"></div><span class="number"><span><?php echo e($villa->Comments()->where('comment_status','=',1)->count()); ?></span></span>
+                                <div class="my-rating-8 villalistrate <?php echo e($villa->id); ?>"></div><span class="number"><span><?php echo e($villa->Comments()->where('comment_status','=',1)->count()); ?></span></span>
                             </div>
                             <ul>
                                 <li><img src="<?php echo e(asset('users/img/icon/icon088.png')); ?>" alt=""><span><?php echo e($villa->bed_count); ?> تخت خواب</span></li>

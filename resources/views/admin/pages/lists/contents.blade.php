@@ -115,6 +115,9 @@
             <td class="text-center">
                 <a href="{{url(Route('adminContentCommentList',$content->id))}}" data-toggle="tooltip" title="نظرات">
                     نظرات
+                </a>|
+                <a href="{{url(Route('adminContentReportList',$content->id))}}" data-toggle="tooltip" title="گزارش تخلف">
+                    گزارش تخلف
                 </a>
             </td>
         </tr>

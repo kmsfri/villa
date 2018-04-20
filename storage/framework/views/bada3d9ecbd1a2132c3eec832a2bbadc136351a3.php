@@ -43,7 +43,7 @@
 
                 </p>
             </td>
-            <td class="text-center"><a href="<?php echo e(Route('editReport',$rp->id)); ?>">مشاهده</a></td>
+            <td class="text-center"><a href="<?php echo e(Route((isset($reportType) && $reportType=='content')?'editContentReport':'editReport',$rp->id)); ?>">مشاهده</a></td>
         </tr>
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </tbody>

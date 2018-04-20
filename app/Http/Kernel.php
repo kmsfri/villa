@@ -69,6 +69,10 @@ class Kernel extends HttpKernel
         'saveVillaVisitor' => \App\Http\Middleware\saveVillaVisitor::class,
         'saveContentVisitor' => \App\Http\Middleware\saveContentVisitor::class,
 
+        'webInitCommonData' => \App\Http\Middleware\WebInitCommonData::class,
+
+
+
 
 
     ];

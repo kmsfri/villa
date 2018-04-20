@@ -32,6 +32,20 @@
         </div>
     </div>
 
+
+
+    <div class="form-group{{ $errors->has('tariff_needed_points') ? ' has-error' : '' }}">
+        <label for="tariff_needed_points" class="col-md-2 pull-right control-label">امتیاز مورد نیاز:</label>
+        <div class="col-md-6 pull-right">
+            <input type="text" class="form-control" name="tariff_needed_points" value="{{ old('tariff_needed_points',isset($tariff->tariff_needed_points) ? $tariff->tariff_needed_points : '') }}" autocomplete="off">
+            @if ($errors->has('tariff_needed_points'))<span class="help-block"><strong>{{ $errors->first('tariff_needed_points') }}</strong></span>@endif
+        </div>
+    </div>
+
+
+
+
+
     <div class="form-group{{ $errors->has('tariff_status') ? ' has-error' : '' }}">
         <label for="tariff_status" class="col-md-2 pull-right control-label">وضعیت:</label>
         <div class="col-md-6 pull-right">
