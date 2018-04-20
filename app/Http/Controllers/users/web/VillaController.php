@@ -20,7 +20,8 @@ class VillaController extends Controller
     public function showSingleVilla(Request $request){
 
         $villa=$request->villa;
-
+        $cities=array();
+        $districts=array();
         //begin set seo tags
         $meta=(object)[
             'title'=>$villa->villa_title,
@@ -54,6 +55,8 @@ class VillaController extends Controller
         $related_contents = Content::related_contents($province_id->pluck('id')->toArray());
         $user = $villa->RenterUser()->first();
         return view('user.web.villa.singlevilla',[
+            'cities'=>$cities,
+            'districts'=>$districts,
             'states'=>$states,
             'villa'=>$villa,
             'meta'=>$meta,
@@ -126,6 +129,33 @@ class VillaController extends Controller
 
 
     }
+    public function villas_based_category1($slug){
+
+        $states = \App\Models\City::where('parent_id',null)->where('city_status',1)->orderBy('city_order','ASC')->get();
+        $cities=array();
+        $districts=array();
+        $villaTypes=\App\Models\VillaType::orderBy('villa_type_order','ASC')->get();
+
+
+        $category1 = Category1::where('category_slug',$slug)
+            ->where('category_status',1)
+            ->first();
+        if($category1==Null) abort(404);
+        $villas = $category1->Villas()->where('villa_status',1)->orderBy('created_at','DESC')->paginate(12);
+        $categories1 = Category1::where('category_status',1)->orderBy('category_order','ASC')->get();
+        $contents = Content::where('content_status',1)->where('is_draft',0)->orderBy('content_order','ASC')->orderBy('created_at','DESC')->take(6)->get();
+        return view('user.web.villa.villaBaseCategory1',[
+            'states'=>$states,
+            'cities'=>$cities,
+            'districts'=>$districts,
+            'villaTypes'=>$villaTypes,
+            'villas'=> $villas,
+            'categories1'=>$categories1,
+            'contents'=>$contents
+        ]);
+
+
+    }
     public function userpage($slug){
         $user = RenterUser::where('profile_slug',$slug)->first();
         $states = City::where('parent_id',null)->where('city_status',1)->orderBy('city_order','ASC')->get();
@@ -191,6 +221,7 @@ class VillaController extends Controller
         $reserve->phone = $request->phone;
         $reserve->villa_id = $id;
         $reserve->save();
+        \Helpers::send_reserve_villa_sms(Villa::find($id)->RenterUser()->first()->mobile_number);
         echo "ok";
     }
 
