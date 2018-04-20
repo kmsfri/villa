@@ -11,7 +11,7 @@ class Category1 extends Model
 
     public function Villas()
     {
-        return $this->belongsToMany('App\Models\Villa','villa_category1');
+        return $this->belongsToMany('App\Models\Villa','villa_category1','category_id','villa_id');
     }
 
     public function SubCategory1()

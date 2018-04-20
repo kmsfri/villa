@@ -254,6 +254,7 @@ class Helpers{
             10=>"دی",
             11=>"بهمن",
             12=>"اسفند",
+
         ];
 
         return $month[$month_order];
@@ -281,21 +282,47 @@ class Helpers{
     }
 
     public static function sendsms($number,$code){
-        $from = "";
-        if (substr($number, 0, 2) == "92"){
-            $from = "+98100009";
-        }
-        else{
-            $from = "+98500020403557";
-        }
+        $from = "+98100009";
+//        if (substr($number, 0, 2) == "92"){
+//            $from = "+98100009";
+//        }
+//        else{
+//            $from = "+98500020403557";
+//        }
         $url = "37.130.202.188/services.jspd";
 
         $param = array
         (
-            'uname'=>'mazandaranweb',
+            'uname'=>'elyasghorbani',
             'pass'=>'5p64g49',
             'from'=>$from,
             'message'=>'رمز عبور جدید شما:'.$code,
+            'to'=>$number,
+            'op'=>'send'
+        );
+
+        $handler = curl_init($url);
+        curl_setopt($handler, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($handler, CURLOPT_POSTFIELDS, $param);
+        curl_setopt($handler, CURLOPT_RETURNTRANSFER, true);
+        $response2 = curl_exec($handler);
+
+        $response2 = json_decode($response2);
+        $res_code = $response2[0];
+        //$res_data = $response2[1];
+
+
+        return $res_code;
+    }
+    public static function send_reserve_villa_sms($number){
+        $from = "+98100009";
+        $url = "37.130.202.188/services.jspd";
+        $param = array
+        (
+            'uname'=>'elyasghorbani',
+            'pass'=>'5p64g49',
+            'from'=>$from,
+            'message'=>'کاربر گرامی، درخواست رزرو ویلا جدید برای شما ارسال شده است. وبسایت ویلایار',
             'to'=>$number,
             'op'=>'send'
         );

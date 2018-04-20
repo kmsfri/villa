@@ -47,7 +47,7 @@ Route::post('VillaRate','users\web\WebsiteGeneralController@rate_villa_list')->n
 //Content Rating
 Route::post('Content/Rate/{id}','users\web\WebsiteGeneralController@rate_content')->name('rate_content');
 
-
+Route::get('نوع-ویلا/{slug}','users\web\VillaController@villas_based_category1')->name('villas_based_category1');
 
 //blog
 Route::get('گردشگری/استان/{province_slug}','users\web\BlogController@websiteArticles')->name('provinceArticles');
@@ -67,9 +67,10 @@ Route::post('User/Register', 'users\auth\AuthController@Register')->name('regist
 Route::get('User/Password', 'users\auth\AuthController@showUserNewPasswordForm')->name('showpassword');
 Route::post('User/Password', 'users\auth\AuthController@NewPassword')->name('password');
 Route::get('User/Logout', 'users\auth\AuthController@logout')->name('logout');
-
+Route::get('VillaVisits/{id}','users\GeneralController@villavisits')->name('villavisits');
 //User Dashboard
 Route::group(['prefix' => 'User',  'middleware' => ['auth:user', 'getSectionPathParts']], function(){
+
     Route::get('Dashboard','users\GeneralController@showDashboard')->name('showdashboard');
     Route::get('Edit','users\UserController@showUser')->name('showuser');
     Route::post('Edit','users\UserController@useraction')->name('useraction');
