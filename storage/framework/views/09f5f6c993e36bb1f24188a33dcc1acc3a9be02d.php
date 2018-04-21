@@ -20,17 +20,18 @@
       <aside class="sidebar">
         <div class="headera">
 		<a class="logo" href="" alt=""><img src="<?php echo e(asset('users/img/logo.png')); ?>" alt=""></a><a class="link-mobile d-md-none d-inline-block" href="" alt=""><img src="<?php echo e(asset('users/img/icon/icon0108.png')); ?>" alt=""></a></div>
-        <div class="box-user"><img src="<?php echo e(asset('images/users/user-uploads/user-pics/'.$user->avatar_dir)); ?>" alt="">
+        <div class="box-user"><img src="<?php echo e(asset($user->avatar_dir)); ?>" alt="">
           <p><?php echo e($user->fullname); ?></p><span class="points">امتیاز شما : <?php echo e($user->points); ?></span>
         </div>
         <ul class="ul-sidebar">
-          <li><a href="" title=""><img src="<?php echo e(asset('users/img/icon/icon040.png')); ?>" alt=""><img class="img" src="<?php echo e(asset('users/img/icon/icon040-2.png')); ?>" alt=""><span>پیشخوان</span></a></li>
+          <li><a href="<?php echo e(route('showdashboard')); ?>" title=""><img src="<?php echo e(asset('users/img/icon/icon040.png')); ?>" alt=""><img class="img" src="<?php echo e(asset('users/img/icon/icon040-2.png')); ?>" alt=""><span>پیشخوان</span></a></li>
           <li class="subset"><a href="" title="" data-toggle="collapse" data-target="#ul-list1" aria-expanded="false"><img src="<?php echo e(asset('users/img/icon/icon041.png')); ?>" alt=""><img class="img" src="<?php echo e(asset('users/img/icon/icon041-2.png')); ?>" alt=""><span>ملک های من</span></a>
             <ul class="list-subset collapse" id="ul-list1">
-              <li><a href="" title="ثبت ملک جدید  "> ثبت ملک جدید</a></li>
+              <li><a href="<?php echo e(Route('addVillaForm')); ?>" title="ثبت ملک جدید  "> ثبت ملک جدید</a></li>
               <li><a href="<?php echo e(Route('villaList')); ?>" title="ویلا ها  ">ویلا ها</a></li>
-              <li><a href="" title="سوئیت - آپارتمان ها  ">سوئیت - آپارتمان ها</a></li>
-              <li><a href="" title="اقامتگاه های بوم گردی  ">اقامتگاه های بوم گردی</a></li>
+              <?php $__currentLoopData = $villa_types; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $vt): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <li><a href="<?php echo e(Route('villaList',$vt->id)); ?>" title="<?php echo e($vt->villa_type_title); ?>">اقامتگاه های <?php echo e($vt->villa_type_title); ?></a></li>
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </ul>
           </li>
           <!--

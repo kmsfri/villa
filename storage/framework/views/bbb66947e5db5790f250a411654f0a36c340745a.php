@@ -24,4 +24,6 @@
             </div>
         </div>
     </section>
+<?php else: ?>
+    <p style="text-align: center;margin-top: 200px;margin-bottom: 200px">مطلبی یافت نشد</p>
 <?php endif; ?>

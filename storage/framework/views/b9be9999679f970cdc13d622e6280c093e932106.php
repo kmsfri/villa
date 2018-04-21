@@ -17,7 +17,7 @@
                     <div class="col-6">
                         <div class="form-group arrow">
                             <select class="custom-select" id="state3" name="state" autocomplete="off">
-                                <option <?php echo e((!old('state', isset($search->state) ? $search->state : '')? 'selected' : '')); ?> value="0" >همه استانها</option>
+                                <option <?php echo e((!old('state', isset($search->state) ? $search->state : '')? 'selected' : '')); ?> value="" >همه استانها</option>
                                 <?php $__currentLoopData = $states; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pr): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <option <?php if(old('state', isset($search->state) ? $search->state : '')==$pr->id): ?> selected <?php endif; ?> value="<?php echo e($pr->id); ?>" ><?php echo e($pr->city_name); ?></option>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

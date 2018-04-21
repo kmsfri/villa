@@ -7,7 +7,7 @@
                 <div class="col-sm-6 col-md-2">
                     <div class="form-group arrow">
                         <select class="custom-select" id="state1" name="state" autocomplete="off">
-                            <option {{(!old('state', isset($search->state) ? $search->state : '')? 'selected' : '')}} value="0" >همه استانها</option>
+                            <option {{(!old('state', isset($search->state) ? $search->state : '')? 'selected' : '')}} value="" >همه استانها</option>
                             @foreach($states as $pr)
                                 <option @if(old('state', isset($search->state) ? $search->state : '')==$pr->id) selected @endif value="{{$pr->id}}" >{{$pr->city_name}}</option>
                             @endforeach
@@ -32,7 +32,7 @@
                 <div class="col-sm-6 col-md-3">
                     <div class="form-group rent">
                         <input class="form-control" name="price" type="text" placeholder="" value="100.000 تومان">
-                        <input type="hidden" name="price_to_search" value="100000">
+                        <input type="hidden"  name="price_to_search" value="{{old('price_to_search', isset($search->price_to_search) ? $search->price_to_search : '')}}" autocomplete="off">
                         <button class="button left" type="button" data-enevtsum="sum">+</button>
                         <button class="button" type="button" data-enevtsum="sub">-</button>
 

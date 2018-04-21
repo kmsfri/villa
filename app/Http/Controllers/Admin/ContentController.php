@@ -126,7 +126,7 @@ class ContentController extends Controller
 
 
 
-        if($validator->fails()){
+        if($validator->fails() || ($request->newImg==Null && $request->oldImg==Null)){
 
 
 

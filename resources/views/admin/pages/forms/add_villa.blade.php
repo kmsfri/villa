@@ -38,6 +38,7 @@
                             <label>* عنوان آگهی ویلا</label>
                             <input class="form-control" type="text" value="{{ old('villa_title',isset($villa->villa_title) ? $villa->villa_title : '') }}" name="villa_title" required>
                             @if ($errors->has('villa_title')) <span class="help-block"><strong>{{ $errors->first('villa_title') }}</strong></span> @endif
+                            @if ($errors->has('villa_slug')) <span class="help-block"><strong>{{ $errors->first('villa_slug') }}</strong></span> @endif
                         </div>
                         <div class="form-group arrow">
                             <label>استان</label>
@@ -61,7 +62,7 @@
                         </div>
                         <div class="form-group arrow">
                             <label>منطقه</label>
-                            <select class="form-control" id="district" name="district" required autocomplete="off">
+                            <select class="form-control" id="district" name="district" autocomplete="off">
                                 <option {{(!old('district', isset($villa->district) ? $villa->district : '')? 'selected' : '')}} value="" disabled>منطقه را انتخاب کنید</option>
                                 @foreach($districts as $dst)
                                     <option @if(old('district', isset($villa->district) ? $villa->district : '')==$dst->id) selected @endif value="{{$dst->id}}" >{{$dst->city_name}}</option>
@@ -100,23 +101,23 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>* مساحت زمین</label>
-                            <input name="land_area" placeholder="متر مربع" value="{{ old('land_area',isset($villa->land_area) ? $villa->land_area : '') }}" class="form-control" type="text">
+                            <input required name="land_area" placeholder="متر مربع" value="{{ old('land_area',isset($villa->land_area) ? $villa->land_area : '') }}" class="form-control" type="text">
                             @if ($errors->has('land_area')) <span class="help-block"><strong>{{ $errors->first('land_area') }}</strong></span> @endif
                         </div>
                         <div class="form-group">
                             <label>* مساحت ساختمان</label>
-                            <input name="building_area" placeholder="متر مربع" value="{{ old('building_area',isset($villa->building_area) ? $villa->building_area : '') }}" class="form-control" type="text">
+                            <input required name="building_area" placeholder="متر مربع" value="{{ old('building_area',isset($villa->building_area) ? $villa->building_area : '') }}" class="form-control" type="text">
                             @if ($errors->has('building_area')) <span class="help-block"><strong>{{ $errors->first('building_area') }}</strong></span> @endif
                         </div>
                         <div class="form-group">
                             <label>زیربنا</label>
-                            <input name="foundation_area" placeholder="متر مربع" value="{{ old('foundation_area',isset($villa->foundation_area) ? $villa->foundation_area : '') }}" class="form-control" type="text">
+                            <input required name="foundation_area" placeholder="متر مربع" value="{{ old('foundation_area',isset($villa->foundation_area) ? $villa->foundation_area : '') }}" class="form-control" type="text">
                             @if ($errors->has('foundation_area')) <span class="help-block"><strong>{{ $errors->first('foundation_area') }}</strong></span> @endif
                         </div>
                         <div class="form-group arrow">
                             <label>تعداد طبقه</label>
                             <select class="form-control" name="floor_count" required autocomplete="off">
-                                <option selected="" {{(old('floor_count', isset($villa->floor_count) ? $villa->floor_count : '')=='')?'selected':''}}> انتخاب کنید</option>
+                                <option value="" selected="" {{(old('floor_count', isset($villa->floor_count) ? $villa->floor_count : '')=='')?'selected':''}}> انتخاب کنید</option>
                                 @for($i = 1;$i <= 10; $i++)
                                     <option {{(old('floor_count', isset($villa->floor_count) ? $villa->floor_count : '')==$i)?'selected':''}} value="{{$i}}">{{$i}}</option>
                                 @endfor
@@ -126,7 +127,7 @@
                         <div class="form-group arrow">
                             <label>تعداد اتاق خواب</label>
                             <select class="form-control" name="bedroom_count" required autocomplete="off">
-                                <option selected="" {{(old('bedroom_count', isset($villa->bedroom_count) ? $villa->bedroom_count : '')=='')?'selected':''}}> انتخاب کنید</option>
+                                <option value="" selected="" {{(old('bedroom_count', isset($villa->bedroom_count) ? $villa->bedroom_count : '')=='')?'selected':''}}> انتخاب کنید</option>
                                 @for($i = 1;$i <= 10; $i++)
                                     <option {{(old('bedroom_count', isset($villa->bedroom_count) ? $villa->bedroom_count : '')==$i)?'selected':''}} value="{{$i}}">{{$i}}</option>
                                 @endfor
@@ -136,7 +137,7 @@
                         <div class="form-group arrow">
                             <label>تعداد تخت خواب</label>
                             <select class="form-control" name="bed_count" required autocomplete="off">
-                                <option selected="" {{(old('bed_count', isset($villa->bed_count) ? $villa->bed_count : '')=='')?'selected':''}}> انتخاب کنید</option>
+                                <option value="" selected="" {{(old('bed_count', isset($villa->bed_count) ? $villa->bed_count : '')=='')?'selected':''}}> انتخاب کنید</option>
                                 @for($i = 1;$i <= 10; $i++)
                                     <option {{(old('bed_count', isset($villa->bed_count) ? $villa->bed_count : '')==$i)?'selected':''}} value="{{$i}}">{{$i}}</option>
                                 @endfor
@@ -198,7 +199,7 @@
 
 
                             <select class="form-control" name="standard_capacity" required autocomplete="off">
-                                <option selected="" {{(old('standard_capacity', isset($villa->standard_capacity) ? $villa->standard_capacity : '')=='')?'selected':''}}> انتخاب کنید</option>
+                                <option value="" selected="" {{(old('standard_capacity', isset($villa->standard_capacity) ? $villa->standard_capacity : '')=='')?'selected':''}}> انتخاب کنید</option>
                                 @for($i = 1;$i <= 20; $i++)
                                     <option {{(old('standard_capacity', isset($villa->standard_capacity) ? $villa->standard_capacity : '')==$i)?'selected':''}} value="{{$i}}">{{$i}}</option>
                                 @endfor
@@ -212,7 +213,7 @@
                         <div class="form-group arrow">
                             <label>تعداد حمام</label>
                             <select class="form-control" name="bathroom_count" required autocomplete="off">
-                                <option selected="" {{(old('bathroom_count', isset($villa->bathroom_count) ? $villa->bathroom_count : '')=='')?'selected':''}}> انتخاب کنید</option>
+                                <option value="" selected="" {{(old('bathroom_count', isset($villa->bathroom_count) ? $villa->bathroom_count : '')=='')?'selected':''}}> انتخاب کنید</option>
                                 @for($i = 1;$i <= 5; $i++)
                                     <option {{(old('bathroom_count', isset($villa->bathroom_count) ? $villa->bathroom_count : '')==$i)?'selected':''}} value="{{$i}}">{{$i}}</option>
                                 @endfor
@@ -226,7 +227,7 @@
 
 
                             <select class="form-control" name="max_capacity" required autocomplete="off">
-                                <option selected="" {{(old('max_capacity', isset($villa->max_capacity) ? $villa->max_capacity : '')=='')?'selected':''}}> انتخاب کنید</option>
+                                <option value="" selected="" {{(old('max_capacity', isset($villa->max_capacity) ? $villa->max_capacity : '')=='')?'selected':''}}> انتخاب کنید</option>
                                 @for($i = 1;$i <= 5; $i++)
                                     <option {{(old('max_capacity', isset($villa->max_capacity) ? $villa->max_capacity : '')==$i)?'selected':''}} value="{{$i}}">{{$i}}</option>
                                 @endfor
@@ -239,7 +240,7 @@
                         <div class="form-group arrow">
                             <label>تعداد دستشویی</label>
                             <select class="form-control" name="wc_count" required autocomplete="off">
-                                <option selected="" {{(old('wc_count', isset($villa->wc_count) ? $villa->wc_count : '')=='')?'selected':''}}> انتخاب کنید</option>
+                                <option value="" selected="" {{(old('wc_count', isset($villa->wc_count) ? $villa->wc_count : '')=='')?'selected':''}}> انتخاب کنید</option>
                                 @for($i = 1;$i <= 5; $i++)
                                     <option {{(old('wc_count', isset($villa->wc_count) ? $villa->wc_count : '')==$i)?'selected':''}} value="{{$i}}">{{$i}}</option>
                                 @endfor
@@ -387,7 +388,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label>متن توضیحات در مورد ویلا</label>
-                            <textarea rows="5" class="form-control" name="villa_description" placeholder="توضیحات اضافی در این قسمت">{{ old('villa_description',isset($villa->villa_description) ? Helpers::br2nl($villa->villa_description) : '') }}</textarea>
+                            <textarea required rows="5" class="form-control" name="villa_description" placeholder="توضیحات اضافی در این قسمت">{{ old('villa_description',isset($villa->villa_description) ? Helpers::br2nl($villa->villa_description) : '') }}</textarea>
                             @if ($errors->has('villa_description'))<span class="help-block"><strong>{{ $errors->first('villa_description') }}</strong></span>@endif
                         </div>
                     </div>
@@ -403,7 +404,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label>آدرس محل اقامتگاه</label>
-                            <textarea rows="2" class="form-control" name="villa_address" placeholder="آدرس">{{ old('villa_address',isset($villa->villa_address) ? Helpers::br2nl($villa->villa_address) : '') }}</textarea>
+                            <textarea required rows="2" class="form-control" name="villa_address" placeholder="آدرس">{{ old('villa_address',isset($villa->villa_address) ? Helpers::br2nl($villa->villa_address) : '') }}</textarea>
                             @if ($errors->has('villa_address'))<span class="help-block"><strong>{{ $errors->first('villa_address') }}</strong></span>@endif
                         </div>
                         <div id="map">
@@ -521,7 +522,7 @@
                 {
                     var cities = $.parseJSON(data);
 
-                    $('#'+elementID).html('').fadeIn(800).append('<option value="0">'+selectTitle+'</option>');
+                    $('#'+elementID).html('').fadeIn(800).append('<option value="">'+selectTitle+'</option>');
                     $.each(cities, function(i, city){
                         if(selected_city == city.id) $('#'+elementID).append('<option value="' + city.id + '" selected>' + city.city_name + '</option>');
                         else $('#'+elementID).append('<option value="' + city.id + '">' + city.city_name + '</option>');

@@ -8,8 +8,8 @@
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </ul>
             <ul class="login">
-                <li><a class="login" href="<?php echo e(Route('showdashboard')); ?>" title="ورود به سایت">ورود به سایت</a></li>
-                <li><a class="record" href="#" title="ثبت رایگان ملک">ثبت رایگان ملک</a></li>
+                <li><a class="login" href="<?php echo e(Route('showlogin')); ?>" title="ورود به سایت">ورود به سایت</a></li>
+                <li><a class="record" href="<?php echo e(Route('addVillaForm')); ?>" title="ثبت رایگان ملک">ثبت رایگان ملک</a></li>
             </ul>
         </nav>
     </div>

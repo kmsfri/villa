@@ -3,7 +3,6 @@
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('main'); ?>
 
-
     <?php echo $__env->make('user.web.common.stickyheadsearch', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
     <!--start section details-->
     <ul class="floating">
@@ -110,27 +109,26 @@
                                         </div>
                                         <?php endif; ?>
 
-
                                     <?php elseif($propValue1->has_text_value==1): ?>
+
                                     <?php if($firstID==$propValue1->id): ?>
                                         <div class="row">
                                             <div class="col-md-11 mr-auto">
                                                 <div class="box-see2">
                                                     <ul class="ul-img">
                                     <?php endif; ?>
+
                                     <?php if($villa->Properties()->where('property_id',$propValue1->id)->count()>0): ?>
-
-                                                            <li>
-                                                                <img src="<?php echo e(asset($propValue1->img_dir)); ?>" alt="<?php echo e($propValue1->prop_title); ?>">
-                                                                <span><?php echo e($propValue1->prop_title); ?></span>
-                                                                <?php if(($VP=$villa->Properties()->withPivot(['text_value'])->where('property_id',$propValue1->id)->first()->pivot->text_value)!=Null): ?>
-                                                                    <button class="btn" type="button" data-toggle="popover" data-content="<?php echo e($VP); ?>">؟</button>
-                                                                <?php endif; ?>
-                                                            </li>
-
-
+                                                        <li>
+                                                            <img src="<?php echo e(asset($propValue1->img_dir)); ?>" alt="<?php echo e($propValue1->prop_title); ?>">
+                                                            <span><?php echo e($propValue1->prop_title); ?></span>
+                                                            <?php if(($VP=$villa->Properties()->withPivot(['text_value'])->where('property_id',$propValue1->id)->first()->pivot->text_value)!=Null): ?>
+                                                                <button class="btn" type="button" data-toggle="popover" data-content="<?php echo e($VP); ?>">؟</button>
+                                                            <?php endif; ?>
+                                                        </li>
 
                                     <?php endif; ?>
+
                                     <?php if($loop->last): ?>
                                                     </ul>
                                                 </div>
@@ -138,41 +136,32 @@
                                         </div>
                                     <?php endif; ?>
 
-
-
-
-
                                     <?php else: ?>
                                         <?php if(isset($villa)): ?>
 
-                                                <?php if($firstID==$propValue1->id): ?>
-                                                <div class="row">
-                                                    <div class="col-md-11 mr-auto">
-                                                        <ul class="<?php echo e(($propValue1->img_dir!=Null)?'new-ul':'ul-new width'); ?>">
-                                                <?php endif; ?>
-                                                        <?php $__currentLoopData = $villa->AllSpecProperty($propValue1->id); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $oneSP): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                        <li>
-                                                            <?php if($propValue1->img_dir!=Null): ?>
-                                                            <img src="<?php echo e(asset($propValue1->img_dir)); ?>" alt="">
-                                                            <?php endif; ?>
-                                                            <span><?php echo e($propValue1->prop_title); ?>:</span><span class="bold"><?php echo e($oneSP->prop_title); ?></span>
-                                                            <?php if($propValue1->guide_text!=Null && $propValue1->guide_text!=''): ?>
-                                                            <button class="btn" type="button" data-toggle="popover" data-content="<?php echo e($propValue1->guide_text); ?>">؟</button>
-                                                            <?php endif; ?>
-                                                        </li>
-                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                <?php if($loop->last): ?>
-                                                        </ul>
-                                                    </div>
+                                            <?php if($firstID==$propValue1->id): ?>
+                                            <div class="row">
+                                                <div class="col-md-11 mr-auto">
+                                                    <ul class="<?php echo e(($propValue1->img_dir!=Null)?'new-ul':'ul-new width'); ?>">
+                                            <?php endif; ?>
+                                                    <?php $__currentLoopData = $villa->AllSpecProperty($propValue1->id); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $oneSP): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <li>
+                                                        <?php if($propValue1->img_dir!=Null): ?>
+                                                        <img src="<?php echo e(asset($propValue1->img_dir)); ?>" alt="">
+                                                        <?php endif; ?>
+                                                        <span><?php echo e($propValue1->prop_title); ?>:</span><span class="bold"><?php echo e($oneSP->prop_title); ?></span>
+                                                        <?php if($propValue1->guide_text!=Null && $propValue1->guide_text!=''): ?>
+                                                        <button class="btn" type="button" data-toggle="popover" data-content="<?php echo e($propValue1->guide_text); ?>">؟</button>
+                                                        <?php endif; ?>
+                                                    </li>
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                            <?php if($loop->last): ?>
+                                                    </ul>
                                                 </div>
-                                                <?php endif; ?>
-
-
-
-
+                                            </div>
+                                            <?php endif; ?>
 
                                         <?php endif; ?>
-
 
                                     <?php endif; ?>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -186,15 +175,8 @@
                                     </div>
                                 </div>
                                 <?php endif; ?>
-
-
-
-
                         </div>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-
-
 
                     <div class="box-new">
                         <div class="header">
@@ -255,7 +237,7 @@
                             <?php $__currentLoopData = $villa->Comments()->where('comment_status','=',1)->withPivot('comment_text')->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cm): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <div class="box-author">
                                     <div class="row">
-                                        <div class="col-md-1"><img src="<?php echo e(asset('images/users/user-uploads/user-pics').'/'.$cm->avatar_dir); ?>" width="50px"></div>
+                                        <div class="col-md-1"><img src="<?php echo e(asset($cm->avatar_dir)); ?>" width="50px"></div>
                                         <div class="col-md-11">
                                             <div class="data-author"><span class="title"><?php echo e($cm->fullname); ?></span><span class="time"><?php echo Helpers::returnexplodedtime($cm->pivot->created_at); ?> - ساعت: <?php echo e($cm->pivot->created_at->format('H:i:s')); ?></span>
                                                 <p><?php echo e($cm->pivot->comment_text); ?></p>
@@ -315,12 +297,6 @@
     <!--start section tourism-->
     <?php echo $__env->make('user.web.common.contents-slider', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
     <!--end section tourism-->
-
-
-
-
-
-
 
 <?php $__env->stopSection(); ?>
 

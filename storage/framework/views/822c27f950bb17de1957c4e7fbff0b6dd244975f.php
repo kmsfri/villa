@@ -8,7 +8,7 @@
                 <div class="col-sm-6 col-md-2">
                     <div class="form-group arrow">
                         <select class="custom-select" id="state1" name="state" autocomplete="off">
-                            <option <?php echo e((!old('state', isset($search->state) ? $search->state : '')? 'selected' : '')); ?> value="0" >همه استانها</option>
+                            <option <?php echo e((!old('state', isset($search->state) ? $search->state : '')? 'selected' : '')); ?> value="" >همه استانها</option>
                             <?php $__currentLoopData = $states; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pr): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <option <?php if(old('state', isset($search->state) ? $search->state : '')==$pr->id): ?> selected <?php endif; ?> value="<?php echo e($pr->id); ?>" ><?php echo e($pr->city_name); ?></option>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -33,7 +33,7 @@
                 <div class="col-sm-6 col-md-3">
                     <div class="form-group rent">
                         <input class="form-control" name="price" type="text" placeholder="" value="100.000 تومان">
-                        <input type="hidden" name="price_to_search" value="100000">
+                        <input type="hidden"  name="price_to_search" value="<?php echo e(old('price_to_search', isset($search->price_to_search) ? $search->price_to_search : '')); ?>" autocomplete="off">
                         <button class="button left" type="button" data-enevtsum="sum">+</button>
                         <button class="button" type="button" data-enevtsum="sub">-</button>
 

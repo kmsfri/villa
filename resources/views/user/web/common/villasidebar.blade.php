@@ -5,7 +5,7 @@
                 <p class="title">نرخ اجاره روزانه از<span>(هر شب)</span></p><span>{{number_format($villa->rent_daily_price_from)}} تومان</span>
             </div>
             <div class="data">
-                <div class="box-property"><img class="img-author" src="{{asset('users/img/img0012452.jpg')}}" alt="">
+                <div class="box-property"><img class="img-author" src="{{asset($villa->RenterUser()->first()->avatar_dir)}}" alt="">
                     <p class="title-author">{{$user->fullname}}</p>
                     <p><img src="{{asset('users/img/icon/icon089.png')}}" alt="">{{$user->mobile_number}}</p>
                     <p><img src="{{asset('users/img/icon/icon090.png')}}" alt="">کدملک :<span>{{$villa->id}}</span></p>

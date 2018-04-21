@@ -284,7 +284,7 @@ class VillaController extends Controller
 
 
 
-        if($validator->fails()){
+        if($validator->fails() || ($request->newImg==Null && $request->oldImg==Null)){
 
             if($request->state!=Null){
                 if(\App\Models\City::find($request->state)!=Null){
@@ -451,20 +451,29 @@ class VillaController extends Controller
 
 
                 $props=array();
-                foreach($newRequest->propDesc as $key=>$pD){
-                    if($pD!=Null && $pD!='' && $key!=Null){
-                        $props[$key]=['text_value'=>$pD];
-                    }
-                }
-                foreach($newRequest->props as $pr){
-                    if($pr!=Null){
-                        $props[$pr]=[];
+
+                if($newRequest->propDesc!=Null) {
+                    foreach ($newRequest->propDesc as $key => $pD) {
+                        if ($pD != Null && $pD != '' && $key != Null) {
+                            $props[$key] = ['text_value' => $pD];
+                        }
                     }
                 }
 
-                foreach($newRequest->propCheck as $key=>$pC){
-                    if($key!=Null) {
-                        $props[$key] = ['text_value' => $newRequest->propText[$key]];
+                if($newRequest->props!=Null) {
+                    foreach ($newRequest->props as $pr) {
+                        if ($pr != Null) {
+                            $props[$pr] = [];
+                        }
+                    }
+                }
+
+
+                if($newRequest->propCheck!=Null) {
+                    foreach ($newRequest->propCheck as $key => $pC) {
+                        if ($key != Null) {
+                            $props[$key] = ['text_value' => $newRequest->propText[$key]];
+                        }
                     }
                 }
 
@@ -933,7 +942,47 @@ class VillaController extends Controller
 
 
 
+    public function doVillaDeleteAndTicket(Request $request){
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'villa_id_to_deleteAndTicket' => 'required|integer|exists:villa,id',
+                'villaDeletionTicketMessage'=>'nullable|max:280',
+            ]
+        );
 
+        if($validator->fails()){
+            return redirect()->back()
+                ->withInput($request->input())
+                ->withErrors($validator->errors())
+                ->with('messages',['درخواست مربوط به حذف ویلای ارسال شده نامعتبر می باشد.']);
+        }
+
+
+        DB::transaction(function() use($request) {
+            if(isset($request->villaDeletionTicketMessage)&&$request->villaDeletionTicketMessage!=Null) {
+                $villa = Villa::findOrFail($request->villa_id_to_deleteAndTicket);
+
+                $ticket = new \App\Models\Ticket();
+                $ticket->renter_user_id = $villa->renter_user_id;
+                $ticket->ticket_status = 0;
+                $ticket->save();
+
+                $ticketMessage = new \App\Models\TicketMessage();
+                $ticketMessage->sender = 1;
+                $ticketMessage->admin_user_id = Auth::guard('admin')->user()->id;
+                $ticketMessage->message_text = nl2br($request->villaDeletionTicketMessage);
+
+                $ticket->TicketMessages()->save($ticketMessage);
+            }
+
+            Villa::destroy($request->villa_id_to_deleteAndTicket);
+        });
+
+        $msg=['ویلای انتخاب شده با موفقیت حذف شد'];
+        return redirect(url(Route('adminShowVillaList')))->with('messages', $msg);
+
+    }
 
 
 

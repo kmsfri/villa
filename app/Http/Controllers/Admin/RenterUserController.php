@@ -88,7 +88,7 @@ class RenterUserController extends Controller
 
         $validator = Validator::make($newRequest->all(),[
             'mobile_number'=>'required|digits:11|unique:renter_users,mobile_number',
-            'email'=>'nullable|email|max:100',
+            'email'=>'nullable|email|max:100|unique:renter_users,email',
             'password'=>'required|min:2|max:50',
             'fullname'=>'nullable|min:3|max:40',
             'avatar_dir' => 'nullable|mimes:png,jpg,jpeg|max:2048',
@@ -185,7 +185,7 @@ class RenterUserController extends Controller
         $validator = Validator::make($newRequest->all(),[
             'edit_id'=>'required|integer|exists:renter_users,id',
             'mobile_number'=>'required|digits:11|unique:renter_users,mobile_number,'.$newRequest->edit_id,
-            'email'=>'nullable|email|max:100',
+            'email'=>'nullable|email|max:100|unique:renter_users,email,'.$newRequest->edit_id,
             'password'=>'required|min:2|max:50',
             'fullname'=>'nullable|min:3|max:40',
             'avatar_dir' => 'nullable|mimes:png,jpg,jpeg|max:2048',
@@ -245,7 +245,7 @@ class RenterUserController extends Controller
                         ];
                         \Helpers::save_img($imgConf['imgType'],$imgConf['imgObject'],$imgConf['resultDir']);
                         //$file->move($destinationPath, $fileName);
-                        $uploaded_file_dir = $fileName;
+                        $uploaded_file_dir = $this->fileUploadDir.'/'.$fileName;
                         if($request->edit_id!=Null) {
                             $to_remove_dir = \App\Models\RenterUser::find($request->edit_id)->avatar_dir;
                         }
@@ -264,6 +264,7 @@ class RenterUserController extends Controller
                 }
 
                 $u->mobile_number=$request->mobile_number;
+                $u->email=$request->email;
                 if(trim($request->password)!="**||password-no-changed") {
                     $u->password = bcrypt($request->password);
                 }
@@ -284,8 +285,8 @@ class RenterUserController extends Controller
                 $u->save();
 
                 if($request->edit_id!=Null && $to_remove_dir!=""){
-                    if(file_exists(public_path().$this->fileUploadDir.'/'.$to_remove_dir)){
-                        unlink(public_path().$this->fileUploadDir.'/'.$to_remove_dir);
+                    if(file_exists(public_path().$to_remove_dir)){
+                        unlink(public_path().$to_remove_dir);
                     }
                 }
             });
@@ -293,8 +294,8 @@ class RenterUserController extends Controller
         }
         catch(Exception $e) {
             catch_block:
-            if(file_exists(public_path().$this->fileUploadDir.'/'.$uploaded_file_dir)){
-                unlink(public_path().$this->fileUploadDir.'/'.$uploaded_file_dir);
+            if(file_exists(public_path().$uploaded_file_dir)){
+                unlink(public_path().$uploaded_file_dir);
             }
             return false;
         }
@@ -309,8 +310,8 @@ class RenterUserController extends Controller
             foreach($request->remove_val as $c_id){
                 $u=\App\Models\RenterUser::find($c_id);
                 if($u!=Null && $u->avatar_dir!=null && trim($u->avatar_dir)!=''){
-                    if(file_exists(public_path().$this->fileUploadDir.'/'.$u->avatar_dir)){
-                        unlink(public_path().$this->fileUploadDir.'/'.$u->avatar_dir);
+                    if(file_exists(public_path().$u->avatar_dir)){
+                        unlink(public_path().$u->avatar_dir);
                     }
                 }
                 unset($u);

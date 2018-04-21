@@ -8,7 +8,7 @@
     <a class="filter" href="" title="Filter"><img src="<?php echo e(asset('users/img/ic_filter_icon.png')); ?>" alt=""></a>
     <ul class="ul-rent">
         <?php $__currentLoopData = $categories1; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category1): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-        <li><a href="" title="<?php echo e($category1->category_title); ?>"><img src="" alt="<?php echo e($category1->category_title); ?>"><?php echo e($category1->category_title); ?></a></li>
+        <li><a href="" title="<?php echo e($category1->category_title); ?>"><img src="<?php echo e(asset($category1->image_dir)); ?>" width="30px" alt="<?php echo e($category1->category_title); ?>"><?php echo e($category1->category_title); ?></a></li>
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </ul>
     <?php endif; ?>
@@ -37,9 +37,9 @@
                         <?php $__currentLoopData = $categories1; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category1): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="col-sm-6 col-md-6 col-lg-4">
                             <div class="box-follow-up">
-                                <figure><img src="<?php echo e(asset($category1->img1)); ?>" alt=""><img class="img" src="<?php echo e(asset($category1->img_hover)); ?>" alt="<?php echo e($category1->category_title); ?>"></figure>
+                                <figure><img src="<?php echo e(asset($category1->image_dir)); ?>" alt=""><img class="img" src="<?php echo e(asset($category1->image_hover_dir)); ?>" alt="<?php echo e($category1->category_title); ?>"></figure>
                                 <h3 class="title"><?php echo e($category1->category_title); ?></h3>
-                                <div class="link"><a href="" title="نمایش ویلاها">نمایش ویلاها</a></div>
+                                <div class="link"><a href="<?php echo e(route('villas_based_category1',$category1->category_slug)); ?>" title="نمایش ویلاها">نمایش ویلاها</a></div>
                             </div>
                         </div>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

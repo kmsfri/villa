@@ -9,7 +9,7 @@
         <a class="filter" href="" title="Filter"><img src="{{asset('users/img/ic_filter_icon.png')}}" alt=""></a>
         <ul class="ul-rent">
             @foreach($categories1 as $category1)
-                <li><a href="" title="{{$category1->category_title}}"><img src="" alt="{{$category1->category_title}}">{{$category1->category_title}}</a></li>
+                <li><a href="{{route('villas_based_category1',$category1->category_slug)}}" title="{{$category1->category_title}}"><img src="" alt="{{$category1->category_title}}">{{$category1->category_title}}</a></li>
             @endforeach
         </ul>
     @endif
@@ -20,7 +20,7 @@
             <div class="box-search">
 
                 <div class="userblog text-center" style="padding: 10px">
-                    <img src="{{asset('images/users/user-uploads/user-pics/'.$user->avatar_dir)}}" style="border-radius: 50%;width: 100px;">
+                    <img src="{{asset($user->avatar_dir)}}" style="border-radius: 50%;width: 100px;">
 
                     <p>{{$user->fullname}}</p>
                     <p>{{$user->blog_description}}</p>

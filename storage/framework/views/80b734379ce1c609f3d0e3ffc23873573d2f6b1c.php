@@ -7,9 +7,14 @@
                     <div class="col-sm-6 col-md-6 col-lg-3">
 
                         <article class="vila">
-                            <figure><img src="<?php echo e(asset($villa->VillaImages()->orderBy('image_order','ASC')->first()->image_dir)); ?>" alt="<?php echo e($villa->villa_title); ?>"/><a class="estate" href="" title="<?php echo e($villa->villa_title); ?>">مشاهده ملک</a><a class="heart" href=""><i class="fa fa-heart-o"></i></a></figure>
+                            <figure><img src="<?php echo e(asset($villa->VillaImages()->orderBy('image_order','ASC')->first()->image_dir)); ?>" alt="<?php echo e($villa->villa_title); ?>"/><a class="estate" href="<?php echo e(Route('showvilla',$villa->villa_slug)); ?>" title="<?php echo e($villa->villa_title); ?>">مشاهده ملک</a>
+                                <?php if($villa->is_special==1): ?>
+                                <span class="special">ویژه</span>
+                                <?php endif; ?>
+                                <!--<a class="heart" href=""><i class="fa fa-heart-o"></i></a>-->
+                            </figure>
                             <div class="data">
-                                <h3 class="title"><a href="" title="<?php echo e($villa->villa_title); ?>"><?php echo e($villa->villa_title); ?></a></h3><span class="price"><?php echo e(number_format($villa->rent_daily_price_from)); ?> تومان</span>
+                                <h3 class="title"><a href="<?php echo e(Route('showvilla',$villa->villa_slug)); ?>" title="<?php echo e($villa->villa_title); ?>"><?php echo e($villa->villa_title); ?></a></h3><span class="price"><?php echo e(number_format($villa->rent_daily_price_from)); ?> تومان</span>
                                 <?php $city = $villa->Cities()->first(); ?>
                                 <p class="place customheight"><?php echo e(\App\Models\City::find($city->parent_id)->city_name); ?> - <?php echo e($city->city_name); ?></p>
                                 <div class="my-rating-8 villalistrate <?php echo e($villa->id); ?>"></div><span class="number"><span><?php echo e($villa->Comments()->where('comment_status','=',1)->count()); ?></span></span>
@@ -31,4 +36,6 @@
             <div class="clearfix"></div>
         </div>
     </section>
+    <?php else: ?>
+    <p style="text-align: center;margin-top: 200px;margin-bottom: 200px">مطلبی یافت نشد</p>
 <?php endif; ?>

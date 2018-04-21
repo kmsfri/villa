@@ -315,6 +315,9 @@ class Helpers{
         return $res_code;
     }
     public static function send_reserve_villa_sms($number){
+
+        $message='کاربر گرامی، درخواست رزرو ویلا جدید برای شما ارسال شده است. وبسایت ویلایار';
+
         $from = "+98100009";
         $url = "37.130.202.188/services.jspd";
         $param = array
@@ -322,7 +325,7 @@ class Helpers{
             'uname'=>'elyasghorbani',
             'pass'=>'5p64g49',
             'from'=>$from,
-            'message'=>'کاربر گرامی، درخواست رزرو ویلا جدید برای شما ارسال شده است. وبسایت ویلایار',
+            'message'=>$message,
             'to'=>$number,
             'op'=>'send'
         );
@@ -338,7 +341,26 @@ class Helpers{
         //$res_data = $response2[1];
 
 
+        $user=\App\Models\RenterUser::find($number);
+        if($user!=Null && $user->email!=Null){
+
+            self::sendEmail($user->email,$user->mobile_number,'درخواست رزرو ویلا',$message,'ویلایار');
+        }
+
+
         return $res_code;
+    }
+
+
+
+
+    public static function sendEmail($to,$receiver,$title,$body,$sender){
+        $objDemo = new \stdClass();
+        $objDemo->receiver = $receiver;
+        $objDemo->text_body = $body;
+        $objDemo->sender = $sender;
+
+        Illuminate\Support\Facades\Mail::to($to)->send(new \App\Mail\RenterUserEmail($objDemo));
     }
 
 

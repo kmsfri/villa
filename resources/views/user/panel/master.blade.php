@@ -20,17 +20,18 @@
       <aside class="sidebar">
         <div class="headera">
 		<a class="logo" href="" alt=""><img src="{{asset('users/img/logo.png')}}" alt=""></a><a class="link-mobile d-md-none d-inline-block" href="" alt=""><img src="{{asset('users/img/icon/icon0108.png')}}" alt=""></a></div>
-        <div class="box-user"><img src="{{asset('images/users/user-uploads/user-pics/'.$user->avatar_dir)}}" alt="">
+        <div class="box-user"><img src="{{asset($user->avatar_dir)}}" alt="">
           <p>{{$user->fullname}}</p><span class="points">امتیاز شما : {{$user->points }}</span>
         </div>
         <ul class="ul-sidebar">
           <li><a href="{{route('showdashboard')}}" title=""><img src="{{asset('users/img/icon/icon040.png')}}" alt=""><img class="img" src="{{asset('users/img/icon/icon040-2.png')}}" alt=""><span>پیشخوان</span></a></li>
           <li class="subset"><a href="" title="" data-toggle="collapse" data-target="#ul-list1" aria-expanded="false"><img src="{{asset('users/img/icon/icon041.png')}}" alt=""><img class="img" src="{{asset('users/img/icon/icon041-2.png')}}" alt=""><span>ملک های من</span></a>
             <ul class="list-subset collapse" id="ul-list1">
-              <li><a href="" title="ثبت ملک جدید  "> ثبت ملک جدید</a></li>
+              <li><a href="{{Route('addVillaForm')}}" title="ثبت ملک جدید  "> ثبت ملک جدید</a></li>
               <li><a href="{{Route('villaList')}}" title="ویلا ها  ">ویلا ها</a></li>
-              <li><a href="" title="سوئیت - آپارتمان ها  ">سوئیت - آپارتمان ها</a></li>
-              <li><a href="" title="اقامتگاه های بوم گردی  ">اقامتگاه های بوم گردی</a></li>
+              @foreach($villa_types as $vt)
+                <li><a href="{{Route('villaList',$vt->id)}}" title="{{$vt->villa_type_title}}">اقامتگاه های {{$vt->villa_type_title}}</a></li>
+              @endforeach
             </ul>
           </li>
           <!--

@@ -17,7 +17,7 @@
                     <div class="col-6">
                         <div class="form-group arrow">
                             <select class="custom-select" id="state3" name="state" autocomplete="off">
-                                <option {{(!old('state', isset($search->state) ? $search->state : '')? 'selected' : '')}} value="0" >همه استانها</option>
+                                <option {{(!old('state', isset($search->state) ? $search->state : '')? 'selected' : '')}} value="" >همه استانها</option>
                                 @foreach($states as $pr)
                                     <option @if(old('state', isset($search->state) ? $search->state : '')==$pr->id) selected @endif value="{{$pr->id}}" >{{$pr->city_name}}</option>
                                 @endforeach

@@ -16,10 +16,10 @@
 //villa
 
 Route::group(['middleware'=>['saveVisitor','webInitCommonData']],function() {
-    Route::get('villa/{slug}', 'users\web\VillaController@showSingleVilla')
+    Route::get('ویلا/{slug}', 'users\web\VillaController@showSingleVilla')
         ->middleware('saveVillaVisitor')
         ->name('showvilla');
-    Route::get('villas', 'users\web\VillaController@showallvillas')->name('showvillas');
+    Route::get('/', 'users\web\VillaController@showallvillas')->name('showvillas');
     Route::post('villas', 'users\web\VillaController@savewebsitecomment')->name('savewebsitecomment');
     Route::post('villa/{id}/Comment', 'users\web\VillaController@villa_comment')->name('villa_comment');
 
@@ -27,31 +27,37 @@ Route::group(['middleware'=>['saveVisitor','webInitCommonData']],function() {
     Route::get('search', 'users\web\VillaController@search')->name('search');
 
     Route::post('villa/{id}/Reserve', 'users\web\VillaController@reserve_request')->name('reserve_request');
-});
 
-//NewsLetter Register
-Route::post('NewsLetter','users\web\WebsiteGeneralController@newsletter_register')->name('newsletter_register');
+
+    //NewsLetter Register
+    Route::post('NewsLetter','users\web\WebsiteGeneralController@newsletter_register')->name('newsletter_register');
 
 //Content_Report
-Route::post('Content/Report/{id}','users\web\WebsiteGeneralController@content_report')->name('content_report');
+    Route::post('Content/Report/{id}','users\web\WebsiteGeneralController@content_report')->name('content_report');
 //Villa_Report
-Route::post('Villa/Report/{id}','users\web\WebsiteGeneralController@villa_report')->name('villa_report');
+    Route::post('Villa/Report/{id}','users\web\WebsiteGeneralController@villa_report')->name('villa_report');
 
 //Villa Rating
-Route::post('Villa/Rate/{id}','users\web\WebsiteGeneralController@rate_villa')->name('rate_villa');
-Route::post('VillaRate','users\web\WebsiteGeneralController@rate_villa_list')->name('rate_villa_list');
+    Route::post('Villa/Rate/{id}','users\web\WebsiteGeneralController@rate_villa')->name('rate_villa');
+    Route::post('VillaRate','users\web\WebsiteGeneralController@rate_villa_list')->name('rate_villa_list');
 //Content Rating
-Route::post('Content/Rate/{id}','users\web\WebsiteGeneralController@rate_content')->name('rate_content');
+    Route::post('Content/Rate/{id}','users\web\WebsiteGeneralController@rate_content')->name('rate_content');
 
-Route::get('نوع-ویلا/{slug}','users\web\VillaController@villas_based_category1')->name('villas_based_category1');
+    Route::get('نوع-ویلا/{slug}','users\web\VillaController@villas_based_category1')->name('villas_based_category1');
+
+    Route::get('گردشگری/استان/{province_slug}','users\web\BlogController@websiteArticles')->name('provinceArticles');
+    Route::get('گردشگری/دسته/{category_slug}','users\web\BlogController@websiteArticles')->name('categoryArticles');
+    Route::get('گردشگری/','users\web\BlogController@websiteArticles')->name('websiteArticles');
+    Route::get('گردشگری/{slug}','users\web\BlogController@showArticle')
+        ->middleware('saveContentVisitor')
+        ->name('showArticle');
+
+});
+
+
 
 //blog
-Route::get('گردشگری/استان/{province_slug}','users\web\BlogController@websiteArticles')->name('provinceArticles');
-Route::get('گردشگری/دسته/{category_slug}','users\web\BlogController@websiteArticles')->name('categoryArticles');
-Route::get('گردشگری/','users\web\BlogController@websiteArticles')->name('websiteArticles');
-Route::get('گردشگری/{slug}','users\web\BlogController@showArticle')
-    ->middleware('saveContentVisitor')
-    ->name('showArticle');
+
 Route::post('Article/{id}/Comment','users\web\BlogController@content_comment')->name('content_comment');
 
 Route::post('/ajax/get_province_cities', 'API\AjaxServicesController@get_province_cities');
@@ -65,7 +71,12 @@ Route::post('User/Password', 'users\auth\AuthController@NewPassword')->name('pas
 Route::get('User/Logout', 'users\auth\AuthController@logout')->name('logout');
 Route::get('VillaVisits/{id}','users\GeneralController@villavisits')->name('villavisits');
 //User Dashboard
-Route::group(['prefix' => 'User',  'middleware' => ['auth:user', 'getSectionPathParts']], function(){
+Route::group(['prefix' => 'User',  'middleware' => ['auth:user', 'getSectionPathParts','userPanelInitCommonData']], function(){
+
+
+    Route::get('/', function(){
+        return redirect(Route('showdashboard'));
+    });
 
     Route::get('Dashboard','users\GeneralController@showDashboard')->name('showdashboard');
     Route::get('Edit','users\UserController@showUser')->name('showuser');
@@ -89,7 +100,7 @@ Route::group(['prefix' => 'User',  'middleware' => ['auth:user', 'getSectionPath
         Route::post('Villa', 'users\VillaController@doSaveVilla')->name('doSaveVilla');
         Route::get('Villa/category/{villa_id}', 'users\VillaController@editVillaCategory')->name('editVillaCategory');
         Route::post('Villa/category', 'users\VillaController@doEditVillaCategory')->name('doEditVillaCategory');
-        Route::get('Villas', 'users\VillaController@showVillaList')->name('villaList');
+        Route::get('Villas/{villa_type?}', 'users\VillaController@showVillaList')->name('villaList');
 
         Route::post('Villa/specialize', 'users\VillaController@specializeVilla')->name('specializeVilla');
         Route::get('Villa/Update/{villa_id}', 'users\VillaController@updateVilla')->name('updateVilla');
@@ -110,7 +121,7 @@ Route::group(['prefix'=>'management'],function(){
     Route::get('logout', 'Admin\AuthAdmin\LoginController@logout')->name('do-admin-logout');
 
     Route::group(['middleware'=>['auth:admin'/*,'init_admin_common_data'*/]],function(){
-        Route::group(['middleware'=>[/*'route_permission'*/]],function(){
+        Route::group(['middleware'=>['route_permission']],function(){
             Route::get('/', function(){
                 return redirect(Route('dashboard'));
             });
@@ -149,12 +160,14 @@ Route::group(['prefix'=>'management'],function(){
             Route::post('content/category','Admin\ContentController@doEditContentCategory')->name('adminDoEditContentCategory');
             Route::get('content/showinblog/{id}','Admin\ContentController@showInBlog')->name('adminShowinBlog');
 
+            /*
             Route::get('/category2/add/{parent_id?}', 'Admin\Category2Controller@showAddCategoryForm')->name('add-category2-form');
             Route::post('/category2/add', 'Admin\Category2Controller@saveCategory')->name('do-add-category2');
             Route::post('/category2/delete/{parent_id?}', 'Admin\Category2Controller@deleteCategory')->name('do-delete-category2');
             Route::get('/category2/edit/{id}', 'Admin\Category2Controller@editCategory')->name('edit-category2-form');
             Route::post('/category2/edit', 'Admin\Category2Controller@doEditCategory')->name('do-edit-category2');
             Route::get('/category2/{parent_id?}', 'Admin\Category2Controller@categories')->name('categories2-list');
+            */
 
             Route::get('/category1/add/{parent_id?}', 'Admin\Category1Controller@showAddCategoryForm')->name('add-category1-form');
             Route::post('/category1/add', 'Admin\Category1Controller@saveCategory')->name('do-add-category1');
@@ -186,6 +199,7 @@ Route::group(['prefix'=>'management'],function(){
             Route::post('villa/remove','Admin\VillaController@doRemoveVilla')->name('adminRemoveVilla');
             Route::get('villa/category/{villa_id}','Admin\VillaController@editVillaCategory')->name('adminEditVillaCategory');
             Route::post('villa/category','Admin\VillaController@doEditVillaCategory')->name('adminDoEditVillaCategory');
+            Route::post('villa/deleteAndTicket','Admin\VillaController@doVillaDeleteAndTicket')->name('adminDoVillaDeleteAndTicket');
 
 
             Route::get('/tariff/add', 'Admin\TariffController@showAddTariffForm')->name('addTariffForm');
@@ -222,21 +236,21 @@ Route::group(['prefix'=>'management'],function(){
             Route::post('/contentReports/edit', 'Admin\ReportController@doEditContentReport')->name('doEditContentReport');
             Route::get('/contentReports/{content_id?}', 'Admin\ReportController@ContentReports')->name('adminContentReportList');
 
-            Route::post('/commant/villa/delete', 'Admin\VillaController@deleteComment')->name('doDeleteVillaComment');
-            Route::get('/commant/villa/edit/{id}', 'Admin\VillaController@editComment')->name('editVillaComment');
-            Route::post('/commant/villa/edit', 'Admin\VillaController@doEditComment')->name('doEditVillaComment');
-            Route::get('/commant/villa/{villa_id?}', 'Admin\VillaController@Comments')->name('adminVillaCommentList');
+            Route::post('/comment/villa/delete', 'Admin\VillaController@deleteComment')->name('doDeleteVillaComment');
+            Route::get('/comment/villa/edit/{id}', 'Admin\VillaController@editComment')->name('editVillaComment');
+            Route::post('/comment/villa/edit', 'Admin\VillaController@doEditComment')->name('doEditVillaComment');
+            Route::get('/comment/villa/{villa_id?}', 'Admin\VillaController@Comments')->name('adminVillaCommentList');
 
 
-            Route::post('/commant/content/delete', 'Admin\ContentController@deleteComment')->name('doDeleteContentComment');
-            Route::get('/commant/content/edit/{id}', 'Admin\ContentController@editComment')->name('editContentComment');
-            Route::post('/commant/content/edit', 'Admin\ContentController@doEditComment')->name('doEditContentComment');
-            Route::get('/commant/content/{content_id?}', 'Admin\ContentController@Comments')->name('adminContentCommentList');
+            Route::post('/comment/content/delete', 'Admin\ContentController@deleteComment')->name('doDeleteContentComment');
+            Route::get('/comment/content/edit/{id}', 'Admin\ContentController@editComment')->name('editContentComment');
+            Route::post('/comment/content/edit', 'Admin\ContentController@doEditComment')->name('doEditContentComment');
+            Route::get('/comment/content/{content_id?}', 'Admin\ContentController@Comments')->name('adminContentCommentList');
 
-            Route::post('/commant/website/delete', 'Admin\WebsiteController@deleteComment')->name('doDeleteWebsiteComment');
-            Route::get('/commant/website/edit/{id}', 'Admin\WebsiteController@editComment')->name('editWebsiteComment');
-            Route::post('/commant/website/edit', 'Admin\WebsiteController@doEditComment')->name('doEditWebsiteComment');
-            Route::get('/commant/website', 'Admin\WebsiteController@Comments')->name('adminWebsiteCommentList');
+            Route::post('/comment/website/delete', 'Admin\WebsiteController@deleteComment')->name('doDeleteWebsiteComment');
+            Route::get('/comment/website/edit/{id}', 'Admin\WebsiteController@editComment')->name('editWebsiteComment');
+            Route::post('/comment/website/edit', 'Admin\WebsiteController@doEditComment')->name('doEditWebsiteComment');
+            Route::get('/comment/website', 'Admin\WebsiteController@Comments')->name('adminWebsiteCommentList');
 
 
             Route::get('/footer/links/add/{parent_id?}', 'Admin\WebsiteController@showAddFooterLinkForm')->name('add_footerLink_form');

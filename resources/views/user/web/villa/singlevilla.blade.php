@@ -235,7 +235,7 @@
                             @foreach($villa->Comments()->where('comment_status','=',1)->withPivot('comment_text')->get() as $cm)
                                 <div class="box-author">
                                     <div class="row">
-                                        <div class="col-md-1"><img src="{{asset('images/users/user-uploads/user-pics').'/'.$cm->avatar_dir}}" width="50px"></div>
+                                        <div class="col-md-1"><img src="{{asset($cm->avatar_dir)}}" width="50px"></div>
                                         <div class="col-md-11">
                                             <div class="data-author"><span class="title">{{$cm->fullname}}</span><span class="time">{!! Helpers::returnexplodedtime($cm->pivot->created_at) !!} - ساعت: {{$cm->pivot->created_at->format('H:i:s')}}</span>
                                                 <p>{{$cm->pivot->comment_text}}</p>

@@ -53,11 +53,45 @@
                 <a href="{{url(Route('adminVillaCommentList',$v->id))}}" data-toggle="tooltip" title="نظرات">
                     نظرات
                 </a>
+                |
+                <a data-toggle="modal" data-target="#deleteAndTicketModal" onclick="$('#villa_id_to_deleteAndTicket').val('{{$v->id}}'); $('#deleteAndTicketVillaTitle').html('{{$v->villa_title}}'); " href="javascript:void" data-toggle="tooltip" title="حذف و ارسال تیکت برای کاربر">
+                    حذف و ارسال پیام
+                </a>
 
             </td>
         </tr>
     @endforeach
     </tbody>
+
+
+    <div id="deleteAndTicketModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">حذف ویلا و ارسال پیام برای کاربر</h4>
+                </div>
+                <div class="modal-body">
+                    <h4>عنوان ویلا: <span id="deleteAndTicketVillaTitle"></span></h4>
+
+                    <form id="deleteAndTicketFrm" method="POST" action="{{Route('adminDoVillaDeleteAndTicket')}}">
+                        {{csrf_field()}}
+                        <input type="hidden" name="villa_id_to_deleteAndTicket" id="villa_id_to_deleteAndTicket" value="" autocomplete="off" required>
+                        <textarea rows="5" class="form-control" name="villaDeletionTicketMessage" placeholder="پیام خود را اینجا بنویسید"></textarea>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" form="deleteAndTicketFrm" class="btn btn-danger">حذف ویلا و ارسال پیام</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">لغو</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
 @stop
 @section('paginationContainer')
     {{ $villas->links() }}

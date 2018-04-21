@@ -17,9 +17,12 @@ class VillaController extends Controller
         $user = RenterUser::find(Auth::guard('user')->user()->id);
         $add_url=Route('addVillaForm');
         $villas = $user->Villas()
-            ->selectRaw('*, (villa.special_to >= CURRENT_TIMESTAMP) as is_special,(villa.updated_at+INTERVAL '.'60'.' MINUTE >= CURRENT_TIMESTAMP) as updated') //--Config ex. 60 minute - yani bad az chand daghighe waziatash beroozresani nashode neshan dade shawad
-            ->orderBy('villa.updated_at','DESC')->orderBy('villa.created_at','ASC')->paginate(10);
+            ->selectRaw('*, (villa.special_to >= CURRENT_TIMESTAMP) as is_special,(villa.updated_at+INTERVAL '.'60'.' MINUTE >= CURRENT_TIMESTAMP) as updated'); //--Config ex. 60 minute - yani bad az chand daghighe waziatash beroozresani nashode neshan dade shawad
 
+        if(isset($request->villa_type) && $request->villa_type!=Null){
+            $villas=$villas->where('villa_type_id',$request->villa_type);
+        }
+        $villas=$villas->orderBy('villa.updated_at','DESC')->orderBy('villa.created_at','ASC')->paginate(10);
 
 
         $tariffs=Tariff::where('tariff_status',1)
@@ -269,7 +272,7 @@ class VillaController extends Controller
 
 
 
-        if($validator->fails()){
+        if($validator->fails() || ($request->newImg==Null && $request->oldImg==Null)){
 
             if($request->state!=Null){
                 if(\App\Models\City::find($request->state)!=Null){
@@ -441,20 +444,29 @@ class VillaController extends Controller
 
 
                 $props=array();
-                foreach($newRequest->propDesc as $key=>$pD){
-                    if($pD!=Null && $pD!='' && $key!=Null){
-                        $props[$key]=['text_value'=>$pD];
-                    }
-                }
-                foreach($newRequest->props as $pr){
-                    if($pr!=Null){
-                        $props[$pr]=[];
+                if($newRequest->propDesc!=Null){
+                    foreach($newRequest->propDesc as $key=>$pD){
+                        if($pD!=Null && $pD!='' && $key!=Null){
+                            $props[$key]=['text_value'=>$pD];
+                        }
                     }
                 }
 
-                foreach($newRequest->propCheck as $key=>$pC){
-                    if($key!=Null) {
-                        $props[$key] = ['text_value' => $newRequest->propText[$key]];
+                if($newRequest->props!=Null) {
+                    foreach ($newRequest->props as $pr) {
+                        if ($pr != Null) {
+                            $props[$pr] = [];
+                        }
+                    }
+                }
+
+
+
+                if($newRequest->propCheck!=Null) {
+                    foreach ($newRequest->propCheck as $key => $pC) {
+                        if ($key != Null) {
+                            $props[$key] = ['text_value' => $newRequest->propText[$key]];
+                        }
                     }
                 }
 

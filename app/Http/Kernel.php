@@ -71,6 +71,8 @@ class Kernel extends HttpKernel
 
         'webInitCommonData' => \App\Http\Middleware\WebInitCommonData::class,
 
+        'userPanelInitCommonData' => \App\Http\Middleware\UserPAnelInitCommonData::class,
+
 
 
 

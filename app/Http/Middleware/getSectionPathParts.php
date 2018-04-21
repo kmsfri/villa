@@ -31,6 +31,16 @@ class getSectionPathParts
                     (object)['title'=>'پیشخوان']
                 ],
             ],
+            ''=>[
+                'page_title'=>'پیشخوان',
+                'headingButton'=>(object)[
+                    'url'=>Route('addcontent'),
+                    'title'=>'افزودن مطلب گردشگری جدید',
+                ],
+                'sectionParts'=>[
+                    (object)['title'=>'پیشخوان']
+                ],
+            ],
             'showuser'=>[
                 'page_title'=>'اطلاعات کاربری',
                 'headingButton'=>(object)[

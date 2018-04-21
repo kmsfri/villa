@@ -31,6 +31,7 @@ class UserController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
+                'email'=>'nullable|email|max:100|unique:renter_users,email,'.Auth::guard('user')->user()->id,
                 'fullname'=>'required|max:255',
                 'address'=>'required|max:500',
                 'image' => 'mimes:png,jpg,jpeg|max:2048',
@@ -83,7 +84,7 @@ class UserController extends Controller
                         ];
                         \Helpers::save_img($imgConf['imgType'],$imgConf['imgObject'],$imgConf['resultDir']);
                         //$file->move(public_path('/images/users/user-uploads/user-pics'), $fileName);
-                        $uploaded_file_dir = $fileName;
+                        $uploaded_file_dir = $this->fileUploadDir.'/'.$fileName;
                         $removeimg = $user->avatar_dir;
 
                     }
@@ -95,6 +96,7 @@ class UserController extends Controller
             DB::transaction(function() use($request,$uploaded_file_dir,$removeimg,$user){
 
 
+                $user->email=$request->email;
                 $user->fullname=$request->fullname;
                 $user->address=$request->address;
                 if($uploaded_file_dir!="") {
@@ -125,8 +127,8 @@ class UserController extends Controller
         catch(Exception $e) {
             catch_block:
 
-            if(file_exists(public_path().$this->fileUploadDir.'/'.$uploaded_file_dir))
-                unlink(public_path().$this->fileUploadDir.'/'.$uploaded_file_dir);
+            if(file_exists(public_path().$uploaded_file_dir))
+                unlink(public_path().$uploaded_file_dir);
 
             return redirect()->back()->withInput($request->input())->with('data' , 'تصویر ارسالی مشکل دارد');
 

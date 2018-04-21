@@ -111,7 +111,12 @@ class VillaController extends Controller
 
 
 
-        $villas = Villa::where('villa_status',1)->orderBy('created_at','DESC')->paginate(12);
+        $villas = Villa::selectRaw('*, (villa.special_to >= CURRENT_TIMESTAMP) as is_special')
+            ->where('villa_status',1)
+            ->orderBy('is_special','DESC')
+            ->orderBy('updated_at','DESC')
+            ->orderBy('created_at','DESC')
+            ->paginate(12);
         $categories1 = Category1::where('category_status',1)->orderBy('category_order','ASC')->get();
         $websitecomments = WebsiteComment::where('comment_status',1)->orderBy('created_at','DESC')->get();
         $contents = Content::where('content_status',1)->where('is_draft',0)->orderBy('content_order','ASC')->orderBy('created_at','DESC')->take(6)->get();
@@ -170,7 +175,8 @@ class VillaController extends Controller
             'villas'=> $villas,
             'categories1'=> $categories1,
             'websitecomments'=>$websitecomments,
-            'contents'=>$contents
+            'contents'=>$contents,
+            'cities'=>array(),
         ]);
 
     }
@@ -237,10 +243,11 @@ class VillaController extends Controller
 
         if(isset($request->villa_code) && $request->villa_code!=Null){
             $search->villa_code = $request->villa_code;
-            $villas=Villa::where('id',$request->villa_code)
+            $villas=Villa::selectRaw('*, (villa.special_to >= CURRENT_TIMESTAMP) as is_special')
+                ->where('id',$request->villa_code)
                 ->where('villa_status',1);
         }else {
-            $villas = Villa::selectRaw('villa.*, villa.created_at as created_at, villa.updated_at as updated_at')
+            $villas = Villa::selectRaw('villa.*, villa.created_at as created_at, villa.updated_at as updated_at, (villa.special_to >= CURRENT_TIMESTAMP) as is_special')
                 ->where('villa_status', 1);
 
 
@@ -324,7 +331,8 @@ class VillaController extends Controller
         }
 
 
-            $villas = $villas->orderBy('villa.updated_at', 'DESC')
+            $villas = $villas->orderBy('is_special', 'DESC')
+                ->orderBy('villa.updated_at', 'DESC')
                 ->orderBy('villa.created_at', 'DESC')
                 ->paginate(12);
 

@@ -111,7 +111,7 @@ class ContentController extends Controller
         );
 
 
-        if($validator->fails()){
+        if($validator->fails() || ($request->newImg==Null && $request->oldImg==Null)){
             if($request->state!=Null){
                 if(\App\Models\City::find($request->state)!=Null){
                     $cities=\App\Models\City::selectRaw('id , city_name')
